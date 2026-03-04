@@ -40,19 +40,19 @@
 </head>
 <body class="font-sans antialiased min-h-screen flex items-start justify-center bg-[#E8E4DF]">
 
-  <!-- Device Frame -->
-  <div class="w-[390px] min-h-screen bg-cream flex flex-col shadow-xl rounded-[40px]">
+  <!-- Device Frame: h-[844px], NO overflow-hidden -->
+  <div class="w-[390px] h-[844px] bg-cream flex flex-col shadow-xl rounded-[40px]">
 
     <!-- Status Bar Spacer -->
     <div class="h-12 flex-shrink-0"></div>
 
     <!-- Top Header (sticky) -->
     <header class="sticky top-0 z-30 bg-cream flex items-center justify-between px-4 pb-3 flex-shrink-0">
-      <!-- Back Arrow -->
+      <!-- Back Arrow: h-11 w-11, aria-label="Back" -->
       <button
         type="button"
         aria-label="Back"
-        class="h-11 w-11 inline-flex items-center justify-center rounded-full text-heading hover:bg-black/5 active:bg-black/10 active:scale-95 transition-all focus-visible:ring-offset-2"
+        class="h-11 w-11 inline-flex items-center justify-center rounded-full text-heading hover:bg-black/5 active:bg-black/10 active:scale-95 transition-all"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M19 12H5"/>
@@ -63,20 +63,30 @@
       <!-- Center Title -->
       <h1 class="text-lg font-semibold text-heading">Shopping List</h1>
 
-      <!-- Shopping Bag Icon (decorative) -->
-      <span
-        aria-hidden="true"
-        class="h-11 w-11 inline-flex items-center justify-center rounded-full text-heading"
+      <!-- Sort toggle pill -->
+      <div
+        role="group"
+        aria-label="Sort options"
+        class="flex p-0.5 bg-white border border-border rounded-full text-xs font-medium"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 0 1-8 0"/>
-        </svg>
-      </span>
+        <button
+          type="button"
+          aria-pressed="false"
+          class="px-3 h-8 rounded-full text-muted hover:bg-black/[0.03] active:scale-95 transition-all"
+        >
+          Recipe
+        </button>
+        <button
+          type="button"
+          aria-pressed="true"
+          class="px-3 h-8 rounded-full bg-primary text-white transition-all"
+        >
+          Aisle
+        </button>
+      </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Content: flex-1 + overflow-y-auto -->
     <main aria-label="Shopping list" class="flex-1 flex flex-col px-6 overflow-y-auto">
 
       <!-- Empty State -->
@@ -84,7 +94,7 @@
         class="flex-1 flex flex-col items-center justify-center pt-10 pb-6"
         style="animation: fadeInUp 0.45s ease-out forwards"
       >
-        <!-- Illustration Circle -->
+        <!-- Illustration Circle: SVG cart icon -->
         <div
           role="img"
           aria-label="Empty shopping list"
@@ -97,24 +107,24 @@
           </svg>
         </div>
 
-        <!-- Heading -->
-        <h2 class="text-xl font-semibold text-heading mt-5">Your list is empty</h2>
+        <!-- Heading: h2 per spec -->
+        <h2 class="text-xl font-semibold text-heading mt-5">No items yet</h2>
 
-        <!-- Subtext -->
+        <!-- Subtext: muted -->
         <p class="text-sm text-muted text-center max-w-[240px] mt-2 leading-relaxed">
-          Add recipes to start building your shopping list
+          Add recipes to build your shopping list
         </p>
 
-        <!-- Primary CTA -->
+        <!-- Primary CTA: full-width, bg-primary, min-h-[56px] -->
         <button
           type="button"
-          class="mt-6 inline-flex items-center gap-2 bg-primary text-white text-sm font-semibold rounded-full py-3 px-6 hover:bg-[#244d34] active:bg-[#1e4029] active:scale-[0.97] transition-all focus-visible:ring-offset-2 min-h-[44px]"
+          class="mt-6 w-full flex items-center justify-center gap-2 bg-primary text-white text-sm font-semibold rounded-full min-h-[56px] px-6 hover:bg-[#244d34] active:bg-[#1e4029] active:scale-[0.97] transition-all"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
-          Browse Recipes
+          Browse recipes
         </button>
 
         <!-- Secondary Text Link -->
@@ -132,6 +142,7 @@
         class="pb-6"
         style="animation: fadeInUp 0.45s ease-out 0.15s both"
       >
+        <!-- Section heading: h2, not <p> -->
         <h2
           id="how-it-works-heading"
           class="text-sm font-semibold text-muted text-center mt-8 mb-5"
@@ -139,7 +150,7 @@
           How it works
         </h2>
 
-        <!-- Steps Row -->
+        <!-- Steps Row: no role="list" on ul -->
         <ul class="flex items-start justify-center gap-4" aria-label="How it works steps">
 
           <!-- Step 1 -->
@@ -174,10 +185,33 @@
 
     </main>
 
-    <!-- Bottom Input Bar (sticky) -->
-    <footer class="sticky bottom-0 bg-cream px-4 pb-8 pt-4 flex-shrink-0">
+    <!-- Bottom Input Bar: sticky bottom-0 bg-cream -->
+    <footer class="sticky bottom-0 bg-cream px-4 pb-8 pt-3 flex-shrink-0">
+
+      <!-- Quick Action Chips above input: min-h-[44px] each, disabled states -->
+      <div class="flex gap-2 overflow-x-auto pb-3 scrollbar-hide" role="group" aria-label="Quick actions">
+        <button
+          type="button"
+          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
+        >
+          <span aria-hidden="true">🍳</span> Start cooking
+        </button>
+        <button
+          type="button"
+          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
+        >
+          <span aria-hidden="true">📖</span> Browse recipes
+        </button>
+      </div>
+
+      <!-- Chat input form: aria-label="Chat input", no role="search" -->
       <form aria-label="Chat input">
-        <div class="flex items-center gap-2 bg-white border border-border rounded-full px-4 py-2.5 shadow-sm focus-within:border-primary/30" style="transition: box-shadow 0.15s ease; " onfocusin="this.style.boxShadow='0 0 0 2px rgba(45,90,61,0.75)'" onfocusout="this.style.boxShadow=''">
+        <div
+          class="flex items-center gap-2 bg-white border border-border rounded-full px-4 py-2.5 shadow-sm"
+          style="transition: box-shadow 0.15s ease;"
+          onfocusin="this.style.boxShadow='0 0 0 2px rgba(45,90,61,0.75)'"
+          onfocusout="this.style.boxShadow=''"
+        >
 
           <!-- Input Field -->
           <input
@@ -188,12 +222,12 @@
             class="flex-1 bg-transparent text-sm text-heading placeholder:text-muted/80 outline-none min-w-0"
           >
 
-          <!-- Search Toggle -->
+          <!-- Search Toggle: h-11 w-11, aria-pressed="false" -->
           <button
             type="button"
             aria-label="Toggle search mode"
             aria-pressed="false"
-            class="h-11 w-11 inline-flex items-center justify-center text-muted hover:text-heading active:scale-95 transition-all flex-shrink-0 rounded-full focus-visible:ring-offset-2"
+            class="h-11 w-11 inline-flex items-center justify-center text-muted hover:text-heading active:scale-95 transition-all flex-shrink-0 rounded-full"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="11" cy="11" r="8"/>

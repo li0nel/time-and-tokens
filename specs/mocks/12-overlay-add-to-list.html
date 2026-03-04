@@ -28,6 +28,7 @@
     }
   </script>
   <style>
+    /* Focus ring: rgba(45,90,61,0.75) */
     *:focus-visible {
       outline: none;
       box-shadow: 0 0 0 2px rgba(45, 90, 61, 0.75);
@@ -42,11 +43,11 @@
   </p>
 
   <!-- ══════════════════════════════════════════════════════════════
-       FRAME 1: Recipe card behind overlay (bottom sheet open)
+       FRAME 1: Device frame — NO overflow-hidden per design rules
        ══════════════════════════════════════════════════════════════ -->
-  <div class="w-[390px] h-[844px] bg-cream relative flex flex-col shadow-xl rounded-[40px] overflow-hidden">
+  <div class="w-[390px] h-[844px] bg-cream relative flex flex-col shadow-xl rounded-[40px]">
 
-    <!-- ── Background screen content (dimmed, aria-hidden when overlay open) ── -->
+    <!-- ── Background screen content: aria-hidden="true" inert (already non-interactive behind overlay) ── -->
     <div aria-hidden="true" inert class="absolute inset-0 flex flex-col opacity-30 pointer-events-none select-none">
 
       <!-- Status bar spacer -->
@@ -84,11 +85,12 @@
       </div>
     </div>
 
-    <!-- ── Scrim ── -->
-    <div aria-hidden="true" class="absolute inset-0 bg-black/40 z-40"></div>
+    <!-- ── Scrim (aria-hidden) ── -->
+    <div aria-hidden="true" class="absolute inset-0 bg-black/40 z-40 rounded-[40px]"></div>
 
     <!-- ══════════════════════════════════════════════════════════════
          BOTTOM SHEET OVERLAY
+         role="dialog" aria-modal="true" aria-labelledby="overlay-title-1"
          JS note: In production, JS would manage focus trap within this dialog.
          On open, focus moves to the close button. Tab cycles within the dialog.
          On close, focus returns to the triggering element.
@@ -97,7 +99,7 @@
       role="dialog"
       aria-modal="true"
       aria-labelledby="overlay-title-1"
-      class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-[0_-4px_24px_rgba(0,0,0,0.12)] z-50 flex flex-col"
+      class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-[0_-4px_24px_rgba(0,0,0,0.12)] z-50 flex flex-col overflow-hidden"
       style="height: 560px;"
     >
 
@@ -106,7 +108,7 @@
 
       <!-- Sheet header -->
       <div class="flex items-center justify-between px-2 py-2 flex-shrink-0">
-        <!-- Close button -->
+        <!-- Close button: h-11 w-11, aria-label="Close, discard changes" -->
         <button
           type="button"
           aria-label="Close, discard changes"
@@ -115,7 +117,7 @@
           ✕
         </button>
 
-        <!-- Title -->
+        <!-- Title: aria-labelledby target -->
         <h2
           id="overlay-title-1"
           class="text-base font-semibold text-heading"
@@ -140,7 +142,7 @@
             <span class="text-sm font-medium text-heading">Servings</span>
 
             <div class="flex items-center gap-3">
-              <!-- Decrease -->
+              <!-- Decrease: h-11 w-11, aria-label="Decrease servings" -->
               <button
                 type="button"
                 aria-label="Decrease servings"
@@ -157,7 +159,7 @@
                 4
               </span>
 
-              <!-- Increase -->
+              <!-- Increase: h-11 w-11, aria-label="Increase servings" -->
               <button
                 type="button"
                 aria-label="Increase servings"
@@ -198,10 +200,10 @@
           </div>
         </div>
 
-        <!-- ── Ingredient list ── -->
+        <!-- ── Ingredient list: ul>li>button pattern, NO role="list" on ul ── -->
         <ul class="flex flex-col gap-1" aria-label="Ingredients for Thai Green Curry">
 
-          <!-- 1. Chicken thigh — selected -->
+          <!-- 1. Chicken thigh — selected: aria-pressed="true" -->
           <li>
             <button
               type="button"
@@ -218,7 +220,6 @@
                   <polyline points="20 6 9 17 4 12"/>
                 </svg>
               </span>
-              <!-- Text -->
               <span class="flex-1 min-w-0">
                 <span class="block text-sm font-medium text-heading leading-snug">Chicken thigh</span>
                 <span class="block text-xs text-muted mt-0.5">400g, sliced</span>
@@ -226,7 +227,7 @@
             </button>
           </li>
 
-          <!-- 2. Coconut milk — selected -->
+          <!-- 2. Coconut milk — selected: aria-pressed="true" -->
           <li>
             <button
               type="button"
@@ -249,7 +250,7 @@
             </button>
           </li>
 
-          <!-- 3. Green curry paste — NOT selected (in pantry) -->
+          <!-- 3. Green curry paste — pantry item: aria-pressed="false", opacity-50 -->
           <li>
             <button
               type="button"
@@ -273,7 +274,7 @@
             </button>
           </li>
 
-          <!-- 4. Thai basil leaves — selected -->
+          <!-- 4. Thai basil leaves — selected: aria-pressed="true" -->
           <li>
             <button
               type="button"
@@ -296,7 +297,7 @@
             </button>
           </li>
 
-          <!-- 5. Red bell pepper — selected -->
+          <!-- 5. Red bell pepper — selected: aria-pressed="true" -->
           <li>
             <button
               type="button"
@@ -319,7 +320,7 @@
             </button>
           </li>
 
-          <!-- 6. Fish sauce — NOT selected (in pantry) -->
+          <!-- 6. Fish sauce — pantry item: aria-pressed="false", opacity-50 -->
           <li>
             <button
               type="button"
@@ -341,7 +342,7 @@
             </button>
           </li>
 
-          <!-- 7. Palm sugar — selected -->
+          <!-- 7. Palm sugar — selected: aria-pressed="true" -->
           <li>
             <button
               type="button"
@@ -364,7 +365,7 @@
             </button>
           </li>
 
-          <!-- 8. Jasmine rice — selected -->
+          <!-- 8. Jasmine rice — selected: aria-pressed="true" -->
           <li>
             <button
               type="button"
@@ -397,7 +398,7 @@
         <!-- Summary row -->
         <p class="text-xs text-muted mb-3 text-center">6 items selected</p>
 
-        <!-- Primary CTA -->
+        <!-- Primary CTA: min-h-[56px], full-width, bg-primary, aria-label includes count -->
         <button
           type="button"
           aria-label="Add 6 selected items to shopping list"
@@ -408,7 +409,7 @@
       </div>
 
     </div>
-    <!-- End bottom sheet -->
+    <!-- End bottom sheet Frame 1 -->
 
   </div>
   <!-- End Frame 1 -->
@@ -420,12 +421,11 @@
   </p>
 
   <!-- ══════════════════════════════════════════════════════════════
-       FRAME 2: Overlay standalone — success / after-adding state
-       Light gray page background, no underlying screen.
+       FRAME 2: Device frame — NO overflow-hidden per design rules
        ══════════════════════════════════════════════════════════════ -->
-  <div class="w-[390px] h-[844px] bg-[#F0EDE9] relative flex flex-col shadow-xl rounded-[40px] overflow-hidden">
+  <div class="w-[390px] h-[844px] bg-[#F0EDE9] relative flex flex-col shadow-xl rounded-[40px]">
 
-    <!-- Page background hint — just a neutral surface -->
+    <!-- Page background hint — decorative, aria-hidden -->
     <div aria-hidden="true" class="absolute inset-0 flex items-end justify-center pointer-events-none select-none">
       <div class="w-full h-full flex flex-col items-center justify-center gap-3 px-8 pb-[560px] opacity-20">
         <div class="w-16 h-16 rounded-2xl bg-heading/20"></div>
@@ -437,21 +437,20 @@
 
     <!-- ══════════════════════════════════════════════════════════════
          OVERLAY SHEET — success/after-adding state
-         (Shown fullscreen/standalone — same visual as bottom sheet
-          but rendered at full overlay height on neutral background)
+         role="dialog" aria-modal="true" aria-labelledby="overlay-title-2"
          ══════════════════════════════════════════════════════════════ -->
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="overlay-title-2"
-      class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-[0_-4px_24px_rgba(0,0,0,0.12)] z-50 flex flex-col"
+      class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-[0_-4px_24px_rgba(0,0,0,0.12)] z-50 flex flex-col overflow-hidden"
       style="height: 560px;"
     >
 
       <!-- Drag handle -->
       <div aria-hidden="true" class="w-10 h-1 bg-border rounded-full mx-auto mt-3 mb-1 flex-shrink-0"></div>
 
-      <!-- ── Success banner ── -->
+      <!-- ── Success banner: role="status" aria-live="polite" ── -->
       <div
         role="status"
         aria-live="polite"
@@ -471,7 +470,7 @@
 
       <!-- Sheet header -->
       <div class="flex items-center justify-between px-2 py-2 flex-shrink-0">
-        <!-- Close button -->
+        <!-- Close button: h-11 w-11, aria-label="Close, discard changes" -->
         <button
           type="button"
           aria-label="Close, discard changes"
@@ -480,7 +479,7 @@
           ✕
         </button>
 
-        <!-- Title -->
+        <!-- Title: aria-labelledby target -->
         <h2
           id="overlay-title-2"
           class="text-base font-semibold text-heading"
@@ -495,7 +494,7 @@
       <!-- Scrollable body -->
       <div class="flex-1 overflow-y-auto px-4 pb-2">
 
-        <!-- ── Servings scaler ── -->
+        <!-- ── Servings scaler (disabled in success state) ── -->
         <div class="mb-4">
           <div
             role="group"
@@ -504,6 +503,7 @@
           >
             <span class="text-sm font-medium text-heading">Servings</span>
             <div class="flex items-center gap-3">
+              <!-- Decrease: h-11 w-11, disabled -->
               <button
                 type="button"
                 aria-label="Decrease servings"
@@ -519,6 +519,7 @@
               >
                 4
               </span>
+              <!-- Increase: h-11 w-11, disabled -->
               <button
                 type="button"
                 aria-label="Increase servings"
@@ -539,7 +540,7 @@
         <!-- Divider -->
         <div class="border-t border-border mb-4" aria-hidden="true"></div>
 
-        <!-- ── Ingredient selection header ── -->
+        <!-- ── Ingredient selection header (disabled in success state) ── -->
         <div class="flex items-center justify-between mb-2.5">
           <span class="text-sm font-medium text-heading">Select ingredients to add:</span>
           <div class="flex items-center gap-2" role="group" aria-label="Selection controls">
@@ -549,12 +550,20 @@
           </div>
         </div>
 
-        <!-- ── Ingredient list (post-add state — all rows slightly dimmed) ── -->
+        <!-- ── Ingredient list (post-add state — all rows disabled + dimmed)
+             ul>li>button pattern; buttons disabled with aria-pressed ── -->
         <ul class="flex flex-col gap-1 opacity-60" aria-label="Ingredients for Thai Green Curry">
 
-          <!-- 1. Chicken thigh — selected/added -->
+          <!-- 1. Chicken thigh — selected/added: aria-pressed="true", disabled -->
           <li>
-            <div class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              aria-pressed="true"
+              aria-label="Chicken thigh, 400g sliced, added"
+              class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left cursor-not-allowed"
+            >
               <span aria-hidden="true" class="w-8 h-8 flex-shrink-0 rounded-lg border-2 border-primary bg-primary flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
@@ -562,12 +571,19 @@
                 <span class="block text-sm font-medium text-heading leading-snug">Chicken thigh</span>
                 <span class="block text-xs text-muted mt-0.5">400g, sliced</span>
               </span>
-            </div>
+            </button>
           </li>
 
-          <!-- 2. Coconut milk — selected/added -->
+          <!-- 2. Coconut milk — selected/added: aria-pressed="true", disabled -->
           <li>
-            <div class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              aria-pressed="true"
+              aria-label="Coconut milk, 200ml, added"
+              class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left cursor-not-allowed"
+            >
               <span aria-hidden="true" class="w-8 h-8 flex-shrink-0 rounded-lg border-2 border-primary bg-primary flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
@@ -575,24 +591,38 @@
                 <span class="block text-sm font-medium text-heading leading-snug">Coconut milk</span>
                 <span class="block text-xs text-muted mt-0.5">200ml</span>
               </span>
-            </div>
+            </button>
           </li>
 
-          <!-- 3. Green curry paste — in pantry -->
+          <!-- 3. Green curry paste — pantry item: aria-pressed="false", disabled, extra opacity-50 -->
           <li>
-            <div class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left opacity-50">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              aria-pressed="false"
+              aria-label="Green curry paste, 3 tbsp, excluded — already in pantry"
+              class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left cursor-not-allowed opacity-50"
+            >
               <span aria-hidden="true" class="w-8 h-8 flex-shrink-0 rounded-lg border-2 border-border bg-white flex items-center justify-center text-muted text-base font-light">×</span>
               <span class="flex-1 min-w-0">
                 <span class="block text-sm font-medium text-heading leading-snug">Green curry paste</span>
                 <span class="block text-xs text-muted mt-0.5">3 tbsp</span>
               </span>
               <span class="text-xs text-muted italic flex-shrink-0">(in pantry)</span>
-            </div>
+            </button>
           </li>
 
-          <!-- 4. Thai basil leaves — selected/added -->
+          <!-- 4. Thai basil leaves — selected/added: aria-pressed="true", disabled -->
           <li>
-            <div class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              aria-pressed="true"
+              aria-label="Thai basil leaves, 1 cup, added"
+              class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left cursor-not-allowed"
+            >
               <span aria-hidden="true" class="w-8 h-8 flex-shrink-0 rounded-lg border-2 border-primary bg-primary flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
@@ -600,12 +630,19 @@
                 <span class="block text-sm font-medium text-heading leading-snug">Thai basil leaves</span>
                 <span class="block text-xs text-muted mt-0.5">1 cup</span>
               </span>
-            </div>
+            </button>
           </li>
 
-          <!-- 5. Red bell pepper — selected/added -->
+          <!-- 5. Red bell pepper — selected/added: aria-pressed="true", disabled -->
           <li>
-            <div class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              aria-pressed="true"
+              aria-label="Red bell pepper, 1 sliced, added"
+              class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left cursor-not-allowed"
+            >
               <span aria-hidden="true" class="w-8 h-8 flex-shrink-0 rounded-lg border-2 border-primary bg-primary flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
@@ -613,24 +650,38 @@
                 <span class="block text-sm font-medium text-heading leading-snug">Red bell pepper</span>
                 <span class="block text-xs text-muted mt-0.5">1, sliced</span>
               </span>
-            </div>
+            </button>
           </li>
 
-          <!-- 6. Fish sauce — in pantry -->
+          <!-- 6. Fish sauce — pantry item: aria-pressed="false", disabled, extra opacity-50 -->
           <li>
-            <div class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left opacity-50">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              aria-pressed="false"
+              aria-label="Fish sauce, 2 tbsp, excluded — already in pantry"
+              class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left cursor-not-allowed opacity-50"
+            >
               <span aria-hidden="true" class="w-8 h-8 flex-shrink-0 rounded-lg border-2 border-border bg-white flex items-center justify-center text-muted text-base font-light">×</span>
               <span class="flex-1 min-w-0">
                 <span class="block text-sm font-medium text-heading leading-snug">Fish sauce</span>
                 <span class="block text-xs text-muted mt-0.5">2 tbsp</span>
               </span>
               <span class="text-xs text-muted italic flex-shrink-0">(in pantry)</span>
-            </div>
+            </button>
           </li>
 
-          <!-- 7. Palm sugar — selected/added -->
+          <!-- 7. Palm sugar — selected/added: aria-pressed="true", disabled -->
           <li>
-            <div class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              aria-pressed="true"
+              aria-label="Palm sugar, 1 tbsp, added"
+              class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left cursor-not-allowed"
+            >
               <span aria-hidden="true" class="w-8 h-8 flex-shrink-0 rounded-lg border-2 border-primary bg-primary flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
@@ -638,12 +689,19 @@
                 <span class="block text-sm font-medium text-heading leading-snug">Palm sugar</span>
                 <span class="block text-xs text-muted mt-0.5">1 tbsp</span>
               </span>
-            </div>
+            </button>
           </li>
 
-          <!-- 8. Jasmine rice — selected/added -->
+          <!-- 8. Jasmine rice — selected/added: aria-pressed="true", disabled -->
           <li>
-            <div class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              aria-pressed="true"
+              aria-label="Jasmine rice, for serving, added"
+              class="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left cursor-not-allowed"
+            >
               <span aria-hidden="true" class="w-8 h-8 flex-shrink-0 rounded-lg border-2 border-primary bg-primary flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
@@ -651,7 +709,7 @@
                 <span class="block text-sm font-medium text-heading leading-snug">Jasmine rice</span>
                 <span class="block text-xs text-muted mt-0.5">for serving</span>
               </span>
-            </div>
+            </button>
           </li>
 
         </ul>
@@ -664,7 +722,7 @@
         <!-- Summary row -->
         <p class="text-xs text-muted mb-3 text-center">6 items selected</p>
 
-        <!-- CTA — disabled / items added state -->
+        <!-- CTA: disabled attribute + cursor-not-allowed, min-h-[56px], full-width, bg-primary-->
         <button
           type="button"
           disabled

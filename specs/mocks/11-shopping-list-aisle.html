@@ -36,15 +36,15 @@
 </head>
 <body class="font-sans antialiased min-h-screen flex items-start justify-center bg-[#E8E4DF]">
 
-  <!-- Device Frame -->
-  <div class="w-[390px] min-h-screen bg-cream flex flex-col shadow-xl rounded-[40px]">
+  <!-- Device Frame: h-[844px], NO overflow-hidden -->
+  <div class="w-[390px] h-[844px] bg-cream flex flex-col shadow-xl rounded-[40px]">
 
     <!-- Status Bar Spacer -->
     <div class="h-12 flex-shrink-0"></div>
 
     <!-- Top Header (sticky) -->
     <header class="sticky top-0 z-30 bg-cream flex items-center justify-between px-4 pb-3 flex-shrink-0">
-      <!-- Back Arrow -->
+      <!-- Back Arrow: h-11 w-11 -->
       <button
         type="button"
         aria-label="Back"
@@ -59,7 +59,7 @@
       <!-- Center Title -->
       <h1 class="text-lg font-semibold text-heading">Shopping List</h1>
 
-      <!-- Sort Toggle Button -->
+      <!-- Sort Toggle Button: h-11 w-11 -->
       <button
         type="button"
         aria-label="Sort options"
@@ -73,10 +73,10 @@
       </button>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Content: overflow-y-auto flex-1 -->
     <main aria-label="Shopping list" class="overflow-y-auto flex-1">
 
-      <!-- Sort Toggle Bar -->
+      <!-- Sort Toggle Bar: "By Aisle" active (aria-pressed="true", bg-primary text-white), "By Recipe" inactive -->
       <div class="px-4 pb-3">
         <div
           role="group"
@@ -87,7 +87,7 @@
           <button
             type="button"
             aria-pressed="false"
-            class="flex-1 min-h-[44px] text-sm font-medium bg-white border border-border text-muted rounded-full hover:bg-black/[0.03] transition-all"
+            class="flex-1 min-h-[44px] text-sm font-medium bg-white border border-border text-muted rounded-full hover:bg-black/[0.03] active:scale-[0.97] transition-all"
           >
             By Recipe
           </button>
@@ -109,17 +109,17 @@
         <div class="mb-5">
           <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-semibold text-heading">11 of 19 items collected</span>
-            <!-- Clear checked pill -->
+            <!-- Clear checked: aria-label="Clear all checked items", min-h-[44px] -->
             <button
               type="button"
               aria-label="Clear all checked items"
-              class="inline-flex items-center gap-1 bg-white border border-border text-primary text-xs font-medium rounded-full px-3 py-1.5 hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap"
+              class="inline-flex items-center gap-1 bg-white border border-border text-primary text-xs font-medium rounded-full px-3 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap"
             >
               <span aria-hidden="true">✕</span> Clear 11 checked
             </button>
           </div>
 
-          <!-- Progress bar -->
+          <!-- Progress bar: role="progressbar" with aria-valuenow/min/max -->
           <div
             role="progressbar"
             aria-valuenow="11"
@@ -141,7 +141,7 @@
 
         <!-- ── Aisle Groups ───────────────────────────────────────── -->
 
-        <!-- PRODUCE -->
+        <!-- PRODUCE: section aria-labelledby + h2 id -->
         <section aria-labelledby="aisle-produce" class="mb-5">
           <h2
             id="aisle-produce"
@@ -150,9 +150,10 @@
             Produce
           </h2>
 
+          <!-- ul: NO role="list" -->
           <ul class="flex flex-col bg-white border border-border rounded-2xl overflow-hidden divide-y divide-border">
 
-            <!-- Thai basil leaves (checked) -->
+            <!-- Thai basil leaves: checked — aria-pressed="true", line-through, opacity-60 -->
             <li>
               <button
                 type="button"
@@ -175,7 +176,7 @@
               </button>
             </li>
 
-            <!-- Red bell pepper (checked) -->
+            <!-- Red bell pepper: checked -->
             <li>
               <button
                 type="button"
@@ -198,7 +199,7 @@
               </button>
             </li>
 
-            <!-- Fresh lime (unchecked) -->
+            <!-- Fresh lime: unchecked — aria-pressed="false", normal text, empty checkbox -->
             <li>
               <button
                 type="button"
@@ -217,7 +218,7 @@
               </button>
             </li>
 
-            <!-- Cucumber (unchecked) -->
+            <!-- Cucumber: unchecked -->
             <li>
               <button
                 type="button"
@@ -236,7 +237,7 @@
               </button>
             </li>
 
-            <!-- Ripe avocado (checked) -->
+            <!-- Ripe avocado: checked -->
             <li>
               <button
                 type="button"
@@ -262,7 +263,7 @@
           </ul>
         </section>
 
-        <!-- PROTEINS -->
+        <!-- PROTEINS: section aria-labelledby + h2 id -->
         <section aria-labelledby="aisle-proteins" class="mb-5">
           <h2
             id="aisle-proteins"
@@ -271,9 +272,10 @@
             Proteins
           </h2>
 
+          <!-- ul: NO role="list" -->
           <ul class="flex flex-col bg-white border border-border rounded-2xl overflow-hidden divide-y divide-border">
 
-            <!-- Chicken thigh (unchecked) -->
+            <!-- Chicken thigh: unchecked -->
             <li>
               <button
                 type="button"
@@ -292,7 +294,7 @@
               </button>
             </li>
 
-            <!-- Sushi-grade salmon (unchecked) -->
+            <!-- Sushi-grade salmon: unchecked -->
             <li>
               <button
                 type="button"
@@ -314,7 +316,7 @@
           </ul>
         </section>
 
-        <!-- DAIRY & SAUCES -->
+        <!-- DAIRY & SAUCES: section aria-labelledby + h2 id -->
         <section aria-labelledby="aisle-dairy-sauces" class="mb-5">
           <h2
             id="aisle-dairy-sauces"
@@ -323,9 +325,10 @@
             Dairy &amp; Sauces
           </h2>
 
+          <!-- ul: NO role="list" -->
           <ul class="flex flex-col bg-white border border-border rounded-2xl overflow-hidden divide-y divide-border">
 
-            <!-- Coconut milk (checked) -->
+            <!-- Coconut milk: checked -->
             <li>
               <button
                 type="button"
@@ -348,7 +351,7 @@
               </button>
             </li>
 
-            <!-- Fish sauce (unchecked) -->
+            <!-- Fish sauce: unchecked -->
             <li>
               <button
                 type="button"
@@ -367,7 +370,7 @@
               </button>
             </li>
 
-            <!-- Soy sauce (unchecked) -->
+            <!-- Soy sauce: unchecked -->
             <li>
               <button
                 type="button"
@@ -386,7 +389,7 @@
               </button>
             </li>
 
-            <!-- Sesame oil (checked) -->
+            <!-- Sesame oil: checked -->
             <li>
               <button
                 type="button"
@@ -412,7 +415,7 @@
           </ul>
         </section>
 
-        <!-- PANTRY & SPICES -->
+        <!-- PANTRY & SPICES: section aria-labelledby + h2 id -->
         <section aria-labelledby="aisle-pantry-spices" class="mb-5">
           <h2
             id="aisle-pantry-spices"
@@ -421,9 +424,10 @@
             Pantry &amp; Spices
           </h2>
 
+          <!-- ul: NO role="list" -->
           <ul class="flex flex-col bg-white border border-border rounded-2xl overflow-hidden divide-y divide-border">
 
-            <!-- Green curry paste (unchecked) -->
+            <!-- Green curry paste: unchecked -->
             <li>
               <button
                 type="button"
@@ -442,7 +446,7 @@
               </button>
             </li>
 
-            <!-- Palm sugar (unchecked) -->
+            <!-- Palm sugar: unchecked -->
             <li>
               <button
                 type="button"
@@ -461,7 +465,7 @@
               </button>
             </li>
 
-            <!-- Chili flakes (unchecked) -->
+            <!-- Chili flakes: unchecked -->
             <li>
               <button
                 type="button"
@@ -480,7 +484,7 @@
               </button>
             </li>
 
-            <!-- Jasmine rice (checked) -->
+            <!-- Jasmine rice: checked -->
             <li>
               <button
                 type="button"
@@ -503,7 +507,7 @@
               </button>
             </li>
 
-            <!-- Sushi rice (checked) -->
+            <!-- Sushi rice: checked -->
             <li>
               <button
                 type="button"
@@ -529,7 +533,7 @@
           </ul>
         </section>
 
-        <!-- BAKERY -->
+        <!-- BAKERY: section aria-labelledby + h2 id -->
         <section aria-labelledby="aisle-bakery" class="mb-5">
           <h2
             id="aisle-bakery"
@@ -538,9 +542,10 @@
             Bakery
           </h2>
 
+          <!-- ul: NO role="list" -->
           <ul class="flex flex-col bg-white border border-border rounded-2xl overflow-hidden divide-y divide-border">
 
-            <!-- Sourdough bread (unchecked) -->
+            <!-- Sourdough bread: unchecked -->
             <li>
               <button
                 type="button"
@@ -562,7 +567,7 @@
           </ul>
         </section>
 
-        <!-- FROZEN / OTHER -->
+        <!-- FROZEN / OTHER: section aria-labelledby + h2 id -->
         <section aria-labelledby="aisle-frozen-other" class="mb-5">
           <h2
             id="aisle-frozen-other"
@@ -571,9 +576,10 @@
             Frozen / Other
           </h2>
 
+          <!-- ul: NO role="list" -->
           <ul class="flex flex-col bg-white border border-border rounded-2xl overflow-hidden divide-y divide-border">
 
-            <!-- Edamame (unchecked) -->
+            <!-- Edamame: unchecked -->
             <li>
               <button
                 type="button"
@@ -592,7 +598,7 @@
               </button>
             </li>
 
-            <!-- Roasted peanuts (unchecked) -->
+            <!-- Roasted peanuts: unchecked -->
             <li>
               <button
                 type="button"
@@ -617,39 +623,39 @@
       </div>
     </main>
 
-    <!-- Bottom Sticky Bar -->
+    <!-- Bottom Sticky Bar: sticky bottom-0 bg-cream -->
     <footer class="sticky bottom-0 bg-cream px-4 pb-8 pt-3 flex-shrink-0">
 
-      <!-- Quick Action Chips -->
+      <!-- Quick Action Chips: min-h-[44px], disabled states -->
       <div class="flex gap-2 overflow-x-auto pb-3 scrollbar-hide" role="group" aria-label="Quick actions">
         <button
           type="button"
           aria-label="Clear checked items"
-          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap"
+          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
         >
           <span aria-hidden="true">✓</span> Clear checked
         </button>
         <button
           type="button"
-          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap"
+          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
         >
           <span aria-hidden="true">📤</span> Share list
         </button>
         <button
           type="button"
-          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap"
+          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
         >
           <span aria-hidden="true">🔁</span> Refill
         </button>
         <button
           type="button"
-          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap"
+          class="flex-shrink-0 inline-flex items-center gap-1.5 bg-white border border-border text-sm font-medium text-heading rounded-full px-4 min-h-[44px] hover:bg-black/[0.03] active:scale-[0.97] transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
         >
           <span aria-hidden="true">➕</span> Add item
         </button>
       </div>
 
-      <!-- Chat Input -->
+      <!-- Chat Input: aria-label="Chat input", no role="search" -->
       <form aria-label="Chat input">
         <div
           class="flex items-center gap-2 bg-white border border-border rounded-full px-4 py-2.5 shadow-sm"
@@ -666,7 +672,7 @@
             class="flex-1 bg-transparent text-sm text-heading placeholder:text-muted/80 outline-none min-w-0"
           >
 
-          <!-- Send Button -->
+          <!-- Send Button: h-11 w-11 -->
           <button
             type="submit"
             aria-label="Send message"
