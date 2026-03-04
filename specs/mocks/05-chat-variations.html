@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cook — Variations &amp; Culinary Knowledge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            cream: '#FAF8F5',
+            primary: '#2D5A3D',
+            heading: '#1A1A1A',
+            muted: '#6B6B6B',
+            greeting: '#8B7355',
+            border: '#E8E4DF',
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Focus-visible only (not focus) */
+    .focus-ring:focus { outline: none; }
+    .focus-ring:focus-visible {
+      outline: 2px solid rgba(45,90,61,0.75);
+      outline-offset: 2px;
+    }
+
+    /* Scrollbar hide for quick actions and horizontal scrolls */
+    .no-scrollbar {
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Glossary term dashed underline */
+    .glossary-term {
+      color: #2D5A3D;
+      text-decoration: underline;
+      text-decoration-style: dashed;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased flex items-start justify-center bg-[#E8E4DF] py-8">
+
+  <!-- Screen-reader live region for chat updates -->
+  <div aria-live="polite" aria-atomic="false" class="sr-only" id="chat-live-region"></div>
+
+  <!-- Device Frame -->
+  <div class="w-[390px] bg-cream relative flex flex-col shadow-xl rounded-[40px] h-[844px]">
+
+    <!-- Status Bar Spacer -->
+    <div class="h-12 flex-shrink-0"></div>
+
+    <!-- Top Bar -->
+    <header class="flex items-center justify-between px-5 pb-3 flex-shrink-0 border-b border-border">
+
+      <!-- Back button -->
+      <button
+        type="button"
+        aria-label="Go back"
+        class="h-11 w-11 inline-flex items-center justify-center rounded-full text-heading hover:bg-black/5 transition-colors active:scale-95 focus-ring"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+      </button>
+
+      <!-- Title -->
+      <div class="text-center">
+        <p class="text-sm font-semibold text-heading">Thai Green Curry</p>
+        <p class="text-xs text-muted">Variations &amp; Tips</p>
+      </div>
+
+      <!-- Shopping list -->
+      <button
+        type="button"
+        aria-label="Shopping list"
+        class="h-11 w-11 inline-flex items-center justify-center rounded-full text-heading hover:bg-black/5 transition-colors active:scale-95 focus-ring"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- ─── CHAT MESSAGES ─────────────────────────────────────── -->
+    <main class="overflow-y-auto flex-1 px-4 pt-5 pb-2" aria-label="Chat messages">
+
+      <!-- Conversation list -->
+      <ol aria-label="Conversation" class="flex flex-col gap-5">
+
+
+        <!-- ══════════════════════════════════════════════════════
+             WIDGET 1 — Variation comparison (vegan version)
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- User: vegan version request -->
+        <li role="listitem" class="flex justify-end" aria-label="Your message">
+          <div class="max-w-[78%] bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-sm">
+            Show me the vegan version of Thai Green Curry
+          </div>
+        </li>
+
+        <!-- AI: variation comparison widget -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Here's what changes for the <strong class="font-semibold">Vegan Version:</strong>
+          </p>
+
+          <!-- Diff-style variation card -->
+          <div
+            class="bg-white border border-border rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="Vegan version: ingredient changes"
+          >
+            <div class="px-4 pt-4 pb-1 border-b border-border">
+              <h3 class="text-[11px] font-semibold text-muted uppercase tracking-widest">Ingredient Changes</h3>
+            </div>
+
+            <ul class="divide-y divide-border/60" role="list" aria-label="Ingredient substitutions">
+
+              <!-- Replace: chicken → tofu -->
+              <li role="listitem" class="px-4 py-3.5 flex items-start gap-3">
+                <span
+                  class="mt-0.5 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#FEF3E8] text-[#C05621] flex-shrink-0"
+                  aria-label="Replace"
+                >
+                  Replace
+                </span>
+                <div class="flex-1 min-w-0 flex items-start gap-2">
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-muted line-through leading-snug" aria-label="Remove: 400g chicken thigh">
+                      400g chicken thigh
+                    </p>
+                  </div>
+                  <!-- Arrow -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="#6B6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       class="flex-shrink-0 mt-0.5" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-primary font-medium leading-snug" aria-label="Use instead: 400g firm tofu, pressed and cubed">
+                      400g firm tofu, pressed &amp; cubed
+                    </p>
+                  </div>
+                  <span
+                    class="mt-0.5 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#E8F2EC] text-primary flex-shrink-0"
+                    aria-label="With"
+                  >
+                    With
+                  </span>
+                </div>
+              </li>
+
+              <!-- Add: soy sauce -->
+              <li role="listitem" class="px-4 py-3.5 flex items-start gap-3">
+                <span
+                  class="mt-0.5 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#E8F2EC] text-primary flex-shrink-0"
+                  aria-label="Add"
+                >
+                  Add
+                </span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs text-heading font-medium leading-snug">
+                    2 tbsp soy sauce <span class="text-muted font-normal">(marinade)</span>
+                  </p>
+                </div>
+              </li>
+
+              <!-- Replace: fish sauce → vegetable broth -->
+              <li role="listitem" class="px-4 py-3.5 flex items-start gap-3">
+                <span
+                  class="mt-0.5 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#FEF3E8] text-[#C05621] flex-shrink-0"
+                  aria-label="Replace"
+                >
+                  Replace
+                </span>
+                <div class="flex-1 min-w-0 flex items-start gap-2">
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-muted line-through leading-snug" aria-label="Remove: fish sauce">
+                      fish sauce
+                    </p>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="#6B6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       class="flex-shrink-0 mt-0.5" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-primary font-medium leading-snug" aria-label="Use instead: vegetable broth">
+                      vegetable broth
+                    </p>
+                  </div>
+                  <span
+                    class="mt-0.5 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#E8F2EC] text-primary flex-shrink-0"
+                    aria-label="With"
+                  >
+                    With
+                  </span>
+                </div>
+              </li>
+            </ul>
+
+            <!-- Action buttons -->
+            <div
+              class="px-4 py-3 border-t border-border flex gap-2"
+              role="group"
+              aria-label="Apply or keep variation"
+            >
+              <button
+                type="button"
+                class="flex-1 inline-flex items-center justify-center min-h-[44px] px-3 py-2.5 rounded-lg border border-border bg-white text-xs font-medium text-heading hover:bg-black/[0.06] hover:border-heading/20 active:scale-[0.97] transition-all focus-ring"
+                aria-label="Keep original recipe"
+              >
+                Keep original
+              </button>
+              <button
+                type="button"
+                class="flex-1 inline-flex items-center justify-center min-h-[44px] px-3 py-2.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 active:scale-[0.97] active:bg-primary/80 transition-all focus-ring"
+                aria-label="Apply vegan variation to recipe"
+              >
+                Apply variation
+              </button>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             WIDGET 2 — Multiple variations list
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- User: what variations exist? -->
+        <li role="listitem" class="flex justify-end" aria-label="Your message">
+          <div class="max-w-[78%] bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-sm">
+            What variations exist for this curry?
+          </div>
+        </li>
+
+        <!-- AI: variations list widget -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            I found <strong class="font-semibold">4 variations</strong> from similar recipes:
+          </p>
+
+          <div
+            class="bg-white border border-border rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="Available recipe variations"
+          >
+            <ul class="divide-y divide-border/60" role="list" aria-label="Recipe variations">
+
+              <!-- Vegan Version -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3.5 hover:bg-black/[0.03]">
+                <span class="text-xl flex-shrink-0" aria-hidden="true">🌿</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-heading">Vegan Version</p>
+                  <p class="text-xs text-muted mt-0.5">Tofu &amp; vegetable broth swap</p>
+                </div>
+                <button
+                  type="button"
+                  class="text-xs font-medium text-primary hover:text-primary/70 whitespace-nowrap min-h-[44px] px-2 focus-ring rounded transition-colors"
+                  aria-label="Try Vegan Version"
+                >
+                  Try this &rsaquo;
+                </button>
+              </li>
+
+              <!-- Spicy Edition -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3.5 hover:bg-black/[0.03]">
+                <span class="text-xl flex-shrink-0" aria-hidden="true">🔥</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-heading">Spicy Edition</p>
+                  <p class="text-xs text-muted mt-0.5">Extra chilis &amp; hot paste</p>
+                </div>
+                <button
+                  type="button"
+                  class="text-xs font-medium text-primary hover:text-primary/70 whitespace-nowrap min-h-[44px] px-2 focus-ring rounded transition-colors"
+                  aria-label="Try Spicy Edition"
+                >
+                  Try this &rsaquo;
+                </button>
+              </li>
+
+              <!-- Quick 20-min Version -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3.5 hover:bg-black/[0.03]">
+                <span class="text-xl flex-shrink-0" aria-hidden="true">⏱</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-heading">Quick 20-min Version</p>
+                  <p class="text-xs text-muted mt-0.5">Pre-made paste shortcut</p>
+                </div>
+                <button
+                  type="button"
+                  class="text-xs font-medium text-primary hover:text-primary/70 whitespace-nowrap min-h-[44px] px-2 focus-ring rounded transition-colors"
+                  aria-label="Try Quick 20-min Version"
+                >
+                  Try this &rsaquo;
+                </button>
+              </li>
+
+              <!-- Restaurant Style -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3.5 hover:bg-black/[0.03]">
+                <span class="text-xl flex-shrink-0" aria-hidden="true">⭐</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-heading">Restaurant Style</p>
+                  <p class="text-xs text-muted mt-0.5">Freshly pounded paste, 90 min</p>
+                </div>
+                <button
+                  type="button"
+                  class="text-xs font-medium text-primary hover:text-primary/70 whitespace-nowrap min-h-[44px] px-2 focus-ring rounded transition-colors"
+                  aria-label="Try Restaurant Style"
+                >
+                  Try this &rsaquo;
+                </button>
+              </li>
+
+            </ul>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             WIDGET 3 — Chef tip / culinary knowledge card
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- User: proper way to make curry -->
+        <li role="listitem" class="flex justify-end" aria-label="Your message">
+          <div class="max-w-[78%] bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-sm">
+            What's the proper way to make this curry?
+          </div>
+        </li>
+
+        <!-- AI: chef tip card -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            The traditional technique has a few key steps that most shortcuts miss:
+          </p>
+
+          <!-- Chef's Notes card -->
+          <div
+            class="rounded-xl overflow-hidden shadow-sm border border-[#B9D8C4]"
+            style="background-color: #E8F2EC;"
+            role="region"
+            aria-label="Chef's notes: traditional technique"
+          >
+            <div class="px-4 pt-4 pb-4">
+              <!-- Card title -->
+              <div class="flex items-center gap-2 mb-3.5">
+                <span class="text-base" aria-hidden="true">👨‍🍳</span>
+                <h3 class="text-sm font-bold text-heading">Traditional Technique</h3>
+              </div>
+
+              <!-- Tips list -->
+              <ul class="flex flex-col gap-3" role="list" aria-label="Traditional cooking tips">
+
+                <li role="listitem" class="flex items-start gap-2.5">
+                  <div
+                    class="h-5 w-5 rounded-full bg-primary flex-shrink-0 flex items-center justify-center mt-0.5"
+                    aria-hidden="true"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
+                         stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
+                  <p class="text-xs text-heading leading-snug">
+                    Fry the curry paste <strong class="font-semibold">dry first</strong> before adding coconut milk — this intensifies the aroma
+                  </p>
+                </li>
+
+                <li role="listitem" class="flex items-start gap-2.5">
+                  <div
+                    class="h-5 w-5 rounded-full bg-primary flex-shrink-0 flex items-center justify-center mt-0.5"
+                    aria-hidden="true"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
+                         stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
+                  <p class="text-xs text-heading leading-snug">
+                    Use the <strong class="font-semibold">top cream</strong> from a can of coconut milk first; reserve the thinner milk for later
+                  </p>
+                </li>
+
+                <li role="listitem" class="flex items-start gap-2.5">
+                  <div
+                    class="h-5 w-5 rounded-full bg-primary flex-shrink-0 flex items-center justify-center mt-0.5"
+                    aria-hidden="true"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
+                         stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
+                  <p class="text-xs text-heading leading-snug">
+                    <strong class="font-semibold">Blanch vegetables briefly</strong> in salted water before adding to the curry for better texture
+                  </p>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             WIDGET 4 — Glossary term highlight + definition callout
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- AI: culinary terminology message with glossary term -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            The base starts with a proper
+            <!-- Glossary term: mirepoix -->
+            <button
+              type="button"
+              class="glossary-term focus-ring rounded-sm"
+              aria-label="Glossary term: mirepoix — tap to see definition"
+              aria-expanded="true"
+              aria-controls="glossary-mirepoix"
+            >mirepoix</button>
+            — the French term for a mix of onion, carrot, and celery sautéed together to build flavor depth.
+          </p>
+
+          <!-- Glossary definition callout -->
+          <div
+            id="glossary-mirepoix"
+            class="bg-white border border-border rounded-xl shadow-sm px-4 py-3.5 ml-1"
+            role="complementary"
+            aria-label="Definition: mirepoix"
+          >
+            <div class="flex items-start justify-between gap-3 mb-1.5">
+              <p class="text-sm font-bold text-heading">Mirepoix</p>
+              <span
+                class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-cream border border-border text-muted flex-shrink-0"
+                aria-label="French cuisine term"
+              >
+                French
+              </span>
+            </div>
+            <p class="text-xs text-muted leading-snug">
+              A culinary base of diced onion <span class="font-medium text-heading">(2 parts)</span>, carrot <span class="font-medium text-heading">(1 part)</span>, and celery <span class="font-medium text-heading">(1 part)</span>, cooked in butter to build flavor.
+            </p>
+            <div class="mt-2.5 pt-2.5 border-t border-border">
+              <button
+                type="button"
+                class="text-xs font-medium text-primary hover:text-primary/70 focus-ring rounded transition-colors min-h-[44px] -my-2 flex items-center"
+                aria-label="Browse more culinary terms"
+              >
+                More terms &rarr;
+              </button>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             WIDGET 5 — Side-by-side recipe comparison
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- User: compare restaurant style vs quick version -->
+        <li role="listitem" class="flex justify-end" aria-label="Your message">
+          <div class="max-w-[78%] bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-sm">
+            Compare the restaurant style vs quick version
+          </div>
+        </li>
+
+        <!-- AI: comparison table widget -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Here's how they compare:
+          </p>
+
+          <!-- Comparison card -->
+          <div
+            class="bg-white border border-border rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="Comparison: Quick 20-min vs Restaurant Style"
+          >
+            <!-- Comparison table -->
+            <table class="w-full" aria-label="Recipe comparison details">
+              <thead>
+                <tr>
+                  <!-- empty corner cell -->
+                  <td class="hidden"></td>
+                  <!-- Quick 20-min header — golden accent -->
+                  <th scope="col" class="border-b-[3px] border-[#D4A017] px-4 pt-3.5 pb-3 border-r border-border text-left font-normal">
+                    <div class="flex items-center gap-1.5 mb-0.5">
+                      <span class="text-sm" aria-hidden="true">⏱</span>
+                      <span class="text-xs font-bold text-heading">Quick 20-min</span>
+                    </div>
+                  </th>
+                  <!-- Restaurant Style header — green accent -->
+                  <th scope="col" class="border-b-[3px] border-primary px-4 pt-3.5 pb-3 text-left font-normal">
+                    <div class="flex items-center gap-1.5 mb-0.5">
+                      <span class="text-sm" aria-hidden="true">⭐</span>
+                      <span class="text-xs font-bold text-heading">Restaurant Style</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border/60">
+
+                <!-- Time row -->
+                <tr>
+                  <th scope="row" class="px-4 py-3 border-r border-border text-left font-normal w-0 whitespace-nowrap">
+                    <span class="text-[10px] font-semibold text-muted uppercase tracking-widest">Time</span>
+                  </th>
+                  <td class="px-4 py-3 border-r border-border">
+                    <p class="text-sm font-semibold text-heading">20 min</p>
+                  </td>
+                  <td class="px-4 py-3">
+                    <p class="text-sm font-semibold text-heading">90 min</p>
+                  </td>
+                </tr>
+
+                <!-- Difficulty row -->
+                <tr>
+                  <th scope="row" class="px-4 py-3 border-r border-border text-left font-normal w-0 whitespace-nowrap">
+                    <span class="text-[10px] font-semibold text-muted uppercase tracking-widest">Difficulty</span>
+                  </th>
+                  <td class="px-4 py-3 border-r border-border">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#FDF4E0] text-[#92610A]">Easy</span>
+                  </td>
+                  <td class="px-4 py-3">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#E8F2EC] text-primary">Advanced</span>
+                  </td>
+                </tr>
+
+                <!-- Key step row -->
+                <tr>
+                  <th scope="row" class="px-4 py-3 border-r border-border text-left font-normal w-0 whitespace-nowrap">
+                    <span class="text-[10px] font-semibold text-muted uppercase tracking-widest">Key step</span>
+                  </th>
+                  <td class="px-4 py-3 border-r border-border">
+                    <p class="text-xs text-heading leading-snug">Use pre-made paste</p>
+                  </td>
+                  <td class="px-4 py-3">
+                    <p class="text-xs text-heading leading-snug">Pound paste fresh</p>
+                  </td>
+                </tr>
+
+                <!-- Result row -->
+                <tr>
+                  <th scope="row" class="px-4 py-3 border-r border-border text-left font-normal w-0 whitespace-nowrap">
+                    <span class="text-[10px] font-semibold text-muted uppercase tracking-widest">Result</span>
+                  </th>
+                  <td class="px-4 py-3 border-r border-border">
+                    <p class="text-xs text-heading leading-snug">Good weeknight</p>
+                  </td>
+                  <td class="px-4 py-3">
+                    <p class="text-xs text-heading leading-snug">Impressive guests</p>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             WIDGET 6 — Knowledge card / tips compilation
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- User: secrets to great Thai curry -->
+        <li role="listitem" class="flex justify-end" aria-label="Your message">
+          <div class="max-w-[78%] bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-sm">
+            What are the secrets to great Thai curry?
+          </div>
+        </li>
+
+        <!-- AI: knowledge card widget -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Here's what I've learned from <strong class="font-semibold">12 similar recipes:</strong>
+          </p>
+
+          <div
+            class="bg-white border border-border rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="Culinary knowledge: secrets to great Thai curry"
+          >
+
+            <!-- Horizontal scrollable insight chips -->
+            <div class="px-4 pt-4 pb-3">
+              <p class="text-[10px] font-semibold text-muted uppercase tracking-widest mb-3">Quick Insights</p>
+              <ul
+                class="no-scrollbar flex items-center gap-2 overflow-x-auto -mx-1 px-1 pb-1"
+                role="list"
+                aria-label="Cooking insight chips"
+              >
+                <li class="flex-shrink-0">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-2 min-h-[44px] bg-cream border border-border rounded-full text-xs font-medium text-heading hover:border-primary/40 hover:bg-[#E8F2EC] active:scale-[0.97] transition-all focus-ring"
+                    aria-label="Insight: Temperature matters"
+                  >
+                    <span aria-hidden="true">🌡️</span>
+                    Temperature matters
+                  </button>
+                </li>
+                <li class="flex-shrink-0">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-2 min-h-[44px] bg-cream border border-border rounded-full text-xs font-medium text-heading hover:border-primary/40 hover:bg-[#E8F2EC] active:scale-[0.97] transition-all focus-ring"
+                    aria-label="Insight: Salt at the end"
+                  >
+                    <span aria-hidden="true">🧂</span>
+                    Salt at the end
+                  </button>
+                </li>
+                <li class="flex-shrink-0">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-2 min-h-[44px] bg-cream border border-border rounded-full text-xs font-medium text-heading hover:border-primary/40 hover:bg-[#E8F2EC] active:scale-[0.97] transition-all focus-ring"
+                    aria-label="Insight: Full-fat coconut milk"
+                  >
+                    <span aria-hidden="true">🥥</span>
+                    Full-fat coconut milk
+                  </button>
+                </li>
+                <li class="flex-shrink-0">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-2 min-h-[44px] bg-cream border border-border rounded-full text-xs font-medium text-heading hover:border-primary/40 hover:bg-[#E8F2EC] active:scale-[0.97] transition-all focus-ring"
+                    aria-label="Insight: Fresh herbs last"
+                  >
+                    <span aria-hidden="true">🌿</span>
+                    Fresh herbs last
+                  </button>
+                </li>
+                <li class="flex-shrink-0">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-2 min-h-[44px] bg-cream border border-border rounded-full text-xs font-medium text-heading hover:border-primary/40 hover:bg-[#E8F2EC] active:scale-[0.97] transition-all focus-ring"
+                    aria-label="Insight: High heat paste"
+                  >
+                    <span aria-hidden="true">🔥</span>
+                    High heat paste
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Knowledge rows -->
+            <div class="border-t border-border divide-y divide-border/60">
+
+              <div class="flex items-start gap-3 px-4 py-3.5">
+                <span class="text-base flex-shrink-0 mt-0.5" aria-hidden="true">⚖️</span>
+                <p class="text-xs text-heading leading-snug">
+                  Balance <strong class="font-semibold">sweet, sour, salty, spicy</strong> in every bite — taste and adjust at each stage of cooking
+                </p>
+              </div>
+
+              <div class="flex items-start gap-3 px-4 py-3.5">
+                <span class="text-base flex-shrink-0 mt-0.5" aria-hidden="true">💡</span>
+                <p class="text-xs text-heading leading-snug">
+                  Fish sauce gives <strong class="font-semibold">umami depth</strong> — don't substitute lightly or the flavor profile will suffer
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             WIDGET 7 — Recipe evolution / history note
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- AI: history / info card -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Interesting fact about <strong class="font-semibold">Thai Green Curry:</strong>
+          </p>
+
+          <!-- Info card with left green border -->
+          <div
+            class="bg-cream border-t border-r border-b border-border border-l-4 border-l-primary rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="History and origin of Thai Green Curry"
+          >
+            <div class="px-4 py-4">
+              <div class="flex items-start gap-2.5">
+                <span class="text-base flex-shrink-0 mt-0.5" aria-hidden="true">📜</span>
+                <div>
+                  <p class="text-xs text-heading leading-relaxed">
+                    Thai Green Curry originated in <strong class="font-semibold">Central Thailand</strong> in the early 20th century. The green color comes from <strong class="font-semibold">young green chilis</strong>, not green bell peppers as Western adaptations suggest.
+                  </p>
+                  <p class="text-[11px] text-muted mt-2.5 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                      <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    Source: Hot Thai Kitchen &middot; verified
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+
+      </ol>
+      <!-- end ol[aria-label="Conversation"] -->
+
+      <!-- Bottom spacer so last message clears quick actions + input bar -->
+      <div class="h-36 pb-safe" aria-hidden="true"></div>
+
+    </main>
+    <!-- end main -->
+
+
+    <!-- ─── BOTTOM AREA ──────────────────────────────────────── -->
+    <footer class="sticky bottom-0 bg-cream border-t border-border/60">
+
+      <!-- Quick action bubbles -->
+      <nav
+        aria-label="Quick variation actions"
+        class="no-scrollbar flex items-center gap-2 px-4 pt-3 pb-2 overflow-x-auto"
+      >
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0"
+          aria-label="See more recipe variations"
+        >
+          <span aria-hidden="true">🌿</span>
+          More variations
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0"
+          aria-label="Get chef tips for this recipe"
+        >
+          <span aria-hidden="true">👨‍🍳</span>
+          Chef tips
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0"
+          aria-label="Learn about the history of this recipe"
+        >
+          <span aria-hidden="true">📖</span>
+          History
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0"
+          aria-label="Compare recipe versions"
+        >
+          <span aria-hidden="true">🔄</span>
+          Compare
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0 mr-4"
+          aria-label="Explain a culinary term"
+        >
+          <span aria-hidden="true">💡</span>
+          Explain term
+        </button>
+      </nav>
+
+      <!-- Input bar -->
+      <form aria-label="Chat input" class="px-4 pb-8 pt-1">
+        <div class="flex items-center gap-2 bg-white border border-border rounded-full px-4 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-primary/30 focus-within:border-primary/30 transition-all">
+
+          <!-- Text input -->
+          <input
+            type="text"
+            placeholder="Ask about variations, tips..."
+            aria-label="Ask about variations, tips, or culinary terms"
+            autocomplete="off"
+            class="flex-1 bg-transparent text-sm text-heading placeholder:text-muted/70 outline-none min-w-0"
+          >
+
+          <!-- Search toggle -->
+          <button
+            type="button"
+            aria-label="Toggle search mode"
+            aria-pressed="false"
+            class="h-11 w-11 inline-flex items-center justify-center text-muted hover:text-heading active:scale-95 transition-all flex-shrink-0 rounded-full focus-ring"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+
+          <!-- Send button -->
+          <button
+            type="submit"
+            aria-label="Send message"
+            class="h-11 w-11 inline-flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 active:scale-95 transition-all flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed focus-ring"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+
+    </footer>
+
+  </div>
+  <!-- end device frame -->
+
+</body>
+</html>

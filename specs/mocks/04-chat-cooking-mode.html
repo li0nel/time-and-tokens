@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cook — Live Cooking Mode</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            cream: '#FAF8F5',
+            primary: '#2D5A3D',
+            heading: '#1A1A1A',
+            muted: '#6B6B6B',
+            greeting: '#8B7355',
+            border: '#E8E4DF',
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Focus-visible only (not focus) */
+    .focus-ring:focus { outline: none; }
+    .focus-ring:focus-visible {
+      outline: 2px solid rgba(45,90,61,0.75);
+      outline-offset: 2px;
+    }
+
+    /* Progress bar pulse for active step */
+    @keyframes progressPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.75; }
+    }
+
+    /* Scrollbar hide for quick actions */
+    .no-scrollbar {
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Step dot */
+    .step-dot-active {
+      width: 20px;
+      height: 8px;
+      border-radius: 4px;
+      background-color: #2D5A3D;
+    }
+    .step-dot-inactive {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #E8E4DF;
+    }
+    .step-dot-done {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #2D5A3D;
+      opacity: 0.4;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased flex items-start justify-center bg-[#E8E4DF] py-8">
+
+  <!-- Screen-reader live region for chat updates -->
+  <div aria-live="polite" aria-atomic="false" class="sr-only" id="chat-live-region"></div>
+
+  <!-- Device Frame -->
+  <div class="w-[390px] bg-cream relative flex flex-col shadow-xl rounded-[40px] h-[844px]">
+
+    <!-- Status Bar Spacer -->
+    <div class="h-12 flex-shrink-0"></div>
+
+    <!-- Top Bar -->
+    <header class="flex items-center justify-between px-5 pb-3 flex-shrink-0 border-b border-border">
+
+      <!-- Back button -->
+      <button
+        type="button"
+        aria-label="Exit cooking mode and go back"
+        class="h-11 w-11 inline-flex items-center justify-center rounded-full text-heading hover:bg-black/5 transition-colors active:scale-95 focus-ring"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+      </button>
+
+      <!-- Title -->
+      <div class="text-center">
+        <p class="text-sm font-semibold text-heading">Cooking Mode</p>
+        <p class="text-xs text-muted">Thai Green Curry</p>
+      </div>
+
+      <!-- Shopping list -->
+      <button
+        type="button"
+        aria-label="Shopping list"
+        class="h-11 w-11 inline-flex items-center justify-center rounded-full text-heading hover:bg-black/5 transition-colors active:scale-95 focus-ring"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- ─── CHAT MESSAGES ─────────────────────────────────────── -->
+    <main class="overflow-y-auto flex-1 px-4 pt-5 pb-2" aria-label="Chat messages">
+
+      <!-- Conversation list -->
+      <ol aria-label="Conversation" class="flex flex-col gap-5">
+
+
+        <!-- ══════════════════════════════════════════════════════
+             SEGMENT 1 — Transition into cooking mode
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- AI: Intro message -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Let's cook <strong class="font-semibold">Thai Green Curry!</strong> I'll guide you step by step. You can ask me anything at any time.
+          </p>
+
+          <!-- Cooking mode header card -->
+          <div
+            class="bg-white border border-border rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="Cooking mode: Thai Green Curry overview"
+          >
+            <!-- Card header -->
+            <div class="px-4 pt-4 pb-3">
+              <div class="flex items-center gap-3">
+                <div
+                  class="h-10 w-10 rounded-lg flex-shrink-0 flex items-center justify-center text-lg bg-gradient-to-br from-primary to-primary/70"
+                  aria-hidden="true"
+                >
+                  🍛
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h2 class="text-sm font-bold text-heading">Thai Green Curry</h2>
+                  <p class="text-xs text-muted mt-0.5">Step 1 of 6</p>
+                </div>
+                <!-- Live indicator -->
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-[#E8F2EC] text-primary flex-shrink-0"
+                  aria-label="Cooking mode active"
+                >
+                  <span class="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true"></span>
+                  Live
+                </span>
+              </div>
+
+              <!-- Progress bar -->
+              <div class="mt-3">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-[11px] font-medium text-heading">Step 1 of 6</span>
+                  <span class="text-[11px] text-muted">17%</span>
+                </div>
+                <div
+                  class="w-full h-1.5 bg-border rounded-full overflow-hidden"
+                  role="progressbar"
+                  aria-valuenow="1"
+                  aria-valuemin="0"
+                  aria-valuemax="6"
+                  aria-label="Recipe progress: step 1 of 6"
+                >
+                  <div class="h-full bg-primary rounded-full" style="width: 16.6%;"></div>
+                </div>
+              </div>
+
+              <!-- Meta badges row -->
+              <div class="flex gap-2 mt-3" role="list" aria-label="Recipe details">
+                <span
+                  role="listitem"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-cream border border-border text-heading"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  35 min total
+                </span>
+                <span
+                  role="listitem"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-cream border border-border text-heading"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                  4 servings
+                </span>
+                <span
+                  role="listitem"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-cream border border-border text-heading"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                    <line x1="6" y1="1" x2="6" y2="4"/>
+                    <line x1="10" y1="1" x2="10" y2="4"/>
+                    <line x1="14" y1="1" x2="14" y2="4"/>
+                  </svg>
+                  420 cal
+                </span>
+              </div>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             SEGMENT 2 — Step 1 widget (active/current step)
+        ══════════════════════════════════════════════════════ -->
+
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+
+          <!-- Active step card -->
+          <div
+            class="bg-white border-2 border-primary rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="Current step: Step 1, Heat the wok"
+          >
+            <!-- Step header -->
+            <div class="px-4 pt-4 pb-3">
+              <div class="flex items-center gap-3">
+                <!-- Step number circle — filled green -->
+                <div
+                  class="h-9 w-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <span class="text-white text-sm font-bold">1</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[10px] font-semibold text-primary uppercase tracking-widest">Current step</p>
+                  <h3 class="text-sm font-bold text-heading mt-0.5">Step 1 — Heat the wok</h3>
+                </div>
+              </div>
+
+              <!-- Instruction text with inline quantity highlights -->
+              <p class="text-sm text-heading leading-relaxed mt-3">
+                Heat
+                <span
+                  class="bg-[#FDF4E0] rounded px-1.5 py-0.5 font-medium text-[#92610A]"
+                  aria-label="quantity: 200ml coconut milk"
+                >200ml coconut milk</span>
+                in a wok over medium heat. Add
+                <span
+                  class="bg-[#FDF4E0] rounded px-1.5 py-0.5 font-medium text-[#92610A]"
+                  aria-label="quantity: 3 tbsp green curry paste"
+                >3 tbsp green curry paste</span>
+                and stir until fragrant, about 2 minutes.
+              </p>
+
+              <!-- Chef tip -->
+              <div class="mt-3 flex items-start gap-2 bg-cream rounded-lg px-3 py-2.5">
+                <span class="text-sm flex-shrink-0 mt-px" aria-hidden="true">💡</span>
+                <p class="text-xs text-muted leading-snug">
+                  <strong class="font-semibold text-heading">Tip:</strong> The paste is fragrant when you can smell the lemongrass and galangal — about 90 seconds on medium.
+                </p>
+              </div>
+
+              <!-- Timer button -->
+              <button
+                type="button"
+                class="mt-3 w-full flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-lg border border-border text-sm font-medium text-heading hover:bg-black/[0.06] hover:border-heading/20 active:scale-[0.97] transition-all focus-ring"
+                aria-label="Set a 2 minute timer for step 1"
+              >
+                <span aria-hidden="true">⏱</span>
+                Set 2 min timer
+              </button>
+            </div>
+
+            <!-- Step indicator dots -->
+            <div
+              class="flex items-center justify-center gap-2 px-4 py-3 border-t border-border bg-cream/50"
+              role="group"
+              aria-label="Step 1 of 6 active"
+            >
+              <!-- Active step dot (pill shape) -->
+              <span class="step-dot-active" aria-hidden="true"></span>
+              <span class="step-dot-inactive" aria-hidden="true"></span>
+              <span class="step-dot-inactive" aria-hidden="true"></span>
+              <span class="step-dot-inactive" aria-hidden="true"></span>
+              <span class="step-dot-inactive" aria-hidden="true"></span>
+              <span class="step-dot-inactive" aria-hidden="true"></span>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             SEGMENT 3 — User asks mid-cooking question
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- User message -->
+        <li role="listitem" class="flex justify-end" aria-label="Your message">
+          <div
+            class="max-w-[78%] bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-sm"
+          >
+            How long should I cook the chicken for step 2?
+          </div>
+        </li>
+
+        <!-- AI response + Step 2 contextual card -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Cook the sliced chicken for <strong class="font-semibold">5–7 minutes</strong> on medium-high heat. Look for golden edges and no pink in the center.
+          </p>
+
+          <!-- Step 2 contextual card -->
+          <div
+            class="bg-white border border-border rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="Step 2: Add chicken preview"
+          >
+            <div class="px-4 pt-4 pb-3">
+              <div class="flex items-center gap-3">
+                <!-- Step number circle — outlined (upcoming step) -->
+                <div
+                  class="h-9 w-9 rounded-full bg-white border-2 border-primary flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <span class="text-primary text-sm font-bold">2</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[10px] font-semibold text-primary uppercase tracking-widest">Coming up next</p>
+                  <h3 class="text-sm font-bold text-heading mt-0.5">Step 2 — Add the chicken</h3>
+                </div>
+                <!-- Upcoming badge -->
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cream border border-border text-muted flex-shrink-0"
+                  aria-label="Step status: upcoming"
+                >
+                  Upcoming
+                </span>
+              </div>
+
+              <p class="text-sm text-heading leading-relaxed mt-3">
+                Medium-high heat,
+                <span
+                  class="bg-[#FDF4E0] rounded px-1.5 py-0.5 font-medium text-[#92610A]"
+                  aria-label="duration: 5–7 minutes"
+                >5–7 min</span>.
+                Add
+                <span
+                  class="bg-[#FDF4E0] rounded px-1.5 py-0.5 font-medium text-[#92610A]"
+                  aria-label="quantity: 500g sliced chicken breast"
+                >500g sliced chicken breast</span>
+                to the wok. Turn occasionally for even browning.
+              </p>
+
+              <!-- Timer button -->
+              <button
+                type="button"
+                class="mt-3 w-full flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-lg border border-border text-sm font-medium text-heading hover:bg-black/[0.06] hover:border-heading/20 active:scale-[0.97] transition-all focus-ring"
+                aria-label="Set a 7 minute timer for step 2 chicken"
+              >
+                <span aria-hidden="true">⏱</span>
+                Set 7 min timer
+              </button>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             SEGMENT 4 — Step completion + Step 3
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- AI: transition message -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Great! Let's move to step 3.
+          </p>
+
+          <!-- Step 3 active card -->
+          <div
+            class="bg-white border-2 border-primary rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="Current step: Step 3, Add bell pepper and simmer"
+          >
+            <div class="px-4 pt-4 pb-3">
+              <div class="flex items-center gap-3">
+                <!-- Step 3 number circle -->
+                <div
+                  class="h-9 w-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <span class="text-white text-sm font-bold">3</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[10px] font-semibold text-primary uppercase tracking-widest">Current step</p>
+                  <h3 class="text-sm font-bold text-heading mt-0.5">Step 3 — Add vegetables</h3>
+                </div>
+              </div>
+
+              <!-- Instruction with inline quantities -->
+              <p class="text-sm text-heading leading-relaxed mt-3">
+                Add
+                <span
+                  class="bg-[#FDF4E0] rounded px-1.5 py-0.5 font-medium text-[#92610A]"
+                  aria-label="quantity: 1 red bell pepper, sliced"
+                >1 red bell pepper, sliced</span>
+                and
+                <span
+                  class="bg-[#FDF4E0] rounded px-1.5 py-0.5 font-medium text-[#92610A]"
+                  aria-label="quantity: 100g bamboo shoots"
+                >100g bamboo shoots</span>
+                to the wok. Reduce to a gentle simmer and cook for 3 minutes until the pepper softens slightly but retains its crunch.
+              </p>
+
+              <!-- Chef tip -->
+              <div class="mt-3 flex items-start gap-2 bg-cream rounded-lg px-3 py-2.5">
+                <span class="text-sm flex-shrink-0 mt-px" aria-hidden="true">💡</span>
+                <p class="text-xs text-muted leading-snug">
+                  <strong class="font-semibold text-heading">Tip:</strong> Don't overcook — bell pepper should still have a slight bite. It'll keep cooking after you turn off the heat.
+                </p>
+              </div>
+
+              <!-- Timer button -->
+              <button
+                type="button"
+                class="mt-3 w-full flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-lg border border-border text-sm font-medium text-heading hover:bg-black/[0.06] hover:border-heading/20 active:scale-[0.97] transition-all focus-ring"
+                aria-label="Set a 3 minute timer for step 3"
+              >
+                <span aria-hidden="true">⏱</span>
+                Set 3 min timer
+              </button>
+
+              <!-- Quick action response row -->
+              <div
+                class="flex gap-2 mt-3"
+                role="group"
+                aria-label="Step 3 quick actions"
+              >
+                <button
+                  type="button"
+                  class="flex-1 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3 py-2.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 active:scale-[0.97] transition-all focus-ring"
+                  aria-label="Mark step 3 as done"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Done
+                </button>
+                <button
+                  type="button"
+                  class="flex-1 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3 py-2.5 rounded-lg border border-border text-xs font-medium text-heading hover:bg-black/[0.06] active:scale-[0.97] transition-all focus-ring"
+                  aria-label="Set a timer for step 3"
+                >
+                  <span aria-hidden="true">⏱</span>
+                  Timer
+                </button>
+                <button
+                  type="button"
+                  class="flex-1 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3 py-2.5 rounded-lg border border-border text-xs font-medium text-heading hover:bg-black/[0.06] active:scale-[0.97] transition-all focus-ring"
+                  aria-label="I need help with step 3"
+                >
+                  <span aria-hidden="true">❓</span>
+                  Help
+                </button>
+              </div>
+            </div>
+
+            <!-- Step indicator dots — step 3 active -->
+            <div
+              class="flex items-center justify-center gap-2 px-4 py-3 border-t border-border bg-cream/50"
+              role="group"
+              aria-label="Step 3 of 6 active"
+            >
+              <span class="step-dot-done" aria-hidden="true"></span>
+              <span class="step-dot-done" aria-hidden="true"></span>
+              <span class="step-dot-active" aria-hidden="true"></span>
+              <span class="step-dot-inactive" aria-hidden="true"></span>
+              <span class="step-dot-inactive" aria-hidden="true"></span>
+              <span class="step-dot-inactive" aria-hidden="true"></span>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             SEGMENT 5 — User mistake + Recovery tips card
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- User message -->
+        <li role="listitem" class="flex justify-end" aria-label="Your message">
+          <div
+            class="max-w-[78%] bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-sm"
+          >
+            Oops, I added too much fish sauce. What do I do?
+          </div>
+        </li>
+
+        <!-- AI response + recovery card -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Don't worry! Here's how to fix it:
+          </p>
+
+          <!-- Recovery tips card — amber/warm -->
+          <div
+            class="rounded-xl overflow-hidden shadow-sm"
+            style="background-color: #FEF3C7; border: 1px solid #F59E0B40;"
+            role="region"
+            aria-label="Recovery tip: Too much fish sauce"
+          >
+            <div class="px-4 pt-4 pb-4">
+              <!-- Card title -->
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-base" aria-hidden="true">🧂</span>
+                <h3 class="text-sm font-bold text-heading">Too much fish sauce — Recovery</h3>
+              </div>
+
+              <!-- Tips list -->
+              <ol role="list" aria-label="Recovery tips" class="flex flex-col gap-3">
+
+                <!-- Tip 1 -->
+                <li role="listitem" class="flex items-start gap-3">
+                  <span
+                    class="h-5 w-5 rounded-full bg-[#F59E0B] text-white flex-shrink-0 flex items-center justify-center text-[11px] font-bold mt-0.5"
+                    aria-hidden="true"
+                  >1</span>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm text-heading leading-snug">
+                      Add
+                      <span
+                        class="bg-white/90 rounded px-1.5 py-0.5 font-medium text-[#7A4F08]"
+                        aria-label="quantity: 1 tsp sugar"
+                      >1 tsp sugar</span>
+                      to balance the saltiness
+                    </p>
+                  </div>
+                </li>
+
+                <!-- Tip 2 -->
+                <li role="listitem" class="flex items-start gap-3">
+                  <span
+                    class="h-5 w-5 rounded-full bg-[#F59E0B] text-white flex-shrink-0 flex items-center justify-center text-[11px] font-bold mt-0.5"
+                    aria-hidden="true"
+                  >2</span>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm text-heading leading-snug">
+                      Squeeze in
+                      <span
+                        class="bg-white/90 rounded px-1.5 py-0.5 font-medium text-[#7A4F08]"
+                        aria-label="ingredient: fresh lime juice"
+                      >fresh lime juice</span>
+                      to cut through the saltiness
+                    </p>
+                  </div>
+                </li>
+
+                <!-- Tip 3 -->
+                <li role="listitem" class="flex items-start gap-3">
+                  <span
+                    class="h-5 w-5 rounded-full bg-[#F59E0B] text-white flex-shrink-0 flex items-center justify-center text-[11px] font-bold mt-0.5"
+                    aria-hidden="true"
+                  >3</span>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm text-heading leading-snug">
+                      Add
+                      <span
+                        class="bg-white/90 rounded px-1.5 py-0.5 font-medium text-[#7A4F08]"
+                        aria-label="quantity: extra coconut milk"
+                      >extra coconut milk</span>
+                      to dilute (adjust other flavors after)
+                    </p>
+                  </div>
+                </li>
+              </ol>
+
+              <!-- Continue cooking button -->
+              <button
+                type="button"
+                class="mt-4 w-full flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 active:scale-[0.97] transition-all focus-ring"
+                aria-label="Continue cooking after fixing fish sauce"
+              >
+                Continue cooking
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             SEGMENT 6 — Steps completion overview
+        ══════════════════════════════════════════════════════ -->
+
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Nicely recovered! Here's where you stand:
+          </p>
+
+          <!-- All-steps summary card -->
+          <div
+            class="bg-white border border-border rounded-xl overflow-hidden shadow-sm"
+            role="region"
+            aria-label="All 6 cooking steps overview"
+          >
+            <!-- Card header -->
+            <div class="px-4 pt-3 pb-2 border-b border-border flex items-center justify-between">
+              <p class="text-xs font-semibold text-heading uppercase tracking-wide">All steps</p>
+              <div
+                class="w-24 h-1 bg-border rounded-full overflow-hidden"
+                role="progressbar"
+                aria-valuenow="3"
+                aria-valuemin="0"
+                aria-valuemax="6"
+                aria-label="3 of 6 steps complete"
+              >
+                <div class="h-full bg-primary rounded-full" style="width: 50%;"></div>
+              </div>
+            </div>
+
+            <ul role="list" aria-label="Step status list" class="divide-y divide-border">
+
+              <!-- Step 1 — completed -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3">
+                <div
+                  class="h-7 w-7 rounded-full border-2 border-primary/30 bg-[#E8F2EC] flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                       stroke="#2D5A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-muted line-through" aria-label="Step 1 completed: Heat the wok">
+                    Step 1 — Heat the wok
+                  </p>
+                </div>
+                <span class="text-[11px] text-primary font-medium flex-shrink-0">Done</span>
+              </li>
+
+              <!-- Step 2 — completed -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3">
+                <div
+                  class="h-7 w-7 rounded-full border-2 border-primary/30 bg-[#E8F2EC] flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                       stroke="#2D5A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-muted line-through" aria-label="Step 2 completed: Add the chicken">
+                    Step 2 — Add the chicken
+                  </p>
+                </div>
+                <span class="text-[11px] text-primary font-medium flex-shrink-0">Done</span>
+              </li>
+
+              <!-- Step 3 — completed -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3">
+                <div
+                  class="h-7 w-7 rounded-full border-2 border-primary/30 bg-[#E8F2EC] flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                       stroke="#2D5A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-muted line-through" aria-label="Step 3 completed: Add bell pepper">
+                    Step 3 — Add bell pepper &amp; simmer
+                  </p>
+                </div>
+                <span class="text-[11px] text-primary font-medium flex-shrink-0">Done</span>
+              </li>
+
+              <!-- Step 4 — upcoming -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3">
+                <div
+                  class="h-7 w-7 rounded-full border-2 border-border bg-transparent flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <span class="text-muted text-xs font-bold">4</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-muted" aria-label="Step 4 upcoming: Season with fish sauce">
+                    Step 4 — Season &amp; finish sauce
+                  </p>
+                </div>
+                <span class="text-[11px] text-muted/60 font-medium flex-shrink-0">Soon</span>
+              </li>
+
+              <!-- Step 5 — upcoming -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3">
+                <div
+                  class="h-7 w-7 rounded-full border-2 border-border bg-transparent flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <span class="text-muted text-xs font-bold">5</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-muted" aria-label="Step 5 upcoming: Add Thai basil">
+                    Step 5 — Add Thai basil &amp; lime
+                  </p>
+                </div>
+                <span class="text-[11px] text-muted/60 font-medium flex-shrink-0">Soon</span>
+              </li>
+
+              <!-- Step 6 — upcoming -->
+              <li role="listitem" class="flex items-center gap-3 px-4 py-3">
+                <div
+                  class="h-7 w-7 rounded-full border-2 border-border bg-transparent flex-shrink-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <span class="text-muted text-xs font-bold">6</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-muted" aria-label="Step 6 upcoming: Serve">
+                    Step 6 — Plate &amp; serve
+                  </p>
+                </div>
+                <span class="text-[11px] text-muted/60 font-medium flex-shrink-0">Soon</span>
+              </li>
+
+            </ul>
+          </div>
+        </li>
+
+
+        <!-- ══════════════════════════════════════════════════════
+             SEGMENT 7 — Finish cooking + success card
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- AI: encouragement message -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+          <p class="text-sm text-heading leading-relaxed px-1">
+            You're almost there! Just 3 more steps. Keep going — you've got this! 🎉
+          </p>
+        </li>
+
+        <!-- User: done! -->
+        <li role="listitem" class="flex justify-end" aria-label="Your message">
+          <div
+            class="max-w-[78%] bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-sm"
+          >
+            Finished! It looks amazing
+          </div>
+        </li>
+
+        <!-- AI: success + success card -->
+        <li role="listitem" class="flex flex-col gap-3" aria-label="Cook assistant reply">
+
+          <p class="text-sm text-heading leading-relaxed px-1">
+            Excellent! Your Thai Green Curry is ready. Here's what to do next:
+          </p>
+
+          <!-- Success card — green background -->
+          <div
+            class="rounded-xl overflow-hidden shadow-sm"
+            style="background-color: #E8F2EC; border: 1px solid #B9D8C4;"
+            role="region"
+            aria-label="Cooking complete: Thai Green Curry done"
+          >
+            <div class="px-4 pt-5 pb-4">
+
+              <!-- Large check icon -->
+              <div class="flex flex-col items-center text-center mb-4">
+                <div
+                  class="h-14 w-14 rounded-full bg-primary flex items-center justify-center shadow-md mb-3"
+                  aria-hidden="true"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                       stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <h3 class="text-base font-bold text-heading">Thai Green Curry — Done!</h3>
+                <p class="text-xs text-muted mt-1">Serves 4 · 35 minutes total</p>
+              </div>
+
+              <!-- Primary action buttons -->
+              <div
+                class="flex gap-2"
+                role="group"
+                aria-label="Post-cooking actions"
+              >
+                <button
+                  type="button"
+                  class="flex-1 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3 py-2.5 rounded-lg border border-border bg-white text-xs font-medium text-heading hover:bg-black/[0.06] hover:border-heading/20 active:scale-[0.97] transition-all focus-ring"
+                  aria-label="Rate this recipe"
+                >
+                  Rate this recipe
+                  <span aria-hidden="true">⭐</span>
+                </button>
+                <button
+                  type="button"
+                  class="flex-1 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3 py-2.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 active:scale-[0.97] transition-all focus-ring"
+                  aria-label="Save Thai Green Curry to favorites"
+                >
+                  Save
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Divider -->
+              <div class="mt-4 border-t border-primary/15"></div>
+
+              <!-- Add ingredients for next time -->
+              <div class="mt-3 flex items-center justify-between gap-3">
+                <p class="text-xs text-muted leading-snug flex-1">
+                  Add ingredients for next time?
+                </p>
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0"
+                  aria-label="Add Thai Green Curry ingredients to shopping list for next time"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  Add to list
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </li>
+
+
+      </ol>
+      <!-- end ol[aria-label="Conversation"] -->
+
+      <!-- Bottom spacer so last message clears quick actions + input bar (intentional padding for sticky footer) -->
+      <div class="h-36 pb-safe" aria-hidden="true"></div>
+
+    </main>
+    <!-- end main -->
+
+
+    <!-- ─── BOTTOM AREA ──────────────────────────────────────── -->
+    <footer class="sticky bottom-0 bg-cream border-t border-border/60">
+
+      <!-- Quick action bubbles -->
+      <nav
+        aria-label="Quick cooking actions"
+        class="no-scrollbar flex items-center gap-2 px-4 pt-3 pb-2 overflow-x-auto"
+      >
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:active:scale-100"
+          aria-label="Go to next cooking step"
+        >
+          <span aria-hidden="true">➡️</span>
+          Next step
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:active:scale-100"
+          aria-label="Set a cooking timer"
+        >
+          <span aria-hidden="true">⏱</span>
+          Set timer
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:active:scale-100"
+          aria-label="I need help with this step"
+        >
+          <span aria-hidden="true">❓</span>
+          I need help
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:active:scale-100"
+          aria-label="Repeat the current step instructions"
+        >
+          <span aria-hidden="true">🔄</span>
+          Repeat step
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 whitespace-nowrap px-3.5 py-2 min-h-[44px] bg-white border border-border rounded-full text-xs font-medium text-heading hover:shadow-sm hover:border-greeting/40 active:scale-[0.97] transition-all focus-ring flex-shrink-0 mr-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:active:scale-100"
+          aria-label="Mark recipe as finished cooking"
+        >
+          <span aria-hidden="true">🍽️</span>
+          I'm done
+        </button>
+      </nav>
+
+      <!-- Input bar -->
+      <form aria-label="Chat input" class="px-4 pb-8 pt-1">
+        <div class="flex items-center gap-2 bg-white border border-border rounded-full px-4 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-primary/30 focus-within:border-primary/30 transition-all">
+
+          <!-- Text input -->
+          <input
+            type="text"
+            placeholder="Ask about this recipe..."
+            aria-label="Ask about this recipe"
+            autocomplete="off"
+            class="flex-1 bg-transparent text-sm text-heading placeholder:text-muted/70 outline-none min-w-0"
+          >
+
+          <!-- Search toggle -->
+          <button
+            type="button"
+            aria-label="Toggle search mode"
+            aria-pressed="false"
+            class="h-11 w-11 inline-flex items-center justify-center text-muted hover:text-heading active:scale-95 transition-all flex-shrink-0 rounded-full focus-ring"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+
+          <!-- Send button -->
+          <button
+            type="submit"
+            aria-label="Send message"
+            class="h-11 w-11 inline-flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 active:scale-95 transition-all flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed focus-ring"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+
+    </footer>
+
+  </div>
+  <!-- end device frame -->
+
+</body>
+</html>
