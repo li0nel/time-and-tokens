@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Recipe: Hainanese Chicken Rice</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .cook-mode-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--brand-50);
+      border: 1px solid var(--brand-muted);
+      border-radius: var(--r-lg);
+      margin-bottom: 24px;
+      cursor: pointer;
+    }
+    .cook-mode-banner-text { font-size: var(--fs-sm); font-weight: 600; color: var(--brand); }
+    .step-warning {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: var(--warning-bg);
+      border: 1px solid #FDE68A;
+      border-radius: var(--r-sm);
+      font-size: var(--fs-xs);
+      color: var(--warning);
+      line-height: var(--lh-normal);
+    }
+    .step-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: var(--info-bg);
+      border: 1px solid #BFDBFE;
+      border-radius: var(--r-sm);
+      font-size: var(--fs-xs);
+      color: var(--info);
+      line-height: var(--lh-normal);
+    }
+    .timer-pill {
+      font-weight: 700;
+      font-size: 1.05em;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- HERO IMAGE (4:3) -->
+  <div class="recipe-hero-wrap">
+    <div class="recipe-hero-img" style="background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:80px;">🍗</div>
+    <div class="recipe-hero-gradient"></div>
+    <div class="recipe-hero-actions">
+      <button class="hero-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      </button>
+    </div>
+    <div class="recipe-hero-title-block">
+      <span class="recipe-hero-cuisine">Chinese · Singaporean</span>
+      <h1 class="recipe-hero-name">Hainanese Chicken Rice</h1>
+    </div>
+  </div>
+
+  <!-- META BAR: prep & cook time only -->
+  <div class="recipe-body">
+    <div class="recipe-meta-bar">
+      <div class="recipe-meta-col"><div class="recipe-meta-val">20</div><div class="recipe-meta-lbl">MIN PREP</div></div>
+      <div class="recipe-meta-col"><div class="recipe-meta-val">1h 30</div><div class="recipe-meta-lbl">MIN COOK</div></div>
+    </div>
+  </div>
+
+  <!-- SCROLLABLE RECIPE CONTENT -->
+  <div class="recipe-body" style="padding-top:20px;">
+
+    <!-- Add to List button above ingredients -->
+    <button class="btn btn-primary" style="width:100%;margin-bottom:24px;">+ Add to List</button>
+
+    <!-- Cook mode banner -->
+    <div class="cook-mode-banner">
+      <span style="font-size:20px;">👨‍🍳</span>
+      <div style="flex:1;">
+        <div class="cook-mode-banner-text">Cook with step-by-step mode →</div>
+        <div style="font-size:var(--fs-xs);color:var(--text-2);margin-top:1px;">Screen stays on · Timers included · Hands-free</div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--brand);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="instr-step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        Fill a large pot with cold water — enough to fully submerge the chicken. Add <span class="ingr-inline">4 slices fresh ginger</span> and <span class="ingr-inline">4 spring onion stalks</span>. Bring to a rolling boil over high heat.
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="instr-step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        Lower the <span class="ingr-inline">whole chicken</span> breast-side down into the boiling water. Bring back to a full boil, then immediately reduce heat to the absolute lowest setting. The liquid should barely simmer — small, lazy bubbles only.
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="instr-step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        Cover the pot and poach for <span class="timer-pill">⏱ 30 min</span> without lifting the lid. Maintaining consistent gentle heat is the single most important factor in silky texture.
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="instr-step">
+      <div class="step-num">4</div>
+      <div class="step-text">
+        Turn the chicken breast-side up using tongs. Poach for an additional <span class="timer-pill">⏱ 10 min</span>.
+        <div class="step-note">
+          <span>💡</span>
+          <span>Insert thermometer at the thickest part of the thigh (not touching bone) — look for 74°C / 165°F to confirm doneness.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="instr-step">
+      <div class="step-num">5</div>
+      <div class="step-text">
+        Transfer chicken to an <span class="ingr-inline">ice bath</span> IMMEDIATELY. Fully submerge and leave for <span class="timer-pill">⏱ 10 min</span>.
+        <div class="step-warning">
+          <span>⚠️</span>
+          <span>Do not skip the ice bath — it creates the silky, taut, jade-green skin that defines the dish. Skip it and the skin will be flabby and pale.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="instr-step">
+      <div class="step-num">6</div>
+      <div class="step-text">
+        While the chicken poaches: heat <span class="ingr-inline">2 tbsp sesame oil</span> in a wok or heavy saucepan over medium heat. Add <span class="ingr-inline">sliced ginger</span> and sauté for <span class="timer-pill">⏱ 2 min</span> until fragrant. Add the <span class="ingr-inline">unwashed jasmine rice</span> and stir to coat every grain in the oil.
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="instr-step">
+      <div class="step-num">7</div>
+      <div class="step-text">
+        Ladle in <span class="ingr-inline">4 cups of hot poaching liquid</span>. Season with <span class="ingr-inline">1 tbsp light soy sauce</span> and a pinch of salt. Cover tightly and cook on the lowest heat for <span class="timer-pill">⏱ 18 min</span>. Do not lift the lid.
+      </div>
+    </div>
+
+    <!-- Step 8 -->
+    <div class="instr-step">
+      <div class="step-num">8</div>
+      <div class="step-text">
+        Make the sauces. <strong>Chilli sauce:</strong> blend <span class="ingr-inline">red chillies</span>, <span class="ingr-inline">garlic</span>, <span class="ingr-inline">lime juice</span>, <span class="ingr-inline">fish sauce</span> and <span class="ingr-inline">sugar</span> until smooth. <strong>Ginger sauce:</strong> combine <span class="ingr-inline">grated ginger</span>, <span class="ingr-inline">minced spring onion</span> and <span class="ingr-inline">salt</span> in a bowl, then pour <span class="ingr-inline">smoking hot neutral oil</span> over the top — it should sizzle dramatically.
+      </div>
+    </div>
+
+    <!-- Step 9 -->
+    <div class="instr-step">
+      <div class="step-num">9</div>
+      <div class="step-text">
+        Remove chicken from ice bath. Pat thoroughly dry with paper towels. Rub all over with a mixture of <span class="ingr-inline">sesame oil</span> and <span class="ingr-inline">light soy sauce</span>. Carve: remove legs and thighs first, then slice the breast. Arrange on a platter, skin-side up.
+      </div>
+    </div>
+
+    <!-- Step 10 -->
+    <div class="instr-step">
+      <div class="step-num">10</div>
+      <div class="step-text">
+        Serve the sliced chicken over a mound of fragrant rice, with cucumber slices, all three dipping sauces, and a small bowl of clear poaching broth seasoned with white pepper and spring onion.
+        <div class="step-note">
+          <span>🍽️</span>
+          <span>Traditionally served at room temperature — the chicken is not meant to be hot. This is correct.</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:32px;"></div>
+
+  </div>
+
+</div>
+</body>
+</html>

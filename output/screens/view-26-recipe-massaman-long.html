@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Massaman Curry</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .unit-toggle {
+      display: flex;
+      background: var(--bg-elevated);
+      border-radius: var(--r-full);
+      padding: 3px;
+      gap: 2px;
+    }
+    .unit-opt {
+      padding: 6px 14px;
+      border-radius: var(--r-full);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      color: var(--text-2);
+      cursor: pointer;
+    }
+    .unit-opt.active { background: var(--bg-surface); color: var(--text); box-shadow: var(--shadow-xs); }
+    .ingr-section-head {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-3);
+      padding: 20px 0 10px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .ingr-section-head.first { border-top: none; padding-top: 0; }
+    .step-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: var(--info-bg);
+      border: 1px solid #BFDBFE;
+      border-radius: var(--r-sm);
+      font-size: var(--fs-xs);
+      color: var(--info);
+      line-height: var(--lh-normal);
+    }
+    .step-warning {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: var(--warning-bg);
+      border: 1px solid #FDE68A;
+      border-radius: var(--r-sm);
+      font-size: var(--fs-xs);
+      color: var(--warning);
+      line-height: var(--lh-normal);
+    }
+    .hero-subtitle {
+      font-size: var(--fs-sm);
+      color: rgba(255,255,255,0.75);
+      margin-top: 4px;
+      font-style: italic;
+      letter-spacing: 0.3px;
+    }
+    .divider-section {
+      height: 6px;
+      background: var(--bg-elevated);
+      margin: 28px -20px 28px;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- HERO IMAGE (4:3) -->
+  <div class="recipe-hero-wrap">
+    <div class="recipe-hero-img" style="background:linear-gradient(160deg,#F5D76E 0%,#E89228 40%,#C8481C 100%);display:flex;align-items:center;justify-content:center;font-size:80px;">🍛</div>
+    <div class="recipe-hero-gradient"></div>
+    <div class="recipe-hero-actions">
+      <button class="hero-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div style="display:flex;gap:8px;">
+        <button class="hero-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        <button class="hero-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+    </div>
+    <div class="recipe-hero-title-block">
+      <span class="recipe-hero-cuisine">Thai · Persian-influenced</span>
+      <h1 class="recipe-hero-name">Massaman Curry</h1>
+      <div class="hero-subtitle">แกงมัสมั่น — The King of Curries</div>
+    </div>
+  </div>
+
+  <!-- META BAR -->
+  <div class="recipe-body">
+    <div class="recipe-meta-bar">
+      <div class="recipe-meta-col"><div class="recipe-meta-val">30</div><div class="recipe-meta-lbl">MIN PREP</div></div>
+      <div class="recipe-meta-col"><div class="recipe-meta-val">2h 30</div><div class="recipe-meta-lbl">MIN COOK</div></div>
+      <div class="recipe-meta-col"><div class="recipe-meta-val">6</div><div class="recipe-meta-lbl">SERVES</div></div>
+      <div class="recipe-meta-col"><div class="recipe-meta-val">⭐⭐</div><div class="recipe-meta-lbl">LEVEL</div></div>
+    </div>
+  </div>
+
+  <!-- INGREDIENTS CONTENT -->
+  <div class="recipe-body" style="padding-top:20px;">
+
+    <!-- Controls -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div class="serve-scaler" style="margin-bottom:0;">
+        <span class="serve-lbl">Serves</span>
+        <button class="serve-btn">−</button>
+        <span class="serve-count">6</span>
+        <button class="serve-btn">+</button>
+        <span class="serve-lbl">people</span>
+      </div>
+      <div class="unit-toggle">
+        <div class="unit-opt active">Metric ✓</div>
+        <div class="unit-opt">Imperial</div>
+      </div>
+    </div>
+
+    <!-- Add All button -->
+    <button class="btn btn-primary" style="width:100%;padding:14px;font-size:var(--fs-base);margin-bottom:20px;">+ Add All to Shopping List</button>
+
+    <!-- CURRY PASTE -->
+    <div class="ingr-section-head first">Curry paste (from scratch)</div>
+    <div style="background:var(--brand-50);border:1px solid var(--brand-muted);border-radius:var(--r-md);padding:8px 12px;margin-bottom:14px;font-size:var(--fs-xs);color:var(--brand);">
+      ✦ mise. tip: Use Mae Ploy brand Massaman paste as a shortcut — add 3 tbsp to skip all 10 paste ingredients. Saves 30 min.
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">10 pcs</div>
+      <div>
+        <div class="ingr-full-name">Dried long red chillies</div>
+        <div class="ingr-full-note">seeds removed; soaked in hot water 20 min until soft</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">1 tbsp</div>
+      <div>
+        <div class="ingr-full-name">Coriander seeds</div>
+        <div class="ingr-full-note">dry toasted in a pan until fragrant; then ground</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">1 tsp</div>
+      <div>
+        <div class="ingr-full-name">Cumin seeds</div>
+        <div class="ingr-full-note">dry toasted; adds earthy warmth</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">5 pcs</div>
+      <div>
+        <div class="ingr-full-name">White peppercorns</div>
+        <div class="ingr-full-note">crushed; gives back-of-throat heat</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">4 cloves</div>
+      <div>
+        <div class="ingr-full-name">Garlic</div>
+        <div class="ingr-full-note">whole, unpeeled; roast in foil for 15 min for depth</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">2 stalks</div>
+      <div>
+        <div class="ingr-full-name">Lemongrass</div>
+        <div class="ingr-full-note">bottom 8cm only, outer leaves removed, thinly sliced</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">2 pcs</div>
+      <div>
+        <div class="ingr-full-name">Shallots</div>
+        <div class="ingr-full-note">roughly sliced</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">1 tsp</div>
+      <div>
+        <div class="ingr-full-name">Fresh galangal</div>
+        <div class="ingr-full-note">thinly sliced; ginger works in a pinch</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">½ tsp</div>
+      <div>
+        <div class="ingr-full-name">Shrimp paste (belacan)</div>
+        <div class="ingr-full-note">wrapped in foil and roasted 5 min</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">½ tsp</div>
+      <div>
+        <div class="ingr-full-name">Fine salt</div>
+        <div class="ingr-full-note">to help grind the paste</div>
+      </div>
+    </div>
+
+    <!-- MAIN CURRY -->
+    <div class="ingr-section-head">Main curry</div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">1 kg</div>
+      <div>
+        <div class="ingr-full-name">Beef chuck</div>
+        <div class="ingr-full-note">cut into 4cm cubes; well-marbled is key</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">2 cans (800ml)</div>
+      <div>
+        <div class="ingr-full-name">Full-fat coconut milk</div>
+        <div class="ingr-full-note">do not use light — the fat is the sauce</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">3 tbsp</div>
+      <div>
+        <div class="ingr-full-name">Massaman curry paste</div>
+        <div class="ingr-full-note">from above recipe or Mae Ploy brand</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">300g</div>
+      <div>
+        <div class="ingr-full-name">Baby potatoes</div>
+        <div class="ingr-full-note">halved; waxy variety holds shape better</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">2 medium</div>
+      <div>
+        <div class="ingr-full-name">Brown onions</div>
+        <div class="ingr-full-note">quartered; will soften into the sauce</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">80g</div>
+      <div>
+        <div class="ingr-full-name">Roasted peanuts</div>
+        <div class="ingr-full-note">skin-on or off; half will be blended in</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">3 tbsp</div>
+      <div>
+        <div class="ingr-full-name">Fish sauce</div>
+        <div class="ingr-full-note">Tiparos or Squid brand; adds saltiness and umami</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">2–3 tbsp</div>
+      <div>
+        <div class="ingr-full-name">Palm sugar</div>
+        <div class="ingr-full-note">grated; coconut sugar or brown sugar as sub</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">2 tbsp</div>
+      <div>
+        <div class="ingr-full-name">Tamarind paste</div>
+        <div class="ingr-full-note">from a block soaked in warm water, or concentrate</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">1 stick</div>
+      <div>
+        <div class="ingr-full-name">Cinnamon stick</div>
+        <div class="ingr-full-note">Persian influence; whole, not ground</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">3 pods</div>
+      <div>
+        <div class="ingr-full-name">Cardamom pods</div>
+        <div class="ingr-full-note">gently bruised with the flat of a knife</div>
+      </div>
+    </div>
+    <div class="ingr-full-item">
+      <div class="ingr-full-amount">3 leaves</div>
+      <div>
+        <div class="ingr-full-name">Bay leaves</div>
+        <div class="ingr-full-note">dried or fresh; remove before serving</div>
+      </div>
+    </div>
+
+    <div style="height:16px;"></div>
+
+  </div>
+
+  <!-- SECTION DIVIDER -->
+  <div class="divider-section"></div>
+
+  <!-- INSTRUCTIONS SECTION -->
+  <div class="recipe-body" style="padding-top:0;">
+
+    <div class="section-title" style="margin-bottom:20px;">Instructions</div>
+
+    <!-- Step 1 -->
+    <div class="instr-step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <strong>Make the curry paste:</strong> Drain the soaked <span class="ingr-inline">dried chillies</span>. Toast <span class="ingr-inline">coriander seeds</span> and <span class="ingr-inline">cumin seeds</span> in a dry pan over medium heat for <span class="timer-pill">⏱ 2 min</span> until fragrant. Let cool, then grind to a powder in a spice grinder or mortar.
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="instr-step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        Combine all paste ingredients in a mortar or food processor: drained <span class="ingr-inline">chillies</span>, ground spices, <span class="ingr-inline">garlic</span>, <span class="ingr-inline">lemongrass</span>, <span class="ingr-inline">shallots</span>, <span class="ingr-inline">galangal</span>, <span class="ingr-inline">roasted shrimp paste</span>, and <span class="ingr-inline">salt</span>. Pound or blend until a smooth, fragrant paste forms. <span class="timer-pill">⏱ 10–15 min</span>
+        <div class="step-note">
+          <span>💡</span>
+          <span>A mortar and pestle gives a coarser, more texturally complex paste than a blender. If using a blender, add a splash of coconut milk to help it move.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="instr-step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        In a large heavy-bottomed pot or Dutch oven, heat 3 tbsp of the thick cream from the top of a coconut milk can over medium-high heat. Add the <span class="ingr-inline">curry paste</span> and fry, stirring constantly, for <span class="timer-pill">⏱ 4–5 min</span> until darkened, fragrant, and oil has separated from the paste.
+        <div class="step-warning">
+          <span>⚠️</span>
+          <span>Don't skip frying the paste — raw paste tastes muddy. You want it to deepen in colour and the oil to visibly separate from the solids.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="instr-step">
+      <div class="step-num">4</div>
+      <div class="step-text">
+        Add the <span class="ingr-inline">beef chuck</span> cubes to the pot. Stir to coat every piece in the paste. Sear for <span class="timer-pill">⏱ 3 min</span> until the outside of the beef is sealed and lightly coloured.
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="instr-step">
+      <div class="step-num">5</div>
+      <div class="step-text">
+        Pour in the remaining <span class="ingr-inline">coconut milk</span>. Add <span class="ingr-inline">cinnamon stick</span>, <span class="ingr-inline">cardamom pods</span>, and <span class="ingr-inline">bay leaves</span>. Stir to combine. Bring to a gentle simmer, then reduce heat to low.
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="instr-step">
+      <div class="step-num">6</div>
+      <div class="step-text">
+        Cover and simmer on the lowest possible heat for <span class="timer-pill">⏱ 1 hour</span>. Stir every 15–20 minutes. The beef should begin to tenderise but is not yet ready.
+        <div class="step-note">
+          <span>🕐</span>
+          <span>The curry deepens in flavour and colour during this time. Resist the urge to crank up the heat — low and slow is everything for this dish.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="instr-step">
+      <div class="step-num">7</div>
+      <div class="step-text">
+        Add the <span class="ingr-inline">baby potatoes</span> and <span class="ingr-inline">quartered onions</span>. Stir in <span class="ingr-inline">half the peanuts</span>, <span class="ingr-inline">fish sauce</span>, <span class="ingr-inline">palm sugar</span>, and <span class="ingr-inline">tamarind paste</span>. Continue to simmer uncovered for another <span class="timer-pill">⏱ 45–60 min</span> until beef is fork-tender and sauce has thickened.
+      </div>
+    </div>
+
+    <!-- Step 8 -->
+    <div class="instr-step">
+      <div class="step-num">8</div>
+      <div class="step-text">
+        Taste and adjust the balance: more <span class="ingr-inline">fish sauce</span> for salt, <span class="ingr-inline">palm sugar</span> for sweetness, <span class="ingr-inline">tamarind</span> for sour. The flavour should be simultaneously rich, sweet, slightly sour, and deeply savoury — with the aromatic spices in the background.
+      </div>
+    </div>
+
+    <!-- Step 9 -->
+    <div class="instr-step">
+      <div class="step-num">9</div>
+      <div class="step-text">
+        Remove the <span class="ingr-inline">cinnamon stick</span>, <span class="ingr-inline">cardamom pods</span>, and <span class="ingr-inline">bay leaves</span>. Scatter the remaining <span class="ingr-inline">roasted peanuts</span> over the top. The curry should be thick enough to coat a spoon.
+      </div>
+    </div>
+
+    <!-- Step 10 -->
+    <div class="instr-step">
+      <div class="step-num">10</div>
+      <div class="step-text">
+        Serve over jasmine rice or roti canai. Garnish with additional peanuts, a swirl of coconut cream, and fresh coriander. Provide extra fish sauce and chilli on the side.
+        <div class="step-note">
+          <span>✨</span>
+          <span>Massaman tastes dramatically better the next day. Make it ahead — the flavours bloom and deepen overnight in the fridge.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STICKY ACTION BAR — Added state -->
+  <div style="background:var(--bg);border-top:1px solid var(--border-subtle);padding:12px 20px 34px;display:flex;gap:10px;position:sticky;bottom:0;">
+    <button class="btn btn-outline" style="flex:1;">Cook Now 👨‍🍳</button>
+    <button class="btn btn-success" style="flex:1;">✓ Added</button>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Cook Steps Chat</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .ai-avatar {
+      width: 30px;
+      height: 30px;
+      background: var(--brand);
+      border-radius: var(--r-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      letter-spacing: -0.5px;
+    }
+    .msg-ai-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .msg-ai-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .time-stamp {
+      font-size: var(--fs-xs);
+      color: var(--text-4);
+      text-align: center;
+    }
+    .system-msg {
+      text-align: center;
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+      padding: 6px 0;
+    }
+    .system-msg span {
+      background: var(--bg-elevated);
+      padding: 4px 12px;
+      border-radius: var(--r-full);
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED -->
+  <div class="chat-feed">
+
+    <div class="time-stamp">Today, 8:02 PM</div>
+
+    <!-- User message -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">
+        Walk me through the Hainanese Chicken recipe
+      </div>
+    </div>
+
+    <!-- AI response with cook step widget -->
+    <div class="msg-ai-row">
+      <div class="ai-avatar">m.</div>
+      <div class="msg-ai-content">
+
+        <div class="msg-ai-text">
+          Perfect! Let's cook. I'll guide you through each step. Here's where we are:
+        </div>
+
+        <!-- Cook Step Widget -->
+        <div class="cook-step">
+          <!-- Header -->
+          <div class="cook-step-head">
+            <span class="cook-step-label">COOKING MODE</span>
+            <span class="cook-step-progress">Step 1 of 8</span>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="cook-progress-bar" style="margin-top:3px;">
+            <div class="cook-progress-fill" style="width:12.5%;"></div>
+          </div>
+
+          <!-- Step body -->
+          <div class="cook-step-body">
+            <div class="cook-step-text">
+              Fill a large pot with enough water to fully submerge the chicken. Add <span class="ingr-inline">3 slices of ginger</span> and <span class="ingr-inline">2 spring onions</span>. Bring to a rolling boil.
+            </div>
+            <div>
+              <span class="timer-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ~8 min to boil
+              </span>
+            </div>
+          </div>
+
+          <!-- Nav buttons -->
+          <div class="cook-step-nav">
+            <button class="btn btn-outline" style="flex:1;opacity:0.4;cursor:not-allowed;">
+              ← Previous
+            </button>
+            <button class="btn btn-primary" style="flex:2;">
+              Next Step →
+            </button>
+          </div>
+        </div>
+
+        <div class="msg-ai-text">
+          While you wait for the water to boil, this is a great time to prepare your rice. Want me to show you that prep in parallel?
+        </div>
+
+        <!-- Quick reply chips -->
+        <div class="chip-row">
+          <button class="chip">Next step</button>
+          <button class="chip">Show rice prep</button>
+          <button class="chip">What temp?</button>
+          <button class="chip">I need help</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">⏱ Set timer</button>
+      <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">📋 Show all steps</button>
+      <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">🆘 Help</button>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field">
+        <span style="color:var(--text-3);">Ask a cooking question...</span>
+      </div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

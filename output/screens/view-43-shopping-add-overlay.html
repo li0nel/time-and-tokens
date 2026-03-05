@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Shopping List</title>
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="mobile-frame" style="position:relative;">
+
+  <!-- Background: dimmed shopping list (view-37 state) -->
+  <div style="filter:blur(1px);pointer-events:none;user-select:none;">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-bar-time">9:41</span>
+      <div class="status-icons">
+        <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+        <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+      </div>
+    </div>
+
+    <!-- App Bar -->
+    <div class="app-bar">
+      <button class="icon-btn back-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      </button>
+      <span style="font-size:17px;font-weight:700;letter-spacing:-0.3px;">Shopping List</span>
+      <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="17" y2="18"/></svg></button>
+    </div>
+
+    <!-- Sort Toggle -->
+    <div style="padding:12px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:13px;color:var(--text-3);">20 items · 2 recipes</span>
+      <div class="sort-toggle">
+        <div class="sort-opt active">By Recipe</div>
+        <div class="sort-opt">By Aisle</div>
+      </div>
+    </div>
+
+    <!-- Partial list content -->
+    <div style="padding:12px 16px 20px;">
+      <div class="shop-section">
+        <div class="shop-section-head">
+          <div class="shop-section-thumb">
+            <div style="width:100%;height:100%;background:linear-gradient(160deg,#F0D5A8,#8B5820);display:flex;align-items:center;justify-content:center;font-size:16px;">🍗</div>
+          </div>
+          <span class="shop-section-name">Hainanese Chicken Rice</span>
+          <span class="shop-section-count">9 items</span>
+        </div>
+        <div class="shop-item"><div class="shop-check"></div><div class="shop-item-info"><div class="shop-item-name">Whole free-range chicken</div><div class="shop-item-amount">1.5 kg</div></div></div>
+        <div class="shop-item"><div class="shop-check"></div><div class="shop-item-info"><div class="shop-item-name">Jasmine rice</div><div class="shop-item-amount">400g</div></div></div>
+        <div class="shop-item"><div class="shop-check"></div><div class="shop-item-info"><div class="shop-item-name">Fresh ginger</div><div class="shop-item-amount">4cm piece</div></div></div>
+        <div class="shop-item"><div class="shop-check"></div><div class="shop-item-info"><div class="shop-item-name">Spring onions</div><div class="shop-item-amount">4 stalks</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dark overlay -->
+  <div style="position:absolute;inset:0;background:var(--bg-overlay);z-index:100;pointer-events:none;"></div>
+
+  <!-- Bottom Sheet Overlay -->
+  <div style="position:absolute;bottom:0;left:0;right:0;z-index:200;background:var(--bg-surface);border-radius:var(--r-2xl) var(--r-2xl) 0 0;box-shadow:var(--shadow-xl);max-height:82vh;overflow-y:auto;padding-bottom:34px;">
+
+    <!-- Handle -->
+    <div style="display:flex;justify-content:center;padding-top:10px;">
+      <div class="sheet-handle"></div>
+    </div>
+
+    <!-- Sheet Header -->
+    <div style="padding:14px 20px 12px;border-bottom:1px solid var(--border-subtle);">
+      <div style="font-size:19px;font-weight:800;letter-spacing:-0.5px;color:var(--text);">Add to Shopping List</div>
+      <div style="font-size:13px;color:var(--text-3);margin-top:2px;">Select a recipe to add ingredients</div>
+    </div>
+
+    <!-- Search bar -->
+    <div style="padding:12px 16px 0;">
+      <div style="display:flex;align-items:center;gap:10px;background:var(--bg-elevated);border:1.5px solid var(--border);border-radius:var(--r-full);padding:10px 14px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span style="font-size:15px;color:var(--text-3);">Search your recipes…</span>
+      </div>
+    </div>
+
+    <!-- Recent Recipes -->
+    <div style="padding:14px 16px 0;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">Your Recipes</div>
+
+      <!-- Recipe 1: Thai Green Curry — SELECTED -->
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 12px;background:var(--brand-50);border:1.5px solid var(--brand);border-radius:var(--r-lg);margin-bottom:8px;cursor:pointer;">
+        <!-- checkbox checked -->
+        <div style="width:22px;height:22px;border-radius:6px;background:var(--brand);border:2px solid var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <!-- thumbnail -->
+        <div style="width:46px;height:46px;border-radius:var(--r-md);overflow:hidden;flex-shrink:0;">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#B8E4A8,#2D7A1A);display:flex;align-items:center;justify-content:center;font-size:20px;">🥥</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--brand);">Thai Green Curry</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px;">4 servings · 40 min · Thai</div>
+        </div>
+      </div>
+
+      <!-- Recipe 2: Beef Bourguignon -->
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 12px;background:var(--bg-surface);border:1.5px solid var(--border);border-radius:var(--r-lg);margin-bottom:8px;cursor:pointer;">
+        <div style="width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;"></div>
+        <div style="width:46px;height:46px;border-radius:var(--r-md);overflow:hidden;flex-shrink:0;">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#D4A0C0,#7A1A3A);display:flex;align-items:center;justify-content:center;font-size:20px;">🥩</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Beef Bourguignon</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px;">6 servings · 3h 30min · French</div>
+        </div>
+      </div>
+
+      <!-- Recipe 3: Roasted Lemon Herb Chicken -->
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 12px;background:var(--bg-surface);border:1.5px solid var(--border);border-radius:var(--r-lg);margin-bottom:8px;cursor:pointer;">
+        <div style="width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;"></div>
+        <div style="width:46px;height:46px;border-radius:var(--r-md);overflow:hidden;flex-shrink:0;">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#FFF3B0,#D4A017);display:flex;align-items:center;justify-content:center;font-size:20px;">🍋</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Roasted Lemon Herb Chicken</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px;">4 servings · 1h 15min · Western</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recently cooked -->
+    <div style="padding:10px 16px 0;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">Recently Cooked</div>
+
+      <!-- Recipe 4: Chicken Tikka Masala -->
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 12px;background:var(--bg-surface);border:1.5px solid var(--border);border-radius:var(--r-lg);margin-bottom:8px;cursor:pointer;">
+        <div style="width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;"></div>
+        <div style="width:46px;height:46px;border-radius:var(--r-md);overflow:hidden;flex-shrink:0;">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#FFB347,#C84E1C);display:flex;align-items:center;justify-content:center;font-size:20px;">🫕</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Chicken Tikka Masala</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px;">4 servings · 50 min · Indian</div>
+        </div>
+      </div>
+
+      <!-- Recipe 5: Lamb Pita -->
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 12px;background:var(--bg-surface);border:1.5px solid var(--border);border-radius:var(--r-lg);margin-bottom:8px;cursor:pointer;">
+        <div style="width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;"></div>
+        <div style="width:46px;height:46px;border-radius:var(--r-md);overflow:hidden;flex-shrink:0;">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#E8CFA0,#8B6530);display:flex;align-items:center;justify-content:center;font-size:20px;">🫓</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Lamb Pita</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px;">2 servings · 30 min · Mediterranean</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer actions -->
+    <div style="padding:14px 16px 0;display:flex;gap:10px;border-top:1px solid var(--border-subtle);margin-top:8px;">
+      <button class="btn btn-outline" style="flex:1;font-size:14px;">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;font-size:14px;">
+        Add Thai Green Curry
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

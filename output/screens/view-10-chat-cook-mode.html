@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Cook Mode: Hainanese Chicken</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .cook-feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    /* Hide nav buttons — all steps shown at once, no next/back needed */
+    .cook-step-nav { display: none; }
+    /* Tip row inside a step bubble */
+    .step-tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border-subtle);
+      padding: 11px 16px;
+      font-size: var(--fs-xs);
+      color: var(--text-2);
+      line-height: var(--lh-snug);
+    }
+    .step-tip-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+    .temp-note {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--info-bg);
+      border: 1px solid #BFDBFE;
+      border-radius: var(--r-md);
+      padding: 9px 12px;
+      font-size: var(--fs-xs);
+      color: var(--info);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions" style="gap:8px;">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- COOK MODE FEED — all steps stacked vertically -->
+  <div class="cook-feed">
+
+    <!-- AI thinking with tool call indicator (ephemeral, disappears on completion) -->
+    <div class="msg-ai">
+      <div class="thinking">
+        <div class="thinking-dot"></div>
+        <div class="thinking-dot"></div>
+        <div class="thinking-dot"></div>
+      </div>
+      <div class="tool-call-status">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Loading cook steps...
+      </div>
+    </div>
+
+    <!-- Step 1 of 8 -->
+    <div class="cook-step">
+      <div class="cook-step-head">
+        <span class="cook-step-label">COOK MODE</span>
+        <span class="cook-step-progress">Step 1 of 8</span>
+      </div>
+      <div class="cook-progress-bar">
+        <div class="cook-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="cook-step-body">
+        <p class="cook-step-text">Fill a large pot with enough cold water to fully submerge your <span class="ingr-inline">1.5 kg whole chicken</span>. Add <span class="ingr-inline">3–4 slices of ginger</span> and <span class="ingr-inline">2 spring onion stalks</span>. Place on the stove over high heat.</p>
+        <div style="display:inline-flex;align-items:center;gap:5px;background:var(--warning-bg);color:var(--warning);padding:4px 10px;border-radius:var(--r-full);font-size:var(--fs-xs);font-weight:600;">
+          ⏱ ~8–10 min to boil
+        </div>
+      </div>
+      <div class="step-tip">
+        <span class="step-tip-icon">💡</span>
+        <span>Take the chicken out of packaging and let it come to room temperature first. Cold chicken straight from the fridge leads to uneven cooking.</span>
+      </div>
+    </div>
+
+    <!-- Step 2 of 8 -->
+    <div class="cook-step">
+      <div class="cook-step-head">
+        <span class="cook-step-label">COOK MODE</span>
+        <span class="cook-step-progress">Step 2 of 8</span>
+      </div>
+      <div class="cook-progress-bar">
+        <div class="cook-progress-fill" style="width:12%"></div>
+      </div>
+      <div class="cook-step-body">
+        <p class="cook-step-text">With the chicken now in the water, immediately reduce heat to minimum. Cover the pot. You want the barest simmer — tiny bubbles occasionally breaking the surface. No more. Set a timer for <span class="timer-pill">⏱ 30 min</span> and do not lift the lid.</p>
+        <div class="temp-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg>
+          If you have a probe thermometer, target 75–80°C water temp
+        </div>
+      </div>
+      <div class="step-tip">
+        <span class="step-tip-icon">💡</span>
+        <span>Now is a great time to start washing your <strong>2 cups jasmine rice</strong>. Rinse until the water runs mostly clear — about 3–4 rinses. Let it soak while the chicken cooks.</span>
+      </div>
+    </div>
+
+    <!-- Step 3 of 8 -->
+    <div class="cook-step">
+      <div class="cook-step-head">
+        <span class="cook-step-label">COOK MODE</span>
+        <span class="cook-step-progress">Step 3 of 8</span>
+      </div>
+      <div class="cook-progress-bar">
+        <div class="cook-progress-fill" style="width:25%"></div>
+      </div>
+      <div class="cook-step-body">
+        <p class="cook-step-text">After 30 minutes, turn off the heat completely. Keep the lid on. Let the chicken poach in the residual heat for another <span class="timer-pill">⏱ 20 min</span>. Do not open the pot.</p>
+      </div>
+      <div class="step-tip">
+        <span class="step-tip-icon">💡</span>
+        <span>The trapped steam continues cooking the chicken gently — this is what gives Hainanese chicken its signature silky texture.</span>
+      </div>
+    </div>
+
+    <!-- Step 4 of 8 -->
+    <div class="cook-step">
+      <div class="cook-step-head">
+        <span class="cook-step-label">COOK MODE</span>
+        <span class="cook-step-progress">Step 4 of 8</span>
+      </div>
+      <div class="cook-progress-bar">
+        <div class="cook-progress-fill" style="width:37%"></div>
+      </div>
+      <div class="cook-step-body">
+        <p class="cook-step-text">Remove the chicken and plunge it into an ice bath immediately. Leave for <span class="timer-pill">⏱ 10 min</span>. This stops the cooking and tightens the skin. Reserve all the poaching broth — you'll use it for the rice and soup.</p>
+      </div>
+      <div class="step-tip">
+        <span class="step-tip-icon">💡</span>
+        <span>The ice bath is not optional — it creates that glossy, taut skin. Don't skip it even if you're in a hurry.</span>
+      </div>
+    </div>
+
+    <!-- Step 5 of 8 -->
+    <div class="cook-step">
+      <div class="cook-step-head">
+        <span class="cook-step-label">COOK MODE</span>
+        <span class="cook-step-progress">Step 5 of 8</span>
+      </div>
+      <div class="cook-progress-bar">
+        <div class="cook-progress-fill" style="width:50%"></div>
+      </div>
+      <div class="cook-step-body">
+        <p class="cook-step-text">In a wok or saucepan, heat <span class="ingr-inline">2 tbsp chicken fat or oil</span> over medium heat. Add <span class="ingr-inline">3 cloves minced garlic</span> and <span class="ingr-inline">1 tsp minced ginger</span>. Stir until fragrant, about 1 minute. Add the drained soaked rice and stir-fry for 2 minutes.</p>
+      </div>
+      <div class="step-tip">
+        <span class="step-tip-icon">💡</span>
+        <span>Using rendered chicken fat instead of oil adds incredible depth to the rice. Skim it from the surface of your poaching broth.</span>
+      </div>
+    </div>
+
+    <!-- Step 6 of 8 -->
+    <div class="cook-step">
+      <div class="cook-step-head">
+        <span class="cook-step-label">COOK MODE</span>
+        <span class="cook-step-progress">Step 6 of 8</span>
+      </div>
+      <div class="cook-progress-bar">
+        <div class="cook-progress-fill" style="width:62%"></div>
+      </div>
+      <div class="cook-step-body">
+        <p class="cook-step-text">Transfer the rice to a rice cooker or pot. Add <span class="ingr-inline">2 cups poaching broth</span> (instead of water), <span class="ingr-inline">1 pandan leaf</span>, and <span class="ingr-inline">½ tsp salt</span>. Cook until done — about <span class="timer-pill">⏱ 15 min</span> in a rice cooker.</p>
+      </div>
+      <div class="step-tip">
+        <span class="step-tip-icon">💡</span>
+        <span>Cooking the rice in chicken broth instead of water is the secret that transforms ordinary jasmine rice into something extraordinary.</span>
+      </div>
+    </div>
+
+    <!-- Step 7 of 8 -->
+    <div class="cook-step">
+      <div class="cook-step-head">
+        <span class="cook-step-label">COOK MODE</span>
+        <span class="cook-step-progress">Step 7 of 8</span>
+      </div>
+      <div class="cook-progress-bar">
+        <div class="cook-progress-fill" style="width:75%"></div>
+      </div>
+      <div class="cook-step-body">
+        <p class="cook-step-text">While the rice cooks, prepare the dipping sauces. Blend <span class="ingr-inline">4 red chillies</span>, <span class="ingr-inline">3 garlic cloves</span>, <span class="ingr-inline">1 tbsp ginger</span>, <span class="ingr-inline">2 tbsp lime juice</span>, and <span class="ingr-inline">1 tsp sugar</span> for the chilli sauce. Mix <span class="ingr-inline">3 tbsp soy sauce</span> with <span class="ingr-inline">1 tsp sesame oil</span> for the soy dip.</p>
+      </div>
+      <div class="step-tip">
+        <span class="step-tip-icon">💡</span>
+        <span>Make the sauces fresh — bottled versions won't do this dish justice. The brightness of fresh lime and ginger is essential.</span>
+      </div>
+    </div>
+
+    <!-- Step 8 of 8 -->
+    <div class="cook-step">
+      <div class="cook-step-head">
+        <span class="cook-step-label">COOK MODE</span>
+        <span class="cook-step-progress">Step 8 of 8</span>
+      </div>
+      <div class="cook-progress-bar">
+        <div class="cook-progress-fill" style="width:88%"></div>
+      </div>
+      <div class="cook-step-body">
+        <p class="cook-step-text">Remove the chicken from the ice bath and pat dry. Chop into serving pieces or slice thinly. Plate over the rice, garnish with sliced cucumber and spring onion. Ladle the clear broth into bowls. Serve all sauces on the side.</p>
+        <div style="display:inline-flex;align-items:center;gap:5px;background:#DCFCE7;color:#16A34A;padding:4px 10px;border-radius:var(--r-full);font-size:var(--fs-xs);font-weight:600;margin-top:8px;">
+          ✓ Recipe complete — enjoy!
+        </div>
+      </div>
+      <div class="step-tip">
+        <span class="step-tip-icon">💡</span>
+        <span>Serve warm rice, room-temperature chicken, hot broth, and cold sauces together — the contrast of temperatures is part of the experience.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR — cook mode -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <div class="chip" style="font-size:var(--fs-xs);padding:5px 11px;background:var(--brand);color:#fff;border-color:var(--brand);">Next step ›</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">⏱ Start timer</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">📋 All steps</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">🆘 Help</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">⏸ Pause</div>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field"><span style="color:var(--text-3);">Ask anything while cooking...</span></div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

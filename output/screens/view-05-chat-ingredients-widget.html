@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Ingredients Widget Chat</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .ai-avatar {
+      width: 30px;
+      height: 30px;
+      background: var(--brand);
+      border-radius: var(--r-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      letter-spacing: -0.5px;
+    }
+    .msg-ai-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .msg-ai-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .time-stamp {
+      font-size: var(--fs-xs);
+      color: var(--text-4);
+      text-align: center;
+    }
+    .ingr-section-header {
+      padding: 8px 16px 4px;
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: var(--bg-elevated);
+    }
+    .widget-footer {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .serve-scaler-inline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .serve-btn-sm {
+      width: 26px;
+      height: 26px;
+      border-radius: var(--r-full);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--text);
+      cursor: pointer;
+      line-height: 1;
+    }
+    .serve-num {
+      font-size: var(--fs-base);
+      font-weight: 700;
+      color: var(--text);
+      min-width: 20px;
+      text-align: center;
+    }
+    .serve-label-sm {
+      font-size: var(--fs-sm);
+      color: var(--text-2);
+    }
+    /* Give recipe title area more room */
+    .widget-head-left {
+      flex: 1;
+      min-width: 0;
+      margin-right: 12px;
+    }
+    .widget-sub {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED -->
+  <div class="chat-feed">
+
+    <div class="time-stamp">Today, 7:45 PM</div>
+
+    <!-- User message -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">
+        What do I need for Hainanese Chicken Rice?
+      </div>
+    </div>
+
+    <!-- AI thinking with tool call indicator (ephemeral, disappears on completion) -->
+    <div class="msg-ai-row">
+      <div class="ai-avatar">m.</div>
+      <div class="msg-ai-content">
+        <div class="thinking">
+          <div class="thinking-dot"></div>
+          <div class="thinking-dot"></div>
+          <div class="thinking-dot"></div>
+        </div>
+        <div class="tool-call-status">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Updating recipe...
+        </div>
+      </div>
+    </div>
+
+    <!-- AI response with ingredients widget -->
+    <div class="msg-ai-row">
+      <div class="ai-avatar">m.</div>
+      <div class="msg-ai-content">
+
+        <div class="msg-ai-text">
+          Here's everything for the full recipe (serves 4):
+        </div>
+
+        <!-- Ingredients Widget -->
+        <div class="ingredients-widget">
+          <!-- Header -->
+          <div class="widget-head">
+            <div class="widget-head-left">
+              <div class="widget-title">Ingredients</div>
+              <div class="widget-sub">Hainanese Chicken Rice</div>
+            </div>
+            <!-- Serve scaler -->
+            <div class="serve-scaler-inline">
+              <button class="serve-btn-sm">−</button>
+              <span class="serve-num">4</span>
+              <button class="serve-btn-sm">+</button>
+              <span class="serve-label-sm">servings</span>
+            </div>
+          </div>
+
+          <!-- Main ingredients -->
+          <div class="ingr-list">
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">1.5 kg</div>
+              <div class="ingr-name">
+                Whole chicken
+                <div class="ingr-note">Room temperature</div>
+              </div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">2 cups</div>
+              <div class="ingr-name">Jasmine rice</div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">3 cm</div>
+              <div class="ingr-name">
+                Fresh ginger
+                <div class="ingr-note">Sliced into coins</div>
+              </div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">4 stalks</div>
+              <div class="ingr-name">Spring onions</div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">2 tbsp</div>
+              <div class="ingr-name">Sesame oil</div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">2 tbsp</div>
+              <div class="ingr-name">Light soy sauce</div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">1 tbsp</div>
+              <div class="ingr-name">Rice wine</div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">4 cups</div>
+              <div class="ingr-name">
+                Chicken stock
+                <div class="ingr-note">For cooking the rice</div>
+              </div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">To taste</div>
+              <div class="ingr-name">Salt</div>
+            </div>
+          </div>
+
+          <!-- Dipping sauces section -->
+          <div class="ingr-section-header">Dipping Sauces</div>
+          <div class="ingr-list">
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">3 tbsp</div>
+              <div class="ingr-name">
+                Chilli sauce
+                <div class="ingr-note">Store-bought or homemade</div>
+              </div>
+            </div>
+            <div class="ingr-item">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">1 tbsp</div>
+              <div class="ingr-name">Ginger paste</div>
+            </div>
+            <div class="ingr-item" style="border-bottom:none;">
+              <div class="ingr-check"></div>
+              <div class="ingr-amount">1 tbsp</div>
+              <div class="ingr-name">Spring onion oil</div>
+            </div>
+          </div>
+
+          <!-- Footer button -->
+          <div class="widget-footer">
+            <button class="btn btn-primary" style="width:100%;justify-content:center;">Add All to Shopping List →</button>
+          </div>
+        </div>
+
+        <!-- AI follow-up with glossary term -->
+        <div class="msg-ai-text">
+          The key to great Hainanese is keeping the chicken at room temperature before poaching — this ensures even cooking. You'll also want to make a proper <span class="gls">chicken broth</span> from the poaching liquid for the rice.
+        </div>
+
+        <!-- Quick reply chips -->
+        <div class="chip-row">
+          <button class="chip">Walk me through it</button>
+          <button class="chip">Add to list</button>
+          <button class="chip">Chef tips</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">Start cooking</button>
+      <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">Scale for 2</button>
+      <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">Substitutes</button>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field">
+        <span style="color:var(--text-3);">Message mise...</span>
+      </div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Cook Mode Rescue</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .prev-step-widget {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      opacity: 0.72;
+    }
+    .prev-step-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--bg-elevated);
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .prev-step-label svg { width: 13px; height: 13px; }
+    .prev-step-body { padding: 12px 14px; }
+    .prev-step-step-tag {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+    .prev-step-text {
+      font-size: var(--fs-sm);
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+    .step-warning {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      padding: 3px 9px;
+      background: #FFF3CD;
+      border: 1px solid #F59E0B;
+      border-radius: var(--r-full);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--warning);
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- App Bar -->
+  <div class="app-bar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="icon-btn" style="width:32px;height:32px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div>
+        <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span style="font-size:var(--fs-xs);color:var(--brand);font-weight:600;background:var(--brand-light);padding:4px 10px;border-radius:var(--r-full);">COOK MODE</span>
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Chat Feed -->
+  <div class="chat-feed">
+
+    <!-- Previous Step Widget (dimmed) -->
+    <div class="msg-ai">
+      <div class="prev-step-widget">
+        <div class="prev-step-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v10l4 2"/><circle cx="12" cy="12" r="10"/></svg>
+          Previous step
+        </div>
+        <div class="prev-step-body">
+          <div class="prev-step-step-tag">Step 4 of 8 — Poaching the chicken</div>
+          <div class="prev-step-text">Lower your chicken gently into the boiling water breast-side up. Cover and reduce heat to the lowest setting to maintain a bare simmer. Do <strong>NOT</strong> let it boil vigorously.</div>
+          <div class="step-warning">⚠️ Critical: bare simmer only</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Message -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">Oh no — I let the chicken boil hard for 10 minutes by mistake. Is it ruined? 😰</div>
+    </div>
+
+    <!-- AI Thinking -->
+    <div class="msg-ai">
+      <div class="thinking">
+        <div class="thinking-dot"></div>
+        <div class="thinking-dot"></div>
+        <div class="thinking-dot"></div>
+      </div>
+      <div class="tool-call-status">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Analyzing issue...
+      </div>
+    </div>
+
+    <!-- AI Response -->
+    <div class="msg-ai">
+      <div class="msg-ai-text">
+        <p>Don't panic — it's recoverable! Vigorous boiling toughens the exterior but the inside should still be fine. Here's the rescue plan:</p>
+      </div>
+
+      <!-- Rescue Widget -->
+      <div class="rescue-widget">
+        <div class="rescue-head">
+          <span class="rescue-icon">⚠️</span>
+          <span class="rescue-title">Recovery Mode</span>
+        </div>
+        <div class="rescue-step">
+          <div class="rescue-num">1</div>
+          <div class="rescue-text"><strong>Immediately remove chicken</strong> and cool in ice water for 5 min — stops further toughening</div>
+        </div>
+        <div class="rescue-step">
+          <div class="rescue-num">2</div>
+          <div class="rescue-text"><strong>Check internal temp</strong> at the thigh — it should read <span style="color:var(--brand);font-weight:600;">75°C</span>. If so, the meat is safe</div>
+        </div>
+        <div class="rescue-step">
+          <div class="rescue-num">3</div>
+          <div class="rescue-text">The skin will be <strong>less silky</strong> than ideal — compensate by serving extra ginger sauce alongside</div>
+        </div>
+        <div class="rescue-step">
+          <div class="rescue-num">4</div>
+          <div class="rescue-text">For the rice: your poaching liquid is now slightly cloudy — <strong>skim the foam</strong> and it's still excellent for cooking the rice</div>
+        </div>
+      </div>
+
+      <div class="msg-ai-text">
+        Honestly? It'll still taste delicious. The chicken may be slightly firmer but the sauce will carry it. This is very normal for home cooking — you're doing great 👌
+      </div>
+    </div>
+
+    <!-- Spacer -->
+    <div style="height:20px;"></div>
+
+  </div>
+
+  <!-- Input Bar -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <button class="chip" style="background:var(--brand);color:#fff;border-color:var(--brand);">
+        <span>Check the temp</span>
+      </button>
+      <button class="chip">Continue cooking</button>
+      <button class="chip">Restart recipe</button>
+      <button class="chip">I need more help</button>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field"><span style="color:var(--text-3);">Message mise...</span></div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

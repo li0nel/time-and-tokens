@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Recipe Carousel Chat</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .ai-avatar {
+      width: 30px;
+      height: 30px;
+      background: var(--brand);
+      border-radius: var(--r-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      letter-spacing: -0.5px;
+    }
+    .msg-ai-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .msg-ai-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .time-stamp {
+      font-size: var(--fs-xs);
+      color: var(--text-4);
+      text-align: center;
+    }
+</style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED -->
+  <div class="chat-feed">
+
+    <div class="time-stamp">Today, 7:32 PM</div>
+
+    <!-- User message -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">
+        Show me all my chicken recipes
+      </div>
+    </div>
+
+    <!-- AI response with carousel -->
+    <div class="msg-ai-row">
+      <div class="ai-avatar">m.</div>
+      <div class="msg-ai-content">
+
+        <div class="msg-ai-text">
+          Here are your saved chicken recipes:
+        </div>
+
+        <!-- Recipe Carousel -->
+        <div class="recipe-carousel">
+          <div class="recipe-carousel-scroll">
+
+            <!-- Card 1: Hainanese Chicken Rice -->
+            <div class="carousel-card">
+              <div class="carousel-img">
+                <div style="width:100%;aspect-ratio:1;background:linear-gradient(160deg,#F5E8CC 0%,#D4A860 40%,#8B6830 100%);display:flex;align-items:center;justify-content:center;font-size:32px;">🍚</div>
+              </div>
+              <div class="carousel-body">
+                <div class="carousel-title">Hainanese Chicken Rice</div>
+                <div class="carousel-meta">⏱ 1h 50min</div>
+                <div class="carousel-tag">Chinese</div>
+              </div>
+            </div>
+
+            <!-- Card 2: Roasted Lemon Herb -->
+            <div class="carousel-card">
+              <div class="carousel-img">
+                <div style="width:100%;aspect-ratio:1;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:32px;">🍗</div>
+              </div>
+              <div class="carousel-body">
+                <div class="carousel-title">Roasted Lemon Herb Chicken</div>
+                <div class="carousel-meta">⏱ 1h 15min</div>
+                <div class="carousel-tag">Western</div>
+              </div>
+            </div>
+
+            <!-- Card 3: Thai Green Curry -->
+            <div class="carousel-card">
+              <div class="carousel-img">
+                <div style="width:100%;aspect-ratio:1;background:linear-gradient(160deg,#C8E8A8 0%,#5A8A3C 40%,#2D5016 100%);display:flex;align-items:center;justify-content:center;font-size:32px;">🌿</div>
+              </div>
+              <div class="carousel-body">
+                <div class="carousel-title">Thai Green Curry Chicken</div>
+                <div class="carousel-meta">⏱ 40min</div>
+                <div class="carousel-tag">Thai</div>
+              </div>
+            </div>
+
+            <!-- Card 4: Chicken Tikka Masala -->
+            <div class="carousel-card">
+              <div class="carousel-img">
+                <div style="width:100%;aspect-ratio:1;background:linear-gradient(160deg,#F5D76E 0%,#E89228 40%,#C8481C 100%);display:flex;align-items:center;justify-content:center;font-size:32px;">🍛</div>
+              </div>
+              <div class="carousel-body">
+                <div class="carousel-title">Chicken Tikka Masala</div>
+                <div class="carousel-meta">⏱ 1h</div>
+                <div class="carousel-tag">Indian</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="msg-ai-text">
+          Tap any recipe to see the full details, or tell me which one you'd like to make tonight!
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar-wrap">
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field">
+        <span style="color:var(--text-3);">Message mise...</span>
+      </div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

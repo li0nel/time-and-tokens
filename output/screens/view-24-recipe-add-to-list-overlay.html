@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Add to Shopping List</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .sheet-serve-scaler {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 16px 0;
+    }
+    .sheet-ingr-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .sheet-ingr-row:last-child { border-bottom: none; }
+    .sheet-check {
+      width: 22px; height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--border-strong);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--t-fast);
+    }
+    .sheet-check.checked { background: var(--brand); border-color: var(--brand); }
+    .sheet-check.checked::after {
+      content: '✓';
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .sheet-ingr-amount {
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      order: 3;
+      margin-left: auto;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .sheet-ingr-name {
+      flex: 1;
+      font-size: var(--fs-sm);
+      color: var(--text);
+      line-height: 1.4;
+      order: 2;
+    }
+    .sheet-ingr-row.unchecked {
+      opacity: 0.4;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- BACKGROUND: recipe card (dimmed) -->
+  <div style="opacity:0.45;pointer-events:none;">
+    <div class="recipe-hero-wrap">
+      <div class="recipe-hero-img" style="background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:80px;">🍗</div>
+      <div class="recipe-hero-gradient"></div>
+      <div class="recipe-hero-title-block">
+        <span class="recipe-hero-cuisine">Chinese · Singaporean</span>
+        <h1 class="recipe-hero-name">Hainanese Chicken Rice</h1>
+      </div>
+    </div>
+    <div class="recipe-body">
+      <div class="recipe-meta-bar">
+        <div class="recipe-meta-col"><div class="recipe-meta-val">20</div><div class="recipe-meta-lbl">MIN PREP</div></div>
+        <div class="recipe-meta-col"><div class="recipe-meta-val">1h 30</div><div class="recipe-meta-lbl">MIN COOK</div></div>
+        <div class="recipe-meta-col"><div class="recipe-meta-val">4</div><div class="recipe-meta-lbl">SERVES</div></div>
+        <div class="recipe-meta-col"><div class="recipe-meta-val">⭐⭐</div><div class="recipe-meta-lbl">LEVEL</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL BACKDROP + BOTTOM SHEET -->
+  <div class="modal-backdrop" style="position:absolute;">
+    <div class="bottom-sheet" style="width:390px;">
+
+      <!-- Handle -->
+      <div class="sheet-handle"></div>
+
+      <!-- Sheet Header -->
+      <div class="sheet-header">
+        <div class="sheet-title">Add to Shopping List</div>
+        <div class="sheet-subtitle">Hainanese Chicken Rice · 4 servings</div>
+      </div>
+
+      <!-- Sheet Body -->
+      <div class="sheet-body">
+
+        <!-- Serve scaler -->
+        <div class="sheet-serve-scaler" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border-subtle);">
+          <span style="font-size:var(--fs-sm);font-weight:600;color:var(--text);">Servings</span>
+          <div style="display:flex;align-items:center;gap:14px;margin-left:auto;">
+            <button class="serve-btn">−</button>
+            <span class="serve-count">4</span>
+            <button class="serve-btn">+</button>
+          </div>
+        </div>
+
+        <!-- Ingredient checklist -->
+        <div style="font-size:var(--fs-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-3);margin-bottom:6px;">Ingredients (15)</div>
+
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">1.5 kg</div>
+          <div class="sheet-ingr-name">Whole free-range chicken</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">400g</div>
+          <div class="sheet-ingr-name">Jasmine rice</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">4cm</div>
+          <div class="sheet-ingr-name">Fresh ginger</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">4 stalks</div>
+          <div class="sheet-ingr-name">Spring onions</div>
+        </div>
+        <div class="sheet-ingr-row unchecked">
+          <div class="sheet-check"></div>
+          <div class="sheet-ingr-amount">2 tbsp</div>
+          <div class="sheet-ingr-name">Sesame oil</div>
+        </div>
+        <div class="sheet-ingr-row unchecked">
+          <div class="sheet-check"></div>
+          <div class="sheet-ingr-amount">2 tbsp</div>
+          <div class="sheet-ingr-name">Light soy sauce</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">1 tbsp</div>
+          <div class="sheet-ingr-name">Shaoxing rice wine</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">6 pcs</div>
+          <div class="sheet-ingr-name">Red chillies</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">1</div>
+          <div class="sheet-ingr-name">Lime</div>
+        </div>
+        <div class="sheet-ingr-row unchecked">
+          <div class="sheet-check"></div>
+          <div class="sheet-ingr-amount">1 tbsp</div>
+          <div class="sheet-ingr-name">Fish sauce</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">3 cloves</div>
+          <div class="sheet-ingr-name">Garlic</div>
+        </div>
+        <div class="sheet-ingr-row unchecked">
+          <div class="sheet-check"></div>
+          <div class="sheet-ingr-amount">1 tsp</div>
+          <div class="sheet-ingr-name">Sugar</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">3 tbsp</div>
+          <div class="sheet-ingr-name">Dark soy sauce</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">1 tbsp</div>
+          <div class="sheet-ingr-name">Sesame seeds</div>
+        </div>
+        <div class="sheet-ingr-row">
+          <div class="sheet-check checked"></div>
+          <div class="sheet-ingr-amount">3 tbsp</div>
+          <div class="sheet-ingr-name">Neutral oil (for sauces)</div>
+        </div>
+
+      </div>
+
+      <!-- Sheet action footer -->
+      <div style="padding:4px 20px 0;display:flex;flex-direction:column;gap:10px;">
+        <button class="btn btn-primary" style="width:100%;padding:14px;font-size:var(--fs-base);">Add 11 items to List →</button>
+        <button class="btn btn-ghost" style="width:100%;padding:10px;">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Search Mode Chat</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .ai-avatar {
+      width: 30px;
+      height: 30px;
+      background: var(--brand);
+      border-radius: var(--r-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      letter-spacing: -0.5px;
+    }
+    .msg-ai-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .msg-ai-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .time-stamp {
+      font-size: var(--fs-xs);
+      color: var(--text-4);
+      text-align: center;
+    }
+    .search-highlight-match {
+      color: var(--brand);
+      font-weight: 700;
+    }
+    /* Inline search results — flows with chat, not fixed/overlaid */
+    .search-results-inline {
+      position: relative;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED (same context as view-03) -->
+  <div class="chat-feed">
+
+    <div class="time-stamp">Today, 7:24 PM</div>
+
+    <!-- Previous context from view-03 -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">
+        I have chicken, lemon, garlic and some fresh herbs. What can I make?
+      </div>
+    </div>
+
+    <div class="msg-ai-row">
+      <div class="ai-avatar">m.</div>
+      <div class="msg-ai-content">
+        <div class="msg-ai-text">
+          Perfect combination! Here's a recipe that'll shine with those ingredients:
+        </div>
+        <div class="recipe-widget">
+          <div class="recipe-widget-img">
+            <div style="width:100%;aspect-ratio:16/9;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:52px;">🍗</div>
+          </div>
+          <div class="recipe-widget-body">
+            <div class="recipe-widget-title">Roasted Lemon Herb Chicken</div>
+            <div class="recipe-meta-row">
+              <div class="recipe-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                1h 15min
+              </div>
+              <div class="recipe-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                4 servings
+              </div>
+            </div>
+            <div class="recipe-widget-actions">
+              <button class="btn btn-primary" style="flex:1;">View Full Recipe →</button>
+              <button class="btn btn-outline">Add to List</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR — SEARCH MODE with inline suggestions expanding upward -->
+  <div class="input-bar-wrap">
+    <!-- Search suggestions — part of the input bar, expanding upward -->
+    <div style="background:var(--bg-surface);border:1px solid var(--border);border-bottom:none;border-radius:var(--r-xl) var(--r-xl) 0 0;overflow:hidden;">
+      <div style="padding:10px 16px 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-3);">Recipes — 3 matches</div>
+
+      <div class="search-result-item">
+        <div class="search-thumb">
+          <div style="width:46px;height:46px;background:linear-gradient(160deg,#F5E8CC 0%,#D4A860 40%,#8B6830 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🍚</div>
+        </div>
+        <div class="search-result-text">
+          <div class="search-result-title"><strong>Hai</strong>nanese Chicken Rice</div>
+          <div class="search-result-meta">Chinese · 1h 50min · Serves 4</div>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="search-result-item">
+        <div class="search-thumb">
+          <div style="width:46px;height:46px;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🐔</div>
+        </div>
+        <div class="search-result-text">
+          <div class="search-result-title"><strong>Hai</strong>nan-style Chicken</div>
+          <div class="search-result-meta">Regional variation · 2h</div>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="search-result-item" style="border-bottom:none;">
+        <div class="search-thumb">
+          <div style="width:46px;height:46px;background:linear-gradient(160deg,#C8E8A8 0%,#5A8A3C 40%,#2D5016 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🌿</div>
+        </div>
+        <div class="search-result-text">
+          <div class="search-result-title">Quick <strong>Hai</strong>nanese Style</div>
+          <div class="search-result-meta">30min shortcut</div>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+
+    <div class="input-row" style="border-radius:0 0 var(--r-xl) var(--r-xl);">
+      <div class="input-field search-active" style="display:flex;align-items:center;">
+        <span style="color:var(--text);">Hai</span><span style="color:var(--text-3);animation:blink 1s step-end infinite;">|</span>
+      </div>
+      <button class="input-action-btn input-icon active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

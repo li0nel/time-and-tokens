@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Sign In</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    /* ---- Sign-in page layout ---- */
+    .sign-in-scroll {
+      overflow-y: auto;
+      padding: 32px 28px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      min-height: calc(100vh - var(--header-h) - var(--appbar-h));
+    }
+
+    /* App identity block */
+    .sign-in-brand {
+      text-align: center;
+      margin-bottom: 36px;
+      margin-top: 8px;
+    }
+    .sign-in-logo {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      color: var(--text);
+      line-height: 1;
+    }
+    .sign-in-logo-dot {
+      color: var(--brand);
+    }
+    .sign-in-tagline {
+      font-size: var(--fs-sm);
+      color: var(--text-3);
+      margin-top: 6px;
+      letter-spacing: 0.1px;
+    }
+
+    /* Form fields */
+    .sign-in-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .form-field-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .form-label {
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--text-2);
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .form-input {
+      width: 100%;
+      height: 48px;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-md);
+      padding: 0 16px;
+      font-size: var(--fs-base);
+      font-family: var(--font);
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--t-fast), box-shadow var(--t-fast);
+    }
+    .form-input::placeholder {
+      color: var(--text-4);
+    }
+    .form-input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-light);
+    }
+
+    /* Forgot password link */
+    .forgot-link {
+      font-size: var(--fs-xs);
+      color: var(--brand);
+      font-weight: 500;
+      text-align: right;
+      margin-top: -4px;
+      margin-bottom: 4px;
+    }
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Primary sign-in button */
+    .sign-in-btn {
+      width: 100%;
+      height: 50px;
+      background: var(--brand);
+      color: var(--text-inv);
+      border: none;
+      border-radius: var(--r-md);
+      font-size: var(--fs-base);
+      font-weight: 700;
+      font-family: var(--font);
+      cursor: pointer;
+      letter-spacing: -0.2px;
+      transition: background var(--t-fast), transform var(--t-fast);
+      margin-bottom: 4px;
+    }
+    .sign-in-btn:hover {
+      background: var(--brand-hover);
+    }
+    .sign-in-btn:active {
+      transform: scale(0.985);
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+    .divider-label {
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      color: var(--text-3);
+      letter-spacing: 0.4px;
+    }
+
+    /* OAuth (social) buttons */
+    .oauth-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .oauth-btn {
+      width: 100%;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-md);
+      font-size: var(--fs-base);
+      font-weight: 600;
+      font-family: var(--font);
+      color: var(--text);
+      cursor: pointer;
+      letter-spacing: -0.1px;
+      transition: background var(--t-fast), border-color var(--t-fast);
+    }
+    .oauth-btn:hover {
+      background: var(--bg-elevated);
+      border-color: var(--border-strong);
+    }
+    .oauth-btn:active {
+      background: var(--border-subtle);
+    }
+    .oauth-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* Sign-up footer */
+    .sign-up-footer {
+      margin-top: 32px;
+      text-align: center;
+      font-size: var(--fs-sm);
+      color: var(--text-3);
+    }
+    .sign-up-link {
+      color: var(--brand);
+      font-weight: 600;
+    }
+    .sign-up-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- SHARED FLOATING HEADER (bwv.3) -->
+  <header class="page-header">
+    <button class="page-header-back" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <h1 class="page-header-title">Sign in</h1>
+    <!-- Right slot: empty spacer to keep title centred -->
+    <div style="width:38px;flex-shrink:0;"></div>
+  </header>
+
+  <!-- SIGN-IN CONTENT -->
+  <div class="sign-in-scroll">
+
+    <!-- Brand identity -->
+    <div class="sign-in-brand">
+      <div class="sign-in-logo">mise<span class="sign-in-logo-dot">.</span></div>
+      <div class="sign-in-tagline">Your AI cooking companion</div>
+    </div>
+
+    <!-- Email / Password form -->
+    <form class="sign-in-form" novalidate>
+      <div class="form-field-wrap">
+        <label class="form-label" for="email">Email</label>
+        <input
+          class="form-input"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          inputmode="email"
+        >
+      </div>
+
+      <div class="form-field-wrap">
+        <label class="form-label" for="password">Password</label>
+        <input
+          class="form-input"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+        >
+      </div>
+    </form>
+
+    <a href="#" class="forgot-link">Forgot password?</a>
+
+    <button class="sign-in-btn" type="submit">Sign in</button>
+
+    <!-- Divider -->
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-label">or</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- OAuth sign-in options -->
+    <div class="oauth-buttons">
+
+      <!-- Continue with Google -->
+      <button class="oauth-btn" type="button">
+        <!-- Google "G" logo using SVG with brand colours -->
+        <svg class="oauth-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M19.6 10.23c0-.68-.06-1.36-.17-2H10v3.79h5.4a4.62 4.62 0 0 1-2 3.03v2.5h3.23c1.89-1.74 2.97-4.3 2.97-7.32z" fill="#4285F4"/>
+          <path d="M10 20c2.7 0 4.97-.89 6.63-2.42l-3.23-2.5c-.9.6-2.04.96-3.4.96-2.61 0-4.82-1.76-5.61-4.13H1.07v2.58A9.99 9.99 0 0 0 10 20z" fill="#34A853"/>
+          <path d="M4.39 11.91A6.02 6.02 0 0 1 4.07 10c0-.66.11-1.3.32-1.91V5.51H1.07A10 10 0 0 0 0 10c0 1.61.38 3.14 1.07 4.49l3.32-2.58z" fill="#FBBC05"/>
+          <path d="M10 3.96c1.47 0 2.8.51 3.84 1.5l2.87-2.87C14.96.99 12.7 0 10 0A9.99 9.99 0 0 0 1.07 5.51l3.32 2.58C5.18 5.72 7.39 3.96 10 3.96z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <!-- Continue with Apple -->
+      <button class="oauth-btn" type="button">
+        <!-- Apple logo in monochrome -->
+        <svg class="oauth-icon" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M14.96 10.61c-.02-2.1 1.71-3.1 1.79-3.16-.97-1.43-2.49-1.62-3.03-1.64-1.29-.13-2.53.76-3.18.76-.66 0-1.67-.74-2.74-.72-1.41.02-2.71.82-3.44 2.09-1.47 2.55-.38 6.32 1.05 8.39.7 1.01 1.53 2.14 2.62 2.1 1.05-.04 1.45-.68 2.72-.68 1.26 0 1.62.68 2.73.66 1.13-.02 1.84-1.03 2.53-2.05.8-1.17 1.13-2.31 1.15-2.37-.03-.01-2.2-.85-2.21-3.38zM12.78 4.26c.58-.71.97-1.69.86-2.67-.83.03-1.84.55-2.44 1.25-.53.62-1 1.62-.87 2.57.92.07 1.86-.46 2.45-1.15z"/>
+        </svg>
+        Continue with Apple
+      </button>
+
+    </div>
+
+    <!-- Sign-up prompt -->
+    <p class="sign-up-footer">
+      Don't have an account?
+      <a href="#" class="sign-up-link">Sign up</a>
+    </p>
+
+  </div><!-- /sign-in-scroll -->
+
+</div><!-- /mobile-frame -->
+</body>
+</html>

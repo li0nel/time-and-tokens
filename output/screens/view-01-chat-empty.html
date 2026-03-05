@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Empty Chat</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .empty-chat-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 28px 32px;
+      text-align: center;
+      gap: 10px;
+    }
+    .empty-chat-icon {
+      font-size: 58px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 4px 12px rgba(200,72,28,0.2));
+    }
+    .empty-chat-title {
+      font-size: var(--fs-2xl);
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .empty-chat-desc {
+      font-size: var(--fs-base);
+      color: var(--text-2);
+      line-height: var(--lh-normal);
+      max-width: 270px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED — EMPTY STATE -->
+  <div class="chat-feed" style="padding-top: 12px;">
+
+    <div class="empty-chat-area">
+      <div class="empty-chat-icon">🍜</div>
+      <div class="empty-chat-title">Ready to cook?</div>
+      <div class="empty-chat-desc">Ask me anything about recipes, ingredients, or techniques. I'm your AI cooking companion.</div>
+      <div class="empty-chat-desc" style="margin-top:8px;font-size:var(--fs-sm);color:var(--text-3);">I'm here to make you a better chef over time.</div>
+
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar-wrap">
+    <div class="input-row">
+      <div class="input-field">
+        <span style="color:var(--text-3);">Ask about recipes...</span>
+      </div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
