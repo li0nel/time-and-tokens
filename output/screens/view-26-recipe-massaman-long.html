@@ -65,7 +65,6 @@
       font-style: italic;
       letter-spacing: 0.3px;
     }
-    .ai-note-type.community { color: var(--info); }
     .divider-section {
       height: 6px;
       background: var(--bg-elevated);
@@ -115,14 +114,6 @@
     </div>
   </div>
 
-  <!-- TAB BAR -->
-  <div class="tab-bar" style="top:44px;">
-    <div class="tab-item">Overview</div>
-    <div class="tab-item active">Ingredients</div>
-    <div class="tab-item">Instructions</div>
-    <div class="tab-item">Notes (3)</div>
-  </div>
-
   <!-- INGREDIENTS CONTENT -->
   <div class="recipe-body" style="padding-top:20px;">
 
@@ -140,6 +131,9 @@
         <div class="unit-opt">Imperial</div>
       </div>
     </div>
+
+    <!-- Add All button -->
+    <button class="btn btn-primary" style="width:100%;padding:14px;font-size:var(--fs-base);margin-bottom:20px;">+ Add All to Shopping List</button>
 
     <!-- CURRY PASTE -->
     <div class="ingr-section-head first">Curry paste (from scratch)</div>
@@ -306,12 +300,6 @@
 
     <div style="height:16px;"></div>
 
-    <!-- Add All button -->
-    <button class="btn btn-primary" style="width:100%;padding:14px;font-size:var(--fs-base);">+ Add All to Shopping List</button>
-    <div style="text-align:center;padding:12px 0;">
-      <span style="font-size:var(--fs-sm);color:var(--brand);font-weight:500;cursor:pointer;">Or select specific items</span>
-    </div>
-
   </div>
 
   <!-- SECTION DIVIDER -->
@@ -417,51 +405,6 @@
         </div>
       </div>
     </div>
-
-  </div>
-
-  <!-- SECTION DIVIDER -->
-  <div class="divider-section"></div>
-
-  <!-- AI NOTES SECTION -->
-  <div class="recipe-body" style="padding-top:0;">
-
-    <div class="ai-notes">
-      <div class="ai-notes-head">
-        <div class="ai-notes-orb">✦</div>
-        <span class="ai-notes-title">mise. Notes</span>
-      </div>
-
-      <!-- Note 1: TIMING -->
-      <div class="ai-note-card">
-        <div class="ai-note-type shortcut">TIMING TIP</div>
-        <div class="ai-note-text">The curry paste can be made up to 5 days ahead and refrigerated, or frozen for 3 months. If using Mae Ploy paste, note it's noticeably saltier — reduce fish sauce by half and taste before adding more. The paste from scratch has a more complex, citrusy freshness.</div>
-      </div>
-
-      <!-- Note 2: PRO TIP -->
-      <div class="ai-note-card">
-        <div class="ai-note-type pro">PRO TIP</div>
-        <div class="ai-note-text">For the most luxurious texture, brown the beef cubes in batches in a separate pan before adding to the curry. The Maillard reaction adds a layer of savoury depth (fond) that you simply cannot get from simmering alone. Don't crowd the pan or they'll steam instead of brown.</div>
-      </div>
-
-      <!-- Note 3: VARIATION -->
-      <div class="ai-note-card">
-        <div class="ai-note-type variation">VARIATION</div>
-        <div class="ai-note-text">Chicken Massaman: use bone-in chicken thighs instead of beef, reduce the first simmer to 30 min and skip the long braise. The sauce will be slightly lighter and less unctuous, but cooks in half the time. Add the potatoes after 15 min with the chicken.</div>
-      </div>
-    </div>
-
-    <!-- Source attribution -->
-    <div class="source-attr" style="margin-top:24px;">
-      <div class="source-favicon">🌐</div>
-      <div style="flex:1;">
-        <div class="source-domain">From: <strong>Hot Thai Kitchen</strong></div>
-        <div style="margin-top:2px;font-size:var(--fs-xs);color:var(--text-3);">hot-thai-kitchen.com · Pailin Chongchitnant · Imported 15 Jan 2025</div>
-      </div>
-      <a class="source-link">Visit →</a>
-    </div>
-
-    <div style="height:8px;"></div>
 
   </div>
 

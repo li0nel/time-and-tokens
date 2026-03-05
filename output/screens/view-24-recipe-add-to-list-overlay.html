@@ -12,7 +12,6 @@
       gap: 14px;
       margin: 16px 0;
     }
-    .sheet-serve-label { font-size: var(--fs-sm); font-weight: 600; color: var(--text); }
     .sheet-ingr-row {
       display: flex;
       align-items: center;
@@ -43,34 +42,21 @@
       font-size: var(--fs-sm);
       font-weight: 600;
       color: var(--text);
-      min-width: 68px;
       font-variant-numeric: tabular-nums;
+      order: 3;
+      margin-left: auto;
+      flex-shrink: 0;
+      text-align: right;
     }
     .sheet-ingr-name {
       flex: 1;
       font-size: var(--fs-sm);
       color: var(--text);
       line-height: 1.4;
+      order: 2;
     }
-    .sheet-ingr-name.pantry {
-      text-decoration: line-through;
-      color: var(--text-3);
-    }
-    .pantry-badge {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 7px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--r-full);
-      color: var(--text-3);
-      white-space: nowrap;
-    }
-    .sheet-footer-note {
-      font-size: var(--fs-xs);
-      color: var(--text-3);
-      text-align: center;
-      padding: 8px 0 4px;
+    .sheet-ingr-row.unchecked {
+      opacity: 0.4;
     }
   </style>
 </head>
@@ -124,7 +110,6 @@
 
         <!-- Serve scaler in sheet -->
         <div style="background:var(--bg-elevated);border-radius:var(--r-lg);padding:12px 16px;margin-bottom:16px;">
-          <div style="font-size:var(--fs-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-3);margin-bottom:10px;">Cook for how many?</div>
           <div class="sheet-serve-scaler">
             <button class="serve-btn">−</button>
             <span class="serve-count">4</span>
@@ -156,17 +141,15 @@
           <div class="sheet-ingr-amount">4 stalks</div>
           <div class="sheet-ingr-name">Spring onions</div>
         </div>
-        <div class="sheet-ingr-row">
+        <div class="sheet-ingr-row unchecked">
           <div class="sheet-check"></div>
           <div class="sheet-ingr-amount">2 tbsp</div>
-          <div class="sheet-ingr-name pantry">Sesame oil</div>
-          <span class="pantry-badge">In pantry</span>
+          <div class="sheet-ingr-name">Sesame oil</div>
         </div>
-        <div class="sheet-ingr-row">
+        <div class="sheet-ingr-row unchecked">
           <div class="sheet-check"></div>
           <div class="sheet-ingr-amount">2 tbsp</div>
-          <div class="sheet-ingr-name pantry">Light soy sauce</div>
-          <span class="pantry-badge">In pantry</span>
+          <div class="sheet-ingr-name">Light soy sauce</div>
         </div>
         <div class="sheet-ingr-row">
           <div class="sheet-check checked"></div>
@@ -183,22 +166,20 @@
           <div class="sheet-ingr-amount">1</div>
           <div class="sheet-ingr-name">Lime</div>
         </div>
-        <div class="sheet-ingr-row">
+        <div class="sheet-ingr-row unchecked">
           <div class="sheet-check"></div>
           <div class="sheet-ingr-amount">1 tbsp</div>
-          <div class="sheet-ingr-name pantry">Fish sauce</div>
-          <span class="pantry-badge">In pantry</span>
+          <div class="sheet-ingr-name">Fish sauce</div>
         </div>
         <div class="sheet-ingr-row">
           <div class="sheet-check checked"></div>
           <div class="sheet-ingr-amount">3 cloves</div>
           <div class="sheet-ingr-name">Garlic</div>
         </div>
-        <div class="sheet-ingr-row">
+        <div class="sheet-ingr-row unchecked">
           <div class="sheet-check"></div>
           <div class="sheet-ingr-amount">1 tsp</div>
-          <div class="sheet-ingr-name pantry">Sugar</div>
-          <span class="pantry-badge">In pantry</span>
+          <div class="sheet-ingr-name">Sugar</div>
         </div>
         <div class="sheet-ingr-row">
           <div class="sheet-check checked"></div>
@@ -215,8 +196,6 @@
           <div class="sheet-ingr-amount">3 tbsp</div>
           <div class="sheet-ingr-name">Neutral oil (for sauces)</div>
         </div>
-
-        <div class="sheet-footer-note">4 pantry items skipped · mise detected them from your list</div>
 
       </div>
 

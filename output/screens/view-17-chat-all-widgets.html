@@ -121,6 +121,64 @@
       margin-top: 10px;
       line-height: var(--lh-snug);
     }
+
+    /* ── Cook Mode: all steps stacked vertically, no nav buttons ── */
+    .cook-mode-all {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+    }
+    .cook-mode-all-head {
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cook-mode-all-label {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    .cook-mode-all-count {
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+    }
+    .cook-mode-step-item {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cook-mode-step-item:last-child {
+      border-bottom: none;
+    }
+    .cook-mode-step-num-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .cook-mode-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .cook-mode-step-title {
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--text);
+    }
   </style>
 </head>
 <body>
@@ -308,130 +366,68 @@
       <div class="msg-user-bubble">Let's cook! I'll go step by step.</div>
     </div>
 
-    <!-- ===== 8. COOK STEP 1/10 ===== -->
+    <!-- ===== 8–15. COOK MODE — all steps vertical, no nav buttons ===== -->
     <div class="msg-ai">
-      <div class="cook-step">
-        <div class="cook-step-head">
-          <span class="cook-step-label">COOK MODE</span>
-          <span class="cook-step-progress">Step 1 of 10</span>
+      <div class="cook-mode-all">
+        <div class="cook-mode-all-head">
+          <span class="cook-mode-all-label">Cook Mode</span>
+          <span class="cook-mode-all-count">5 steps</span>
         </div>
-        <div class="cook-progress-bar">
-          <div class="cook-progress-fill" style="width:0%"></div>
-        </div>
-        <div class="cook-step-body">
+
+        <!-- Step 1 -->
+        <div class="cook-mode-step-item">
+          <div class="cook-mode-step-num-row">
+            <div class="cook-mode-step-num">1</div>
+            <div class="cook-mode-step-title">Blanch the lardons</div>
+          </div>
           <p class="cook-step-text">Bring a medium pot of water to a boil. Add <span class="ingr-inline">170g lardons</span> and blanch for 8 minutes. This removes excess salt and the "smoky" flavour so it doesn't overwhelm the finished dish. Drain and pat dry with kitchen paper.</p>
-          <div class="timer-pill">⏱ 8 min blanch</div>
+          <div class="timer-pill" style="margin-top:8px;">⏱ 8 min blanch</div>
         </div>
-        <div class="cook-step-nav">
-          <button class="btn btn-secondary btn-sm" style="opacity:0.35;cursor:not-allowed;">← Back</button>
-          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- ===== 9. COOK STEP 2/10 ===== -->
-    <div class="msg-ai">
-      <div class="cook-step">
-        <div class="cook-step-head">
-          <span class="cook-step-label">COOK MODE</span>
-          <span class="cook-step-progress">Step 2 of 10</span>
-        </div>
-        <div class="cook-progress-bar">
-          <div class="cook-progress-fill" style="width:10%"></div>
-        </div>
-        <div class="cook-step-body">
+        <!-- Step 2 -->
+        <div class="cook-mode-step-item">
+          <div class="cook-mode-step-num-row">
+            <div class="cook-mode-step-num">2</div>
+            <div class="cook-mode-step-title">Render the lardons</div>
+          </div>
           <p class="cook-step-text">In a large heavy casserole (Dutch oven), heat <span class="ingr-inline">1 tbsp butter + 1 tbsp oil</span> over medium heat. Add the lardons and render until <strong>golden and lightly crisp</strong>, about 3–4 minutes. Remove to a side bowl with a slotted spoon — leave the fat in the pan. You'll use this flavour-rich fat for the beef.</p>
-          <div class="timer-pill">⏱ 3–4 min render</div>
+          <div class="timer-pill" style="margin-top:8px;">⏱ 3–4 min render</div>
         </div>
-        <div class="cook-step-nav">
-          <button class="btn btn-secondary btn-sm">← Back</button>
-          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- ===== 10. USER ===== -->
-    <div class="msg-user">
-      <div class="msg-user-bubble">Lardons are golden and absolutely delicious smelling</div>
-    </div>
-
-    <!-- ===== 11. COOK STEP 3/10 ===== -->
-    <div class="msg-ai">
-      <p class="msg-ai-text">That smell is the <span class="gls">Maillard reaction</span> starting — you're building the flavour base of the entire dish right there. Now for the most important technical step:</p>
-      <div class="cook-step">
-        <div class="cook-step-head">
-          <span class="cook-step-label">COOK MODE</span>
-          <span class="cook-step-progress">Step 3 of 10</span>
-        </div>
-        <div class="cook-progress-bar">
-          <div class="cook-progress-fill" style="width:20%"></div>
-        </div>
-        <div class="cook-step-body">
+        <!-- Step 3 -->
+        <div class="cook-mode-step-item">
+          <div class="cook-mode-step-num-row">
+            <div class="cook-mode-step-num">3</div>
+            <div class="cook-mode-step-title">Brown the beef in batches</div>
+          </div>
           <p class="cook-step-text">Pat every piece of <span class="ingr-inline">1.3kg beef</span> completely dry with kitchen paper. Season generously with salt and pepper. Raise heat to high. In batches of 4–5 pieces (never crowding the pan), sear beef on all sides until deeply browned — about <span class="timer-pill">⏱ 3 min per batch</span>. Set aside with the lardons. The <span class="gls">fond</span> forming on the pan bottom is liquid gold.</p>
           <div class="step-important-note">
             <span>⚠️</span>
             <span>Crowded pan = steamed beef = grey, sad, flavourless. Space between pieces is mandatory. Work in batches. The whole process takes 15–20 minutes but it cannot be rushed.</span>
           </div>
         </div>
-        <div class="cook-step-nav">
-          <button class="btn btn-secondary btn-sm">← Back</button>
-          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- ===== 12. USER ===== -->
-    <div class="msg-user">
-      <div class="msg-user-bubble">I browned all the beef — took about 15 minutes. The fond at the bottom looks absolutely incredible</div>
-    </div>
-
-    <!-- ===== 13. AI — Fond explanation with glossary ===== -->
-    <div class="msg-ai">
-      <p class="msg-ai-text">That <span class="gls">fond</span> is the single most important thing in your pot right now. It's not a problem to clean up — it's concentrated caramelised meat protein, and you're about to <span class="gls">deglaze</span> it into your sauce where it will become the backbone of the entire dish's flavour.</p>
-      <p class="msg-ai-text">This is exactly why Julia was so insistent on proper browning. A rushed grey sear gives you almost no fond. A proper deep mahogany sear like yours gives you that rich, almost toffee-like coating that will make your sauce taste like it simmered for a week. Don't add anything yet — we're going to <span class="gls">deglaze</span> with wine next.</p>
-    </div>
-
-    <!-- ===== 14. COOK STEP 4/10 — Deglaze ===== -->
-    <div class="msg-ai">
-      <div class="cook-step">
-        <div class="cook-step-head">
-          <span class="cook-step-label">COOK MODE</span>
-          <span class="cook-step-progress">Step 4 of 10</span>
-        </div>
-        <div class="cook-progress-bar">
-          <div class="cook-progress-fill" style="width:30%"></div>
-        </div>
-        <div class="cook-step-body">
+        <!-- Step 4 -->
+        <div class="cook-mode-step-item">
+          <div class="cook-mode-step-num-row">
+            <div class="cook-mode-step-num">4</div>
+            <div class="cook-mode-step-title">Deglaze the pot</div>
+          </div>
           <p class="cook-step-text">Reduce heat to medium. Add the sliced carrots and onion to the pot. Cook 5 minutes until softened. Add <span class="ingr-inline">4 cloves garlic</span> and cook 1 minute. Sprinkle <span class="ingr-inline">3 tbsp flour</span> over everything and stir to coat. Now pour in <span class="ingr-inline">half the bottle of wine</span> and scrape vigorously with a wooden spoon, releasing every bit of <span class="gls">fond</span>. This is <span class="gls">deglaze</span> — watch the pot transform instantly.</p>
         </div>
-        <div class="cook-step-nav">
-          <button class="btn btn-secondary btn-sm">← Back</button>
-          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- ===== 15. COOK STEP 5/10 — Into oven ===== -->
-    <div class="msg-ai">
-      <div class="cook-step">
-        <div class="cook-step-head">
-          <span class="cook-step-label">COOK MODE</span>
-          <span class="cook-step-progress">Step 5 of 10</span>
-        </div>
-        <div class="cook-progress-bar">
-          <div class="cook-progress-fill" style="width:40%"></div>
-        </div>
-        <div class="cook-step-body">
+        <!-- Step 5 -->
+        <div class="cook-mode-step-item">
+          <div class="cook-mode-step-num-row">
+            <div class="cook-mode-step-num">5</div>
+            <div class="cook-mode-step-title">Braise in the oven</div>
+          </div>
           <p class="cook-step-text">Return the browned beef and lardons to the pot. Add the remaining wine, <span class="ingr-inline">500ml beef stock</span>, <span class="ingr-inline">2 tbsp tomato paste</span>, and the <span class="ingr-inline">bouquet garni</span>. The liquid should come about ¾ up the beef. Bring to a bare simmer on the stovetop, then cover and place in the oven at <span class="ingr-inline">160°C / 325°F</span>.</p>
-          <div class="timer-pill">⏱ 2½–3 hours in oven</div>
+          <div class="timer-pill" style="margin-top:8px;">⏱ 2½–3 hours in oven</div>
           <div class="ai-hint" style="margin-top:10px;">
             <span>💡</span>
             <span>Julia's test: the beef should be easily pierced with a fork with no resistance. Not falling apart — that's overcooked. Tender but intact.</span>
           </div>
-        </div>
-        <div class="cook-step-nav">
-          <button class="btn btn-secondary btn-sm">← Back</button>
-          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
         </div>
       </div>
     </div>

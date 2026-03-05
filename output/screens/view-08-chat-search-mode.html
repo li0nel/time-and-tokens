@@ -39,24 +39,14 @@
       color: var(--text-4);
       text-align: center;
     }
-    .search-mode-label {
-      text-align: center;
-      font-size: var(--fs-xs);
-      color: var(--text-3);
-      padding: 0 14px 2px;
-    }
     .search-highlight-match {
       color: var(--brand);
       font-weight: 700;
     }
-    /* Compact search overlay positioning above input */
-    .search-overlay-wrap {
-      position: fixed;
-      bottom: 120px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 362px;
-      z-index: 95;
+    /* Inline search results — flows with chat, not fixed/overlaid */
+    .search-results-inline {
+      position: relative;
+      width: 100%;
     }
   </style>
 </head>
@@ -125,60 +115,51 @@
       </div>
     </div>
 
-    <!-- User now switches to search mode -->
-    <div class="time-stamp" style="margin-top:8px;">Just now · Search mode active</div>
+    <!-- SEARCH RESULTS — inline in chat feed, pushing content up -->
+    <div class="search-results-inline">
+      <div class="search-overlay" style="position:static;transform:none;width:100%;bottom:auto;left:auto;">
+        <div class="search-overlay-header">RECIPES — 3 MATCHES</div>
 
-  </div>
-
-  <!-- SEARCH OVERLAY — appears above input bar -->
-  <div class="search-overlay-wrap">
-    <!-- Small label above overlay -->
-    <div style="text-align:center;font-size:11px;color:var(--text-3);padding:0 14px 6px;display:flex;align-items:center;justify-content:center;gap:6px;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      Search mode — tap recipe to open, or ask AI
-    </div>
-
-    <div class="search-overlay" style="position:static;transform:none;width:100%;bottom:auto;left:auto;">
-      <div class="search-overlay-header">RECIPES — 3 MATCHES</div>
-
-      <div class="search-result-item">
-        <div class="search-thumb">
-          <div style="width:46px;height:46px;background:linear-gradient(160deg,#F5E8CC 0%,#D4A860 40%,#8B6830 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🍚</div>
+        <div class="search-result-item">
+          <div class="search-thumb">
+            <div style="width:46px;height:46px;background:linear-gradient(160deg,#F5E8CC 0%,#D4A860 40%,#8B6830 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🍚</div>
+          </div>
+          <div class="search-result-text">
+            <div class="search-result-title"><strong>Hai</strong>nanese Chicken Rice</div>
+            <div class="search-result-meta">Chinese · 1h 50min · Serves 4</div>
+          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="search-result-text">
-          <div class="search-result-title"><strong>Hai</strong>nanese Chicken Rice</div>
-          <div class="search-result-meta">Chinese · 1h 50min · Serves 4</div>
-        </div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
 
-      <div class="search-result-item">
-        <div class="search-thumb">
-          <div style="width:46px;height:46px;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🐔</div>
+        <div class="search-result-item">
+          <div class="search-thumb">
+            <div style="width:46px;height:46px;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🐔</div>
+          </div>
+          <div class="search-result-text">
+            <div class="search-result-title"><strong>Hai</strong>nan-style Chicken</div>
+            <div class="search-result-meta">Regional variation · 2h</div>
+          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="search-result-text">
-          <div class="search-result-title"><strong>Hai</strong>nan-style Chicken</div>
-          <div class="search-result-meta">Regional variation · 2h</div>
-        </div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
 
-      <div class="search-result-item">
-        <div class="search-thumb">
-          <div style="width:46px;height:46px;background:linear-gradient(160deg,#C8E8A8 0%,#5A8A3C 40%,#2D5016 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🌿</div>
+        <div class="search-result-item">
+          <div class="search-thumb">
+            <div style="width:46px;height:46px;background:linear-gradient(160deg,#C8E8A8 0%,#5A8A3C 40%,#2D5016 100%);display:flex;align-items:center;justify-content:center;font-size:22px;">🌿</div>
+          </div>
+          <div class="search-result-text">
+            <div class="search-result-title">Quick <strong>Hai</strong>nanese Style</div>
+            <div class="search-result-meta">30min shortcut</div>
+          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="search-result-text">
-          <div class="search-result-title">Quick <strong>Hai</strong>nanese Style</div>
-          <div class="search-result-meta">30min shortcut</div>
-        </div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-4);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
 
-      <div class="search-overlay-footer">
-        <button class="btn btn-outline btn-sm" style="flex:1;">Search online for 'Hai...'</button>
-        <button class="btn btn-primary btn-sm" style="flex:1;">Ask AI instead</button>
+        <div class="search-overlay-footer">
+          <button class="btn btn-outline btn-sm" style="flex:1;">Search online for 'Hai...'</button>
+          <button class="btn btn-primary btn-sm" style="flex:1;">Ask AI instead</button>
+        </div>
       </div>
     </div>
+
   </div>
 
   <!-- INPUT BAR — SEARCH MODE ACTIVE -->
