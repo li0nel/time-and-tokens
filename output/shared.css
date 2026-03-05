@@ -1446,3 +1446,117 @@ input[type="checkbox"]:checked {
    .input-bar-wrap is already position:fixed, which creates a containing
    block for absolutely-positioned children. The .input-chips-row.floating
    variant uses position:absolute; bottom:100% to float above the bar. */
+
+/* ================================================================
+   PAGE HEADER — Shared floating header component (bwv.3)
+   Usage:
+     <header class="page-header">
+       <button class="page-header-back" aria-label="Back">
+         <svg ...back arrow svg...></svg>
+       </button>
+       <h1 class="page-header-title">Title</h1>
+       <button class="page-header-cart" aria-label="Shopping cart">
+         <svg ...cart icon svg...></svg>
+       </button>
+     </header>
+   Used by: recipe card view, shopping list view, sign-in view.
+   ================================================================ */
+
+.page-header {
+  /* Floating: sticky to the top of the mobile frame, sits above content */
+  position: sticky;
+  top: 0;
+  z-index: 90;
+
+  /* Layout: flex row, vertically centred, left/title/right */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  /* Sizing — matches --appbar-h token */
+  height: var(--appbar-h);   /* 52px */
+  padding: 0 8px;
+
+  /* Appearance — same as .app-bar */
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Back arrow button — left slot */
+.page-header-back {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--t-fast);
+}
+.page-header-back:hover,
+.page-header-back:active {
+  background: var(--bg-elevated);
+}
+.page-header-back svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+/* Centred title — fills available space, text centred */
+.page-header-title {
+  flex: 1;
+  text-align: center;
+  font-size: var(--fs-md);   /* 16px */
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+  /* Remove default h1 margin */
+  margin: 0;
+}
+
+/* Shopping cart button — right slot */
+.page-header-cart {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--t-fast);
+  position: relative;
+}
+.page-header-cart:hover,
+.page-header-cart:active {
+  background: var(--bg-elevated);
+}
+.page-header-cart svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+/* Optional badge on the cart icon (e.g. item count) */
+.page-header-cart .badge-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--brand);
+  border-radius: var(--r-full);
+  border: 2px solid var(--bg-surface);
+}
