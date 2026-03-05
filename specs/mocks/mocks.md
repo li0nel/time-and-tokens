@@ -2,6 +2,8 @@ The goal is for you to create static HTML/CSS pages, many pages in many variatio
 
 You MUST create a agent team, spawning 3 new agents for each page: one front-end developer that implements the code, one that checks for code quality and one that tests the page in Chrome and verifies that it satisfies the requirements below.
 
+Use claude-sonnet-4-6 for each agent.
+
 The screens, the static HTML/CSS, are for a cooking app which is heavily inspired by the Gemini app interface on iOS. The Gemini app is basically a chat, but I want to merge the Gemini chat UI with Samsung food, an app which is very popular for searching recipes and seeing the recipe views and the recipe cards. You can see the metadata, the time of preparation, some images, the ingredients, and you can scale the ingredients and show them in different metrics. You can see the instructions and you can see pretty much the source, like the source URL that this recipe has been imported from.
 One big feature in Samsung food is that you have the shopping list and the meal plan. You just add some specific recipes to plan the shopping list, but I think that should be the same thing. In the shopping list view, you have the list of ingredients. A great feature is that you can sort things per recipe (the sauce recipe), or you can sort things per aisle at the supermarket. When you are in the supermarket, you can just display sold by aisle instead of sold by recipe, and then it's very easy to go through the supermarket and get what you need. That's it.
 Let's go through the various screens. There are mostly three screens for you to make:
