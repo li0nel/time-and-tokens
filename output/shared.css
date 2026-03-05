@@ -313,6 +313,14 @@ input, textarea { font-family: inherit; }
   0%, 80%, 100% { transform: scale(0.75); opacity: 0.4; }
   40% { transform: scale(1); opacity: 1; }
 }
+.tool-call-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  padding: 2px 0;
+}
 
 /* ======================== CHIP ROW ======================== */
 .chip-row {
