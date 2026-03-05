@@ -75,46 +75,6 @@
       color: var(--text);
       padding-top: 4px;
     }
-    .culinary-terms-banner {
-      background: var(--bg-elevated);
-      border-radius: var(--r-lg);
-      padding: 14px 16px;
-      margin-top: 24px;
-    }
-    .culinary-terms-head {
-      font-size: var(--fs-xs);
-      font-weight: 700;
-      color: var(--brand);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 5px;
-    }
-    .culinary-terms-desc {
-      font-size: var(--fs-xs);
-      color: var(--text-2);
-      line-height: 1.5;
-      margin-bottom: 12px;
-    }
-    .terms-pills-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
-    .terms-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 10px;
-      background: var(--bg-surface);
-      border: 1.5px solid var(--brand-muted);
-      border-radius: var(--r-full);
-      font-size: var(--fs-xs);
-      color: var(--brand);
-      font-style: italic;
-      cursor: pointer;
-      transition: all var(--t-fast);
-    }
-    .terms-pill:hover { background: var(--brand-50); }
-    .terms-pill.active { background: var(--brand-light); border-color: var(--brand); }
   </style>
 </head>
 <body>
@@ -187,11 +147,9 @@
 
     <div class="section-title">Method</div>
 
-    <!-- Step 1: done -->
+    <!-- Step 1 -->
     <div class="instr-step">
-      <div class="step-num done">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
+      <div class="step-num">1</div>
       <div class="step-text-wrap">
         <strong>Prepare your onions.</strong> Peel and slice 1.5 kg large yellow onions into thin half-moon rounds, approximately 3–4mm thick. Even slicing is important so all pieces cook at the same rate. Set aside in a large bowl.
       </div>
@@ -265,18 +223,6 @@
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Watch it closely — it goes from perfect to burnt in 30 seconds
         </div>
-      </div>
-    </div>
-
-    <!-- Culinary Terms Banner -->
-    <div class="culinary-terms-banner">
-      <div class="culinary-terms-head">Culinary Terms in This Recipe</div>
-      <div class="culinary-terms-desc">mise. recognises culinary terms in recipes and explains them inline. Tap any term to learn more.</div>
-      <div class="terms-pills-row">
-        <span class="terms-pill active">mirepoix</span>
-        <span class="terms-pill">deglaze</span>
-        <span class="terms-pill">bouquet garni</span>
-        <span class="terms-pill">gratiné</span>
       </div>
     </div>
 

@@ -80,6 +80,17 @@
       font-size: var(--fs-sm);
       color: var(--text-2);
     }
+    /* Give recipe title area more room */
+    .widget-head-left {
+      flex: 1;
+      min-width: 0;
+      margin-right: 12px;
+    }
+    .widget-sub {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
   </style>
 </head>
 <body>
@@ -131,7 +142,7 @@
           <div class="widget-head">
             <div class="widget-head-left">
               <div class="widget-title">Ingredients</div>
-              <div class="widget-sub">Hainanese Chicken Rice · 4 servings</div>
+              <div class="widget-sub">Hainanese Chicken Rice</div>
             </div>
             <!-- Serve scaler -->
             <div class="serve-scaler-inline">

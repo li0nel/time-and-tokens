@@ -6,20 +6,6 @@
   <title>Mise — Recipe Card Chat</title>
   <link rel="stylesheet" href="../shared.css">
   <style>
-    .ai-avatar {
-      width: 30px;
-      height: 30px;
-      background: var(--brand);
-      border-radius: var(--r-full);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 13px;
-      font-weight: 700;
-      flex-shrink: 0;
-      letter-spacing: -0.5px;
-    }
     .msg-ai-row {
       display: flex;
       gap: 10px;
@@ -83,7 +69,6 @@
 
     <!-- AI response with recipe card -->
     <div class="msg-ai-row">
-      <div class="ai-avatar">m.</div>
       <div class="msg-ai-content">
 
         <div class="msg-ai-text">
@@ -92,9 +77,9 @@
 
         <!-- Recipe Widget -->
         <div class="recipe-widget">
-          <!-- Hero image -->
-          <div class="recipe-widget-img">
-            <div style="width:100%;aspect-ratio:16/9;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:52px;">🍗</div>
+          <!-- Hero image (shrunk to ~50%) -->
+          <div class="recipe-widget-img" style="max-height:90px;overflow:hidden;">
+            <div style="width:100%;height:90px;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:32px;">🍗</div>
           </div>
           <div class="recipe-widget-body">
             <div class="recipe-widget-title">Roasted Lemon Herb Chicken</div>
@@ -113,7 +98,7 @@
               </div>
             </div>
             <div class="recipe-widget-actions">
-              <button class="btn btn-primary" style="flex:1;">View Full Recipe →</button>
+              <button class="btn btn-outline" style="flex:1;color:var(--brand);border-color:var(--brand);font-weight:600;">Show full recipe ▾</button>
               <button class="btn btn-outline" style="flex:0 0 auto;">Add to List</button>
             </div>
           </div>
@@ -138,7 +123,7 @@
 
   <!-- INPUT BAR (active conversation) -->
   <div class="input-bar-wrap">
-    <div class="input-chips-row">
+    <div class="input-chips-row floating">
       <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">Start cooking</button>
       <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">Add to list</button>
       <button class="chip" style="font-size:var(--fs-xs);padding:5px 11px;">More recipes</button>
