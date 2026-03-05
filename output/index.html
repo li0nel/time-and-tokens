@@ -186,6 +186,12 @@
     }
     .info-shopping .screen-type .type-dot { background: #15803D; }
 
+    /* Auth / Offline style */
+    .preview-auth {
+      background: linear-gradient(160deg, #F5F3FF 0%, #C4B5FD 100%);
+    }
+    .info-auth .screen-type .type-dot { background: #7C3AED; }
+
     /* Overlay link indicator */
     .screen-card:hover .screen-num { color: rgba(200,72,28,0.8); }
 
@@ -199,14 +205,14 @@
 <body>
   <div class="gallery-header">
     <div class="gallery-title">mise<span class="brand">.</span>&nbsp;screens</div>
-    <div class="gallery-subtitle">19 mobile screen variations — Chat · Recipe Card · Shopping List</div>
+    <div class="gallery-subtitle">23 mobile screen variations — Chat · Recipe Card · Shopping List · Auth &amp; Offline</div>
     <div class="gallery-stats">
       <div class="gallery-stat">
-        <div class="gallery-stat-num">19</div>
+        <div class="gallery-stat-num">23</div>
         <div class="gallery-stat-lbl">Screens</div>
       </div>
       <div class="gallery-stat">
-        <div class="gallery-stat-num">3</div>
+        <div class="gallery-stat-num">4</div>
         <div class="gallery-stat-lbl">Views</div>
       </div>
       <div class="gallery-stat">
@@ -607,8 +613,86 @@
     </div>
   </div>
 
+  <!-- AUTH & OFFLINE VIEWS -->
+  <div class="section-block">
+    <div class="section-label">🔐 Auth &amp; Offline Views</div>
+    <div class="screen-grid">
+
+      <a class="screen-card" href="screens/view-51-sign-in.html">
+        <div class="screen-preview preview-auth">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🔐</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(124,58,237,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(124,58,237,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-auth">
+          <div class="screen-num">VIEW 51</div>
+          <div class="screen-name">Sign In</div>
+          <div class="screen-type"><span class="type-dot"></span>Auth</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-52-offline-chat.html">
+        <div class="screen-preview preview-auth">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📡</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(124,58,237,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(124,58,237,0.15);"></div>
+              <div class="preview-line short" style="background:rgba(124,58,237,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-auth">
+          <div class="screen-num">VIEW 52</div>
+          <div class="screen-name">Offline Chat</div>
+          <div class="screen-type"><span class="type-dot"></span>Offline</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-53-offline-recipe.html">
+        <div class="screen-preview preview-auth">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📖</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(124,58,237,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(124,58,237,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(124,58,237,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-auth">
+          <div class="screen-num">VIEW 53</div>
+          <div class="screen-name">Offline Recipe Card</div>
+          <div class="screen-type"><span class="type-dot"></span>Offline</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-54-offline-shopping.html">
+        <div class="screen-preview preview-auth">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🛍️</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(124,58,237,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(124,58,237,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-auth">
+          <div class="screen-num">VIEW 54</div>
+          <div class="screen-name">Offline Shopping List</div>
+          <div class="screen-type"><span class="type-dot"></span>Offline</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
   <div style="padding:20px 40px 60px;text-align:center;">
-    <div style="font-size:12px;color:rgba(255,255,255,0.18);letter-spacing:-0.1px;">mise. · 50 screens · 3 view types · designed for cooking AI</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.18);letter-spacing:-0.1px;">mise. · 23 screens · 4 view types · designed for cooking AI</div>
   </div>
 </body>
 </html>
