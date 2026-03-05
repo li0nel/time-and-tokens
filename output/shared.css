@@ -999,7 +999,7 @@ input, textarea { font-family: inherit; }
 .ingr-full-item:last-child { border-bottom: none; }
 /* Ingredient full layout: name LEFT, qty RIGHT */
 .ingr-full-amount { font-size: var(--fs-sm); font-weight: 600; color: var(--text-2); font-variant-numeric: tabular-nums; order: 2; margin-left: auto; text-align: right; flex-shrink: 0; }
-.ingr-full-name { flex: 1; font-size: var(--fs-sm); color: var(--text); order: 1; }
+.ingr-full-name { flex: 1; font-size: var(--fs-sm); color: var(--text); }
 .ingr-full-note { font-size: var(--fs-xs); color: var(--text-3); margin-top: 2px; }
 
 /* Full instruction steps */
