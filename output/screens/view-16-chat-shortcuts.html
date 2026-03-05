@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Active Cooking: Shortcuts &amp; Context</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .system-msg {
+      text-align: center;
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+      padding: 4px 0;
+    }
+    .system-msg span {
+      background: var(--bg-elevated);
+      padding: 5px 14px;
+      border-radius: var(--r-full);
+      display: inline-block;
+    }
+    .cook-mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: var(--r-full);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .ai-hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--bg-elevated);
+      border-radius: var(--r-lg);
+      padding: 11px 13px;
+      font-size: var(--fs-sm);
+      color: var(--text-2);
+      line-height: var(--lh-snug);
+    }
+    .step-important-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      background: var(--warning-bg);
+      border: 1px solid #FDE68A;
+      border-radius: var(--r-md);
+      padding: 9px 12px;
+      font-size: var(--fs-xs);
+      color: var(--warning);
+      margin-top: 10px;
+      line-height: var(--lh-snug);
+    }
+    /* Contextual cooking context bar */
+    .cook-context-bar {
+      padding: 7px 14px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-elevated);
+      border-radius: 0;
+    }
+    .cook-context-text {
+      font-size: var(--fs-xs);
+      color: var(--text-2);
+      font-weight: 500;
+    }
+    .cook-context-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cook-context-nav-btn {
+      width: 22px; height: 22px;
+      border-radius: var(--r-full);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--text-2);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">11:34</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR — Cook mode active -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions" style="gap:8px;">
+      <span class="cook-mode-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg>
+        Cook mode
+      </span>
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED -->
+  <div class="chat-feed">
+
+    <!-- 1. System message -->
+    <div class="system-msg">
+      <span>— Cook mode: Hainanese Chicken Rice — Step 4 of 8 —</span>
+    </div>
+
+    <!-- 2. AI message — no avatar, no bubble -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">The chicken should have been poaching for about 30 minutes at a gentle simmer. Time to check how we're doing — this is the moment of truth for getting that silky Hainanese texture right.</p>
+
+      <!-- 3. Cook Step 4 of 8 -->
+      <div class="cook-step">
+        <div class="cook-step-head">
+          <span class="cook-step-label">COOK MODE</span>
+          <span class="cook-step-progress">Step 4 of 8</span>
+        </div>
+        <div class="cook-progress-bar">
+          <div class="cook-progress-fill" style="width:50%"></div>
+        </div>
+        <div class="cook-step-body">
+          <p class="cook-step-text">Lift the lid and insert a probe thermometer into the thickest part of the thigh, <strong>without touching the bone</strong>. You're looking for <span class="ingr-inline">74°C / 165°F</span>. If it reads lower, cover and continue for 10 more minutes, then check again.</p>
+          <div class="step-important-note">
+            <span>⚠️</span>
+            <span>Always check the thickest part of the thigh — not the breast. Breast cooks faster and will read higher. Thigh temp is the true indicator.</span>
+          </div>
+        </div>
+        <div class="cook-step-nav">
+          <button class="btn btn-secondary btn-sm">← Step 3</button>
+          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. User message -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">75°C — we're good!</div>
+    </div>
+
+    <!-- 5. AI response — no avatar, no bubble -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">Excellent! Perfect temperature. Now the most important moment in the whole recipe — the <strong>ice bath</strong>. This single step is what separates silky Hainanese chicken from ordinary poached chicken. Don't skip it, don't shorten it.</p>
+
+      <!-- 6. Cook Step 5 of 8 -->
+      <div class="cook-step">
+        <div class="cook-step-head">
+          <span class="cook-step-label">COOK MODE</span>
+          <span class="cook-step-progress">Step 5 of 8</span>
+        </div>
+        <div class="cook-progress-bar">
+          <div class="cook-progress-fill" style="width:62%"></div>
+        </div>
+        <div class="cook-step-body">
+          <p class="cook-step-text">Carefully transfer the chicken from the hot water to your prepared ice bath. Fully submerge it. Hold it down if it floats. Leave for exactly <span class="timer-pill">⏱ 10 minutes</span>. This shock-stops the cooking and contracts the skin to create the signature silky, bouncy texture.</p>
+          <div class="step-important-note">
+            <span>⚠️</span>
+            <span>Don't skip this step — it's literally the difference between silky, bouncy Hainanese skin and flabby, sad skin. Have your ice ready before you start.</span>
+          </div>
+        </div>
+        <div class="cook-step-nav">
+          <button class="btn btn-secondary btn-sm">← Step 4</button>
+          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
+        </div>
+      </div>
+
+      <!-- 7. AI hint -->
+      <div class="ai-hint">
+        <span>💡</span>
+        <span>While the chicken chills, now's the perfect time to start the rice (Step 6) — they'll finish at roughly the same time. Want me to show the rice step running in parallel?</span>
+      </div>
+
+      <div class="chip-row">
+        <button class="chip" style="background:var(--brand);color:#fff;border-color:var(--brand);">Yes, show rice step</button>
+        <button class="chip">⏱ Set 10 min timer</button>
+        <button class="chip">Parallel steps?</button>
+        <button class="chip">Skip ahead</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR — Prominent shortcuts with context bar -->
+  <div class="input-bar-wrap">
+    <!-- Context bar — NEW UI ELEMENT: cooking progress mini-nav -->
+    <div class="cook-context-bar">
+      <div class="cook-context-text">Hainanese Chicken Rice · <strong style="color:var(--brand);">Step 5/8</strong></div>
+      <div class="cook-context-nav">
+        <div class="cook-context-nav-btn">←</div>
+        <span style="font-size:var(--fs-xs);color:var(--text-3);">5/8</span>
+        <div class="cook-context-nav-btn">→</div>
+      </div>
+    </div>
+    <!-- Prominent contextual shortcut chips -->
+    <div class="input-chips-row" style="gap:7px;padding:8px 14px 0;display:flex;overflow-x:auto;scrollbar-width:none;">
+      <div class="chip" style="background:var(--brand);color:white;border-color:var(--brand);font-size:var(--fs-xs);padding:6px 12px;">Next step ›</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:6px 12px;">⏱ Set timer</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:6px 12px;">🍚 Rice step</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:6px 12px;">⚠️ Problem?</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:6px 12px;">✅ Done</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:6px 12px;">💡 Explain more</div>
+      <div class="chip" style="font-size:var(--fs-xs);padding:6px 12px;">📋 Full recipe</div>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field"><span style="color:var(--text-3);">Ask anything while cooking...</span></div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Entity Detection: Multiple Input Patterns</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    /* Section label dividers */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 8px 0 4px;
+    }
+    .section-divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-divider-label {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      color: var(--text-3);
+      white-space: nowrap;
+      background: var(--brand-50);
+      border: 1px solid var(--brand-muted);
+      color: var(--brand);
+      padding: 3px 10px;
+      border-radius: var(--r-full);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Chat section wrapper */
+    .chat-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Input bar variants — positioned statically for showcase */
+    .input-bar-static {
+      background: var(--bg);
+      border-top: 1px solid var(--border-subtle);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+    }
+    .input-row-static {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 8px 12px 10px;
+    }
+    .input-field-static {
+      flex: 1;
+      min-height: 42px;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      border-radius: 21px;
+      padding: 10px 14px;
+      font-size: var(--fs-base);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+    }
+
+    /* Search overlay (static) */
+    .search-overlay-static {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    /* @ mention overlay */
+    .mention-overlay {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .mention-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      cursor: pointer;
+      transition: background var(--t-fast);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .mention-item:last-child { border-bottom: none; }
+    .mention-item.active { background: var(--brand-50); }
+    .mention-item:hover { background: var(--bg-elevated); }
+    .mention-thumb {
+      width: 40px; height: 40px;
+      border-radius: var(--r-md);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .mention-name { font-size: var(--fs-sm); font-weight: 600; color: var(--text); }
+    .mention-name strong { color: var(--brand); }
+    .mention-meta { font-size: var(--fs-xs); color: var(--text-3); margin-top: 2px; }
+    .mention-footer {
+      padding: 8px 16px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+      background: var(--bg-elevated);
+      display: flex;
+      justify-content: space-between;
+    }
+    .mention-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-2);
+    }
+
+    /* Auto-detect entity bar */
+    .auto-detect-bar {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--brand-muted);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .auto-detect-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--brand-50);
+      border-bottom: 1px solid var(--brand-muted);
+    }
+    .auto-detect-label {
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--brand);
+    }
+    .auto-detect-items {
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .auto-detect-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--bg-elevated);
+      border-radius: var(--r-lg);
+      cursor: pointer;
+      transition: all var(--t-fast);
+    }
+    .auto-detect-item:hover { background: var(--border); }
+    .auto-detect-item-thumb {
+      width: 36px; height: 36px;
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .auto-detect-item-name { font-size: var(--fs-sm); font-weight: 600; color: var(--text); }
+    .auto-detect-item-meta { font-size: var(--fs-xs); color: var(--text-3); margin-top: 1px; }
+
+    /* Quick pill bubbles (Variation D) */
+    .pill-results-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 14px;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      scrollbar-width: none;
+    }
+    .pill-results-bar::-webkit-scrollbar { display: none; }
+    .recipe-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--brand-muted);
+      border-radius: var(--r-full);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all var(--t-fast);
+    }
+    .recipe-pill:hover { background: var(--brand-50); border-color: var(--brand); }
+    .recipe-pill-emoji { font-size: 14px; }
+
+    /* Typed text with highlight */
+    .typed-text { color: var(--text); }
+    .typed-text .partial { color: var(--brand); font-weight: 600; }
+    .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 15px;
+      background: var(--brand);
+      border-radius: 1px;
+      margin-left: 1px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- FULL CHAT FEED — showcasing all 4 entity detection variations -->
+  <div class="chat-feed">
+
+    <!-- ================================================================ -->
+    <!-- VARIATION A: MANUAL SEARCH TOGGLE (magnifier icon)             -->
+    <!-- ================================================================ -->
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Variation A — Manual search toggle</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="chat-section">
+      <!-- Context messages -->
+      <div class="msg-user">
+        <div class="msg-user-bubble">I want to cook something Asian this week</div>
+      </div>
+      <div class="msg-ai">
+        <p class="msg-ai-text">You've got some great options in your cookbook — tap the search icon to look for a specific recipe, or tell me what style you're in the mood for: Thai, Japanese, Chinese, Korean, or something else?</p>
+      </div>
+      <div class="msg-user">
+        <div class="msg-user-bubble">Something like Hainanese...</div>
+      </div>
+
+      <!-- Input bar with active search mode -->
+      <div style="border-top:1px solid var(--border-subtle);">
+        <!-- Search results overlay (appears above input) -->
+        <div class="search-overlay-static">
+          <div class="search-overlay-header">Your cookbook · 3 results for "Hai..."</div>
+          <div class="search-result-item">
+            <div class="search-thumb">
+              <div style="width:100%;height:100%;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);"></div>
+            </div>
+            <div class="search-result-text">
+              <div class="search-result-title"><strong>Hai</strong>nanese Chicken Rice</div>
+              <div class="search-result-meta">⏱ 1h 30min · Singaporean · 4 servings</div>
+            </div>
+          </div>
+          <div class="search-result-item">
+            <div class="search-thumb">
+              <div style="width:100%;height:100%;background:linear-gradient(160deg,#F5D76E 0%,#E89228 40%,#C8481C 100%);"></div>
+            </div>
+            <div class="search-result-text">
+              <div class="search-result-title"><strong>Hai</strong>nan-style Congee</div>
+              <div class="search-result-meta">⏱ 45min · Chinese · 2 servings</div>
+            </div>
+          </div>
+          <div class="search-result-item">
+            <div class="search-thumb">
+              <div style="width:100%;height:100%;background:linear-gradient(160deg,#C8E8A8 0%,#5A8A3C 40%,#2D5016 100%);"></div>
+            </div>
+            <div class="search-result-text">
+              <div class="search-result-title"><strong>Hai</strong>nanese Pork Chop</div>
+              <div class="search-result-meta">⏱ 30min · Malaysian · 3 servings</div>
+            </div>
+          </div>
+          <div class="search-overlay-footer">
+            <span style="font-size:var(--fs-xs);color:var(--text-3);">Search results from your cookbook</span>
+            <span style="font-size:var(--fs-xs);color:var(--brand);font-weight:600;">Browse all</span>
+          </div>
+        </div>
+        <!-- Input with active search icon -->
+        <div class="input-row-static">
+          <button class="input-action-btn input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <div class="input-field-static" style="border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-light);">
+            <span class="typed-text"><span class="partial">Hai</span>...<span class="cursor-blink"></span></span>
+          </div>
+          <button class="input-action-btn input-icon active" style="background:var(--brand-light);color:var(--brand);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </button>
+          <button class="input-action-btn input-send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- VARIATION B: @ MENTION STYLE                                    -->
+    <!-- ================================================================ -->
+    <div class="section-divider" style="margin-top:12px;">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Variation B — @ symbol triggers recipe search</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="chat-section">
+      <!-- Context messages -->
+      <div class="msg-user">
+        <div class="msg-user-bubble">Can I substitute ingredients in the curry?</div>
+      </div>
+      <div class="msg-ai">
+        <p class="msg-ai-text">Of course! Which curry are you working with? You can type @ to search your cookbook directly — for example @massaman or @thai green.</p>
+      </div>
+      <div class="msg-user">
+        <div class="msg-user-bubble">The @massaman one</div>
+      </div>
+
+      <!-- Input with @ mention dropdown -->
+      <div style="border-top:1px solid var(--border-subtle);">
+        <!-- Mention overlay -->
+        <div class="mention-overlay">
+          <div style="padding:10px 16px 8px;border-bottom:1px solid var(--border-subtle);">
+            <div style="font-size:var(--fs-xs);font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;">Your cookbook · matching "@massaman"</div>
+          </div>
+          <div class="mention-item active">
+            <div class="mention-thumb">
+              <div style="width:100%;height:100%;background:linear-gradient(160deg,#F5D76E 0%,#E89228 40%,#C8481C 100%);"></div>
+            </div>
+            <div style="flex:1;">
+              <div class="mention-name"><strong>Massam</strong>an Curry</div>
+              <div class="mention-meta">⏱ 1h 15min · Thai · 4 servings · Saved Mar 1</div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--brand);flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+          </div>
+          <div class="mention-item">
+            <div class="mention-thumb">
+              <div style="width:100%;height:100%;background:linear-gradient(160deg,#E8D0A8 0%,#C8A050 40%,#785830 100%);"></div>
+            </div>
+            <div style="flex:1;">
+              <div class="mention-name"><strong>Massam</strong>an Lamb</div>
+              <div class="mention-meta">⏱ 2h · Thai-inspired · 6 servings</div>
+            </div>
+          </div>
+          <div class="mention-footer">
+            <span>2 results</span>
+            <span><span class="mention-hint">↵ Enter</span> to select · <span class="mention-hint">ESC</span> to dismiss</span>
+          </div>
+        </div>
+        <!-- Input field -->
+        <div class="input-row-static">
+          <button class="input-action-btn input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <div class="input-field-static" style="border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-light);">
+            <span style="color:var(--text);">@<span style="color:var(--brand);font-weight:600;">massaman</span><span class="cursor-blink"></span></span>
+          </div>
+          <button class="input-action-btn input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </button>
+          <button class="input-action-btn input-send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- VARIATION C: AUTO-DETECTION (no special character)              -->
+    <!-- ================================================================ -->
+    <div class="section-divider" style="margin-top:12px;">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Variation C — Auto-detection in free text</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="chat-section">
+      <!-- Context messages -->
+      <div class="msg-user">
+        <div class="msg-user-bubble">What's a good protein side dish with rice?</div>
+      </div>
+      <div class="msg-ai">
+        <p class="msg-ai-text">Lots of great options — it depends on the rice dish. Are you thinking plain rice as a base, or a specific recipe like fried rice or biryani?</p>
+      </div>
+
+      <!-- Input with auto-detected entity above -->
+      <div style="border-top:1px solid var(--border-subtle);">
+        <!-- Auto-detect bar appears above input -->
+        <div class="auto-detect-bar">
+          <div class="auto-detect-head">
+            <span style="font-size:14px;">📖</span>
+            <div class="auto-detect-label">Found in your cookbook</div>
+            <span style="font-size:var(--fs-xs);color:var(--text-3);margin-left:auto;">Tap to open</span>
+          </div>
+          <div class="auto-detect-items">
+            <div class="auto-detect-item">
+              <div class="auto-detect-item-thumb">
+                <div style="width:100%;height:100%;background:linear-gradient(160deg,#F5D76E 0%,#E89228 40%,#C8481C 100%);"></div>
+              </div>
+              <div style="flex:1;">
+                <div class="auto-detect-item-name">🍛 Chicken Tikka Masala</div>
+                <div class="auto-detect-item-meta">45min · Indian · 4 servings</div>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--text-3);flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+            <div class="auto-detect-item">
+              <div class="auto-detect-item-thumb">
+                <div style="width:100%;height:100%;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);"></div>
+              </div>
+              <div style="flex:1;">
+                <div class="auto-detect-item-name">🍢 Chicken Tikka</div>
+                <div class="auto-detect-item-meta">30min · starter · 6 pieces</div>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--text-3);flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+        <!-- Input field with typed text -->
+        <div class="input-row-static">
+          <button class="input-action-btn input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <div class="input-field-static">
+            <span style="color:var(--text);font-size:var(--fs-sm);">I'm thinking about making chicken tik<span class="cursor-blink"></span></span>
+          </div>
+          <button class="input-action-btn input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </button>
+          <button class="input-action-btn input-send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- VARIATION D: MULTIPLE MATCHES — RECIPE PILL BUBBLES             -->
+    <!-- ================================================================ -->
+    <div class="section-divider" style="margin-top:12px;">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Variation D — Multiple matches: recipe pills</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="chat-section">
+      <!-- Context messages -->
+      <div class="msg-user">
+        <div class="msg-user-bubble">I'm in the mood for something warming and spiced</div>
+      </div>
+      <div class="msg-ai">
+        <p class="msg-ai-text">Sounds like a curry night to me! You've got five saved in your cookbook — which direction are you feeling?</p>
+      </div>
+      <div class="msg-user">
+        <div class="msg-user-bubble">Yes definitely something curry</div>
+      </div>
+
+      <!-- Input with pill results bar above -->
+      <div style="border-top:1px solid var(--border-subtle);">
+        <!-- Pills bar -->
+        <div style="padding:8px 12px 4px;background:var(--bg-elevated);border-bottom:1px solid var(--border-subtle);">
+          <div style="font-size:var(--fs-xs);color:var(--text-3);font-weight:500;margin-bottom:6px;">5 matches in your cookbook:</div>
+          <div class="pill-results-bar" style="padding:0;">
+            <div class="recipe-pill"><span class="recipe-pill-emoji">🍛</span>Massaman</div>
+            <div class="recipe-pill"><span class="recipe-pill-emoji">🌿</span>Thai Green</div>
+            <div class="recipe-pill"><span class="recipe-pill-emoji">🍛</span>Tikka Masala</div>
+            <div class="recipe-pill"><span class="recipe-pill-emoji">🟡</span>Dal</div>
+            <div class="recipe-pill"><span class="recipe-pill-emoji">🔴</span>Lamb Rogan</div>
+          </div>
+        </div>
+        <!-- Input field -->
+        <div class="input-row-static">
+          <button class="input-action-btn input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <div class="input-field-static" style="border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-light);">
+            <span style="color:var(--text);">curry<span class="cursor-blink"></span></span>
+          </div>
+          <button class="input-action-btn input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </button>
+          <button class="input-action-btn input-send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary note -->
+    <div class="msg-ai" style="margin-top:8px;">
+      <p class="msg-ai-text" style="font-size:var(--fs-sm);color:var(--text-2);">Four ways to find a recipe — manual search, @ mentions, smart detection, and instant pill shortcuts. All connected to your cookbook.</p>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR (decorative — the showcase uses static versions) -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <div class="chip"><span class="chip-emoji">🍳</span>Cook mode</div>
+      <div class="chip"><span class="chip-emoji">🛒</span>Add to list</div>
+      <div class="chip"><span class="chip-emoji">❓</span>Quick question</div>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field"><span style="color:var(--text-3);">Message mise...</span></div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

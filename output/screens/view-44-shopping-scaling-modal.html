@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Shopping Scaling Modal</title>
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="mobile-frame">
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+  <div class="app-bar">
+    <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
+    <span style="font-size:17px;font-weight:700;letter-spacing:-0.3px;opacity:0.35;">Shopping List</span>
+    <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+  </div>
+
+  <!-- Background list (dimmed) -->
+  <div style="opacity:0.3;pointer-events:none;">
+    <div style="padding:12px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:13px;color:var(--text-3);">20 items</span>
+      <div class="sort-toggle">
+        <div class="sort-opt active">By Recipe</div>
+        <div class="sort-opt">By Aisle</div>
+      </div>
+    </div>
+    <div style="padding:12px 16px;">
+      <!-- Hainanese section -->
+      <div class="shop-section">
+        <div class="shop-section-head">
+          <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(160deg,#F0D5A8,#8B5820);display:flex;align-items:center;justify-content:center;font-size:16px;">🍗</div>
+          <span class="shop-section-name">Hainanese Chicken Rice</span>
+          <span class="shop-section-count">9 items</span>
+        </div>
+        <div class="shop-item">
+          <div class="shop-check"></div>
+          <div class="shop-item-info">
+            <div class="shop-item-name">Whole chicken (free-range)</div>
+            <div class="shop-item-amount">1.5 kg</div>
+          </div>
+        </div>
+        <div class="shop-item">
+          <div class="shop-check"></div>
+          <div class="shop-item-info">
+            <div class="shop-item-name">Jasmine rice</div>
+            <div class="shop-item-amount">400g</div>
+          </div>
+        </div>
+        <div class="shop-item">
+          <div class="shop-check"></div>
+          <div class="shop-item-info">
+            <div class="shop-item-name">Fresh ginger</div>
+            <div class="shop-item-amount">4cm piece</div>
+          </div>
+        </div>
+      </div>
+      <!-- Massaman section -->
+      <div class="shop-section">
+        <div class="shop-section-head">
+          <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(160deg,#F5D76E,#C8481C);display:flex;align-items:center;justify-content:center;font-size:16px;">🍛</div>
+          <span class="shop-section-name">Massaman Curry</span>
+          <span class="shop-section-count">11 items</span>
+        </div>
+        <div class="shop-item">
+          <div class="shop-check"></div>
+          <div class="shop-item-info">
+            <div class="shop-item-name">Beef chuck</div>
+            <div class="shop-item-amount">600g</div>
+          </div>
+        </div>
+        <div class="shop-item">
+          <div class="shop-check"></div>
+          <div class="shop-item-info">
+            <div class="shop-item-name">Coconut milk</div>
+            <div class="shop-item-amount">400ml</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal backdrop -->
+  <div style="position:absolute;inset:0;background:rgba(20,16,12,0.52);backdrop-filter:blur(3px);z-index:200;">
+    <!-- Bottom sheet -->
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--bg-surface);border-radius:24px 24px 0 0;padding-bottom:34px;max-height:88vh;overflow-y:auto;">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div style="font-size:18px;font-weight:800;letter-spacing:-0.4px;">Adjust Servings</div>
+        <div style="font-size:14px;color:var(--text-2);margin-top:4px;">Hainanese Chicken Rice</div>
+      </div>
+      <div class="sheet-body">
+
+        <!-- Serve scaler large -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:20px;padding:20px 0 16px;">
+          <button style="width:48px;height:48px;border-radius:50%;background:var(--bg-elevated);font-size:24px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;color:var(--text);">−</button>
+          <div style="text-align:center;">
+            <div style="font-size:52px;font-weight:800;letter-spacing:-2px;color:var(--text);line-height:1;">6</div>
+            <div style="font-size:13px;color:var(--text-3);margin-top:4px;">servings</div>
+          </div>
+          <button style="width:48px;height:48px;border-radius:50%;background:var(--brand);color:white;font-size:24px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;">+</button>
+        </div>
+
+        <!-- Note -->
+        <div style="background:var(--info-bg);border:1px solid #BFDBFE;border-radius:var(--r-md);padding:12px 14px;margin-bottom:16px;">
+          <div style="font-size:12px;color:var(--info);line-height:1.5;">Was added for <strong>4 servings</strong>. Changing to 6 will update all ingredient quantities <strong>(×1.5)</strong></div>
+        </div>
+
+        <!-- Preview changes -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-3);margin-bottom:10px;">INGREDIENT PREVIEW</div>
+          <div style="display:flex;flex-direction:column;gap:0;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border-subtle);">
+              <span style="font-size:13px;color:var(--text);">Whole chicken</span>
+              <div style="text-align:right;">
+                <span style="font-size:12px;color:var(--text-3);text-decoration:line-through;margin-right:6px;">1.5 kg</span>
+                <span style="font-size:13px;font-weight:700;color:var(--brand);">2.25 kg</span>
+                <span style="font-size:11px;color:var(--text-3);margin-left:4px;">×1.5</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border-subtle);">
+              <span style="font-size:13px;color:var(--text);">Jasmine rice</span>
+              <div style="text-align:right;">
+                <span style="font-size:12px;color:var(--text-3);text-decoration:line-through;margin-right:6px;">400g</span>
+                <span style="font-size:13px;font-weight:700;color:var(--brand);">600g</span>
+                <span style="font-size:11px;color:var(--text-3);margin-left:4px;">×1.5</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border-subtle);">
+              <span style="font-size:13px;color:var(--text);">Fresh ginger</span>
+              <div style="text-align:right;">
+                <span style="font-size:12px;color:var(--text-3);text-decoration:line-through;margin-right:6px;">4cm</span>
+                <span style="font-size:13px;font-weight:700;color:var(--brand);">6cm</span>
+                <span style="font-size:11px;color:var(--text-3);margin-left:4px;">×1.5</span>
+              </div>
+            </div>
+            <div style="padding:10px 14px;background:var(--bg-elevated);">
+              <span style="font-size:12px;color:var(--text-3);">...and 6 more items will update</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer buttons -->
+        <div style="display:flex;gap:10px;padding-top:4px;">
+          <button class="btn btn-outline" style="flex:1;">Cancel</button>
+          <button class="btn btn-primary" style="flex:2;">Update to 6 servings →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

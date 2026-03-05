@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Recipe Brainstorm: Lamb &amp; Mediterranean</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .recipe-stack-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .recipe-stack-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      position: relative;
+      overflow: hidden;
+    }
+    .recipe-stack-img-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .recipe-stack-body {
+      padding: 14px 16px 16px;
+    }
+    .recipe-stack-title {
+      font-size: var(--fs-md);
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .recipe-stack-subtitle {
+      font-size: var(--fs-sm);
+      color: var(--text-2);
+      line-height: var(--lh-snug);
+      margin-bottom: 12px;
+    }
+    .recipe-stack-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .recipe-stack-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--fs-xs);
+      color: var(--text-2);
+    }
+    .recipe-stack-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: var(--r-full);
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .rank-badge.top {
+      background: var(--brand);
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">7:22</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED -->
+  <div class="chat-feed">
+
+    <!-- 1. User message -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">I have ground lamb, feta, cucumber, cherry tomatoes, pita bread, lemon and oregano. What can I make for dinner tonight?</div>
+    </div>
+
+    <!-- 2. AI response — no bubble, no avatar -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">Oh, that's a beautiful haul — you're essentially set up for a proper Mediterranean feast. Here are 4 ideas, ranked by how hungry I am looking at your ingredient list:</p>
+
+      <!-- Card 1: Spiced Lamb Pita -->
+      <div class="recipe-stack-card">
+        <div class="recipe-stack-img">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#E8C8A8 0%,#C89048 40%,#785020 100%);display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;">
+            <span style="font-size:36px;">🫓</span>
+          </div>
+          <div class="recipe-stack-img-overlay">
+            <div class="rank-badge top">1</div>
+          </div>
+        </div>
+        <div class="recipe-stack-body">
+          <div class="recipe-stack-title">Spiced Lamb Pita</div>
+          <div class="recipe-stack-subtitle">Seasoned minced lamb in warm pita with cucumber-feta salad and a yoghurt-lemon drizzle. Lebanese-inspired, zero waste.</div>
+          <div class="recipe-stack-meta">
+            <div class="recipe-stack-meta-item">⏱ 25 min</div>
+            <div class="recipe-stack-meta-item">👥 4 servings</div>
+            <div class="recipe-stack-meta-item" style="background:var(--success-bg);color:var(--success);padding:2px 8px;border-radius:var(--r-full);font-weight:600;">Easy</div>
+          </div>
+          <div class="recipe-stack-actions">
+            <button class="btn btn-primary btn-sm" style="flex:1;">Make this →</button>
+            <button class="btn btn-outline btn-sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Greek Lamb Bowl -->
+      <div class="recipe-stack-card">
+        <div class="recipe-stack-img">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#E8D0A8 0%,#C8A050 40%,#785830 100%);display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;">
+            <span style="font-size:36px;">🥗</span>
+          </div>
+          <div class="recipe-stack-img-overlay">
+            <div class="rank-badge">2</div>
+          </div>
+        </div>
+        <div class="recipe-stack-body">
+          <div class="recipe-stack-title">Greek Lamb Bowl</div>
+          <div class="recipe-stack-subtitle">Herbed lamb over greens with tomato, cucumber, feta crumble and a bright lemon-oregano dressing. Healthy and fast.</div>
+          <div class="recipe-stack-meta">
+            <div class="recipe-stack-meta-item">⏱ 20 min</div>
+            <div class="recipe-stack-meta-item">👥 2 servings</div>
+            <div class="recipe-stack-meta-item" style="background:var(--success-bg);color:var(--success);padding:2px 8px;border-radius:var(--r-full);font-weight:600;">Easy</div>
+          </div>
+          <div class="recipe-stack-actions">
+            <button class="btn btn-outline btn-sm" style="flex:1;">Make this →</button>
+            <button class="btn btn-outline btn-sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Lamb Flatbread Pizza -->
+      <div class="recipe-stack-card">
+        <div class="recipe-stack-img">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#F0D5C8 0%,#D4804A 40%,#A04020 100%);display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;">
+            <span style="font-size:36px;">🍕</span>
+          </div>
+          <div class="recipe-stack-img-overlay">
+            <div class="rank-badge">3</div>
+          </div>
+        </div>
+        <div class="recipe-stack-body">
+          <div class="recipe-stack-title">Lamb Flatbread Pizza</div>
+          <div class="recipe-stack-subtitle">Crispy pita topped with spiced lamb, roasted cherry tomatoes, crumbled feta and fresh herbs. Creative and impressive.</div>
+          <div class="recipe-stack-meta">
+            <div class="recipe-stack-meta-item">⏱ 35 min</div>
+            <div class="recipe-stack-meta-item">👥 3 servings</div>
+            <div class="recipe-stack-meta-item" style="background:var(--warning-bg);color:var(--warning);padding:2px 8px;border-radius:var(--r-full);font-weight:600;">Medium</div>
+          </div>
+          <div class="recipe-stack-actions">
+            <button class="btn btn-outline btn-sm" style="flex:1;">Make this →</button>
+            <button class="btn btn-outline btn-sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Dolmasi -->
+      <div class="recipe-stack-card">
+        <div class="recipe-stack-img">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#C8E8A8 0%,#5A8A3C 40%,#2D5016 100%);display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;">
+            <span style="font-size:36px;">🫑</span>
+          </div>
+          <div class="recipe-stack-img-overlay">
+            <div class="rank-badge">4</div>
+          </div>
+        </div>
+        <div class="recipe-stack-body">
+          <div class="recipe-stack-title">Dolmasi — Stuffed Peppers</div>
+          <div class="recipe-stack-subtitle">Ground lamb and rice stuffed into sweet peppers, baked with tomato and a hint of cinnamon. Turkish comfort food at its best.</div>
+          <div class="recipe-stack-meta">
+            <div class="recipe-stack-meta-item">⏱ 50 min</div>
+            <div class="recipe-stack-meta-item">👥 4 servings</div>
+            <div class="recipe-stack-meta-item" style="background:var(--warning-bg);color:var(--warning);padding:2px 8px;border-radius:var(--r-full);font-weight:600;">Medium</div>
+          </div>
+          <div class="recipe-stack-actions">
+            <button class="btn btn-outline btn-sm" style="flex:1;">Make this →</button>
+            <button class="btn btn-outline btn-sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. AI recommendation -->
+      <p class="msg-ai-text">My pick? <strong>Option 1 — the Spiced Lamb Pita.</strong> It's the fastest, wastes literally nothing in your fridge, and the feta-cucumber combination with warm spiced lamb is going to be incredible tonight. Plus pita is the most forgiving thing to cook — hard to mess up.</p>
+      <p class="msg-ai-text">Want me to walk you through it step by step? I'll keep it simple — 25 minutes, one pan.</p>
+
+      <!-- 5. Quick chips -->
+      <div class="chip-row">
+        <button class="chip" style="background:var(--brand);color:#fff;border-color:var(--brand);">Yes, make the pita!</button>
+        <button class="chip">Option 2 bowl</button>
+        <button class="chip">What's fastest?</button>
+        <button class="chip">Surprise me</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <div class="chip"><span class="chip-emoji">🍳</span>Cook mode</div>
+      <div class="chip"><span class="chip-emoji">🛒</span>Add to list</div>
+      <div class="chip"><span class="chip-emoji">❓</span>Quick question</div>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field"><span style="color:var(--text-3);">Message mise...</span></div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

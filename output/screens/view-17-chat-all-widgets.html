@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Complete Showcase: All Widgets</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .system-msg {
+      text-align: center;
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+      padding: 4px 0;
+    }
+    .system-msg span {
+      background: var(--bg-elevated);
+      padding: 5px 14px;
+      border-radius: var(--r-full);
+      display: inline-block;
+    }
+    .ai-hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--bg-elevated);
+      border-radius: var(--r-lg);
+      padding: 11px 13px;
+      font-size: var(--fs-sm);
+      color: var(--text-2);
+      line-height: var(--lh-snug);
+    }
+    .star-rating {
+      display: flex;
+      gap: 3px;
+    }
+    .star { font-size: 15px; }
+    .star.filled { color: #F59E0B; }
+    .star.empty { color: var(--border-strong); }
+    .difficulty-stars {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .recipe-bookmark {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+    }
+    .recipe-bookmark-head {
+      background: var(--success-bg);
+      border-bottom: 1px solid #A7F3D0;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .recipe-bookmark-title {
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--success);
+      flex: 1;
+    }
+    .recipe-bookmark-body {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .variation-teaser {
+      background: var(--brand-50);
+      border: 1px solid var(--brand-muted);
+      border-radius: var(--r-lg);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .variation-teaser-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--r-md);
+      background: var(--brand-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .variation-teaser-text {
+      flex: 1;
+    }
+    .variation-teaser-title {
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--brand);
+    }
+    .variation-teaser-sub {
+      font-size: var(--fs-xs);
+      color: var(--text-2);
+      margin-top: 2px;
+    }
+    .entity-section-label {
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .step-important-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      background: var(--warning-bg);
+      border: 1px solid #FDE68A;
+      border-radius: var(--r-md);
+      padding: 9px 12px;
+      font-size: var(--fs-xs);
+      color: var(--warning);
+      margin-top: 10px;
+      line-height: var(--lh-snug);
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">7:38</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED — Beef Bourguignon full journey -->
+  <div class="chat-feed">
+
+    <!-- ===== 1. USER OPENER ===== -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">Good evening mise. I've been meaning to learn Beef Bourguignon — the proper Julia Child way. I want the full experience, not shortcuts.</div>
+    </div>
+
+    <!-- ===== 2. AI WELCOME — no avatar, no bubble ===== -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">What a wonderful choice for an evening project. Boeuf Bourguignon is one of those dishes that elevated home cooking into something approaching art — Julia Child called it "one of the most savoury French dishes concocted by man," and I'd argue she was right.</p>
+      <p class="msg-ai-text">The original Julia Child version from <em>Mastering the Art of French Cooking</em> (1961) has a few hallmarks that separate it from shortcuts: the lardons are blanched then rendered, the beef is dried and browned in small batches (this matters enormously), and the whole thing braises low and slow for at least 3 hours. No rushing. The payoff is a depth of flavour you genuinely can't fake.</p>
+    </div>
+
+    <!-- ===== 3. RECIPE CARD WIDGET ===== -->
+    <div class="msg-ai">
+      <div class="recipe-widget">
+        <div class="recipe-widget-img">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#D4B0A8 0%,#8B4838 40%,#4A1818 100%);display:flex;align-items:flex-end;padding:12px;">
+            <span style="font-size:42px;">🥩</span>
+          </div>
+        </div>
+        <div class="recipe-widget-body">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">
+            <div class="recipe-widget-title" style="margin-bottom:0;">Boeuf Bourguignon</div>
+            <div class="star-rating">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+            </div>
+          </div>
+          <div style="font-size:var(--fs-xs);color:var(--brand);font-weight:600;margin-bottom:10px;">Julia Child's Classic</div>
+          <div class="recipe-meta-row">
+            <div class="recipe-meta-item">⏱ 3h 30 min</div>
+            <div class="recipe-meta-item">👥 6 servings</div>
+            <div class="recipe-meta-item">🇫🇷 French</div>
+          </div>
+          <div style="font-size:var(--fs-sm);color:var(--text-2);line-height:var(--lh-snug);margin-bottom:14px;">Beef braised in Burgundy wine with lardons, pearl onions and mushrooms. Julia Child's defining recipe from <em>Mastering the Art of French Cooking</em>.</div>
+          <div class="recipe-widget-actions">
+            <button class="btn btn-primary btn-sm" style="flex:1;">Start Cooking</button>
+            <button class="btn btn-outline btn-sm">View Full Recipe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 4. USER ===== -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">Perfect! What do I need?</div>
+    </div>
+
+    <!-- ===== 5. LARGE INGREDIENTS WIDGET ===== -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">Here's the full shopping list for Julia's version. This serves 6 generously — it's actually better the next day, so don't worry about making too much.</p>
+      <div class="ingredients-widget">
+        <div class="widget-head">
+          <div class="widget-head-left">
+            <div class="widget-title">🧂 Ingredients</div>
+            <div class="widget-sub">6 servings · 13 items</div>
+          </div>
+          <span class="badge badge-default">6 servings</span>
+        </div>
+        <div class="ingr-list">
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">170 g</div>
+            <div class="ingr-name">Lardons (thick-cut pancetta or bacon)</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">1.3 kg</div>
+            <div class="ingr-name">Stewing beef, cut into 5cm cubes<div class="ingr-note">Chuck, brisket or beef cheek — never lean cuts</div></div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">1 bottle</div>
+            <div class="ingr-name">Full-bodied red wine<div class="ingr-note">Burgundy, Côtes du Rhône or Chianti — drinkable quality</div></div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">500 ml</div>
+            <div class="ingr-name">Beef stock, homemade or good quality</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">2 tbsp</div>
+            <div class="ingr-name">Tomato paste</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">4 cloves</div>
+            <div class="ingr-name">Garlic, smashed</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">1</div>
+            <div class="ingr-name">Bouquet garni (thyme, bay leaf, parsley)</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">18–24</div>
+            <div class="ingr-name">Pearl onions, blanched and peeled</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">450 g</div>
+            <div class="ingr-name">Button mushrooms, quartered</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">3 tbsp</div>
+            <div class="ingr-name">Unsalted butter, divided</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">2 tbsp</div>
+            <div class="ingr-name">Neutral oil (vegetable or grapeseed)</div>
+          </div>
+          <div class="ingr-item">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">3 tbsp</div>
+            <div class="ingr-name">Plain flour (for dredging)</div>
+          </div>
+          <div class="ingr-item" style="border-bottom:none;">
+            <div class="ingr-check"></div>
+            <div class="ingr-amount">To taste</div>
+            <div class="ingr-name">Salt and freshly ground black pepper</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 6. TIPS WIDGET ===== -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">Before we start, three things Julia was emphatic about:</p>
+      <div class="tip-item">
+        <div class="tip-icon">🥩</div>
+        <div>
+          <div class="tip-label">Dry the beef</div>
+          <div class="tip-text">Pat every piece of beef completely dry with kitchen paper before browning. Wet beef steams instead of browning — and browning is where 40% of the flavour lives. Julia used to get frustrated watching people skip this.</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🍷</div>
+        <div>
+          <div class="tip-label">Use good wine</div>
+          <div class="tip-text">Julia's rule: if you wouldn't drink it, don't cook with it. The wine reduces and concentrates — a bad wine becomes a very bad sauce. A decent £10-12 bottle is all you need.</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🔥</div>
+        <div>
+          <div class="tip-label">Brown in small batches</div>
+          <div class="tip-text">Never crowd the pan. The beef must sear, not steam. Work in batches of 4–5 pieces maximum, with hot fat and space between them. A packed pan drops the temperature and ruins the <span class="gls">Maillard</span> reaction.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 7. USER ===== -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">Let's cook! I'll go step by step.</div>
+    </div>
+
+    <!-- ===== 8. COOK STEP 1/10 ===== -->
+    <div class="msg-ai">
+      <div class="cook-step">
+        <div class="cook-step-head">
+          <span class="cook-step-label">COOK MODE</span>
+          <span class="cook-step-progress">Step 1 of 10</span>
+        </div>
+        <div class="cook-progress-bar">
+          <div class="cook-progress-fill" style="width:0%"></div>
+        </div>
+        <div class="cook-step-body">
+          <p class="cook-step-text">Bring a medium pot of water to a boil. Add <span class="ingr-inline">170g lardons</span> and blanch for 8 minutes. This removes excess salt and the "smoky" flavour so it doesn't overwhelm the finished dish. Drain and pat dry with kitchen paper.</p>
+          <div class="timer-pill">⏱ 8 min blanch</div>
+        </div>
+        <div class="cook-step-nav">
+          <button class="btn btn-secondary btn-sm" style="opacity:0.35;cursor:not-allowed;">← Back</button>
+          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 9. COOK STEP 2/10 ===== -->
+    <div class="msg-ai">
+      <div class="cook-step">
+        <div class="cook-step-head">
+          <span class="cook-step-label">COOK MODE</span>
+          <span class="cook-step-progress">Step 2 of 10</span>
+        </div>
+        <div class="cook-progress-bar">
+          <div class="cook-progress-fill" style="width:10%"></div>
+        </div>
+        <div class="cook-step-body">
+          <p class="cook-step-text">In a large heavy casserole (Dutch oven), heat <span class="ingr-inline">1 tbsp butter + 1 tbsp oil</span> over medium heat. Add the lardons and render until <strong>golden and lightly crisp</strong>, about 3–4 minutes. Remove to a side bowl with a slotted spoon — leave the fat in the pan. You'll use this flavour-rich fat for the beef.</p>
+          <div class="timer-pill">⏱ 3–4 min render</div>
+        </div>
+        <div class="cook-step-nav">
+          <button class="btn btn-secondary btn-sm">← Back</button>
+          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 10. USER ===== -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">Lardons are golden and absolutely delicious smelling</div>
+    </div>
+
+    <!-- ===== 11. COOK STEP 3/10 ===== -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">That smell is the <span class="gls">Maillard reaction</span> starting — you're building the flavour base of the entire dish right there. Now for the most important technical step:</p>
+      <div class="cook-step">
+        <div class="cook-step-head">
+          <span class="cook-step-label">COOK MODE</span>
+          <span class="cook-step-progress">Step 3 of 10</span>
+        </div>
+        <div class="cook-progress-bar">
+          <div class="cook-progress-fill" style="width:20%"></div>
+        </div>
+        <div class="cook-step-body">
+          <p class="cook-step-text">Pat every piece of <span class="ingr-inline">1.3kg beef</span> completely dry with kitchen paper. Season generously with salt and pepper. Raise heat to high. In batches of 4–5 pieces (never crowding the pan), sear beef on all sides until deeply browned — about <span class="timer-pill">⏱ 3 min per batch</span>. Set aside with the lardons. The <span class="gls">fond</span> forming on the pan bottom is liquid gold.</p>
+          <div class="step-important-note">
+            <span>⚠️</span>
+            <span>Crowded pan = steamed beef = grey, sad, flavourless. Space between pieces is mandatory. Work in batches. The whole process takes 15–20 minutes but it cannot be rushed.</span>
+          </div>
+        </div>
+        <div class="cook-step-nav">
+          <button class="btn btn-secondary btn-sm">← Back</button>
+          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 12. USER ===== -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">I browned all the beef — took about 15 minutes. The fond at the bottom looks absolutely incredible</div>
+    </div>
+
+    <!-- ===== 13. AI — Fond explanation with glossary ===== -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">That <span class="gls">fond</span> is the single most important thing in your pot right now. It's not a problem to clean up — it's concentrated caramelised meat protein, and you're about to <span class="gls">deglaze</span> it into your sauce where it will become the backbone of the entire dish's flavour.</p>
+      <p class="msg-ai-text">This is exactly why Julia was so insistent on proper browning. A rushed grey sear gives you almost no fond. A proper deep mahogany sear like yours gives you that rich, almost toffee-like coating that will make your sauce taste like it simmered for a week. Don't add anything yet — we're going to <span class="gls">deglaze</span> with wine next.</p>
+    </div>
+
+    <!-- ===== 14. COOK STEP 4/10 — Deglaze ===== -->
+    <div class="msg-ai">
+      <div class="cook-step">
+        <div class="cook-step-head">
+          <span class="cook-step-label">COOK MODE</span>
+          <span class="cook-step-progress">Step 4 of 10</span>
+        </div>
+        <div class="cook-progress-bar">
+          <div class="cook-progress-fill" style="width:30%"></div>
+        </div>
+        <div class="cook-step-body">
+          <p class="cook-step-text">Reduce heat to medium. Add the sliced carrots and onion to the pot. Cook 5 minutes until softened. Add <span class="ingr-inline">4 cloves garlic</span> and cook 1 minute. Sprinkle <span class="ingr-inline">3 tbsp flour</span> over everything and stir to coat. Now pour in <span class="ingr-inline">half the bottle of wine</span> and scrape vigorously with a wooden spoon, releasing every bit of <span class="gls">fond</span>. This is <span class="gls">deglaze</span> — watch the pot transform instantly.</p>
+        </div>
+        <div class="cook-step-nav">
+          <button class="btn btn-secondary btn-sm">← Back</button>
+          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 15. COOK STEP 5/10 — Into oven ===== -->
+    <div class="msg-ai">
+      <div class="cook-step">
+        <div class="cook-step-head">
+          <span class="cook-step-label">COOK MODE</span>
+          <span class="cook-step-progress">Step 5 of 10</span>
+        </div>
+        <div class="cook-progress-bar">
+          <div class="cook-progress-fill" style="width:40%"></div>
+        </div>
+        <div class="cook-step-body">
+          <p class="cook-step-text">Return the browned beef and lardons to the pot. Add the remaining wine, <span class="ingr-inline">500ml beef stock</span>, <span class="ingr-inline">2 tbsp tomato paste</span>, and the <span class="ingr-inline">bouquet garni</span>. The liquid should come about ¾ up the beef. Bring to a bare simmer on the stovetop, then cover and place in the oven at <span class="ingr-inline">160°C / 325°F</span>.</p>
+          <div class="timer-pill">⏱ 2½–3 hours in oven</div>
+          <div class="ai-hint" style="margin-top:10px;">
+            <span>💡</span>
+            <span>Julia's test: the beef should be easily pierced with a fork with no resistance. Not falling apart — that's overcooked. Tender but intact.</span>
+          </div>
+        </div>
+        <div class="cook-step-nav">
+          <button class="btn btn-secondary btn-sm">← Back</button>
+          <button class="btn btn-primary btn-sm" style="flex:1;">Next Step →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 16. SYSTEM MESSAGE — 2 hour wait ===== -->
+    <div class="system-msg">
+      <span>— 2 hours later — checking back in —</span>
+    </div>
+
+    <!-- ===== 17. USER ===== -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">It's been 2 hours. Smells incredible. Beef is very tender but the sauce seems thin — almost watery. Is that normal?</div>
+    </div>
+
+    <!-- ===== 18. RESCUE WIDGET ===== -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">Completely normal at this stage! The sauce will thin as it cooks because the beef releases moisture. You reduce it at the end — this is actually exactly how Julia intended it. Here's the finish:</p>
+      <div class="rescue-widget">
+        <div class="rescue-head">
+          <span class="rescue-icon">🍷</span>
+          <div class="rescue-title">Sauce Recovery — Reduction Finish</div>
+        </div>
+        <div class="rescue-step">
+          <div class="rescue-num">1</div>
+          <div class="rescue-text">Remove beef with a slotted spoon and keep warm in a covered bowl. Leave sauce in the pot over the stove.</div>
+        </div>
+        <div class="rescue-step">
+          <div class="rescue-num">2</div>
+          <div class="rescue-text">Rapid boil the sauce uncovered for 12–15 minutes until reduced by about ⅓ and it coats the back of a spoon. Skim off any fat that rises.</div>
+        </div>
+        <div class="rescue-step">
+          <div class="rescue-num">3</div>
+          <div class="rescue-text">Taste and adjust with salt, a few grinds of pepper, and if you like, a small splash of the remaining wine for brightness.</div>
+        </div>
+        <div class="rescue-step">
+          <div class="rescue-num">4</div>
+          <div class="rescue-text">Finish with cold butter — the <span class="gls">montée au beurre</span>: cut 2 tbsp cold butter into cubes, take the pan off heat, and whisk them in one at a time until glossy and thickened. Return beef to sauce.</div>
+        </div>
+      </div>
+
+      <!-- ===== 19. AI post-rescue explanation ===== -->
+      <p class="msg-ai-text">This reduction step is actually how Julia specified the finish — many home cooks miss it because they expect the sauce to be perfect straight from the oven. The <span class="gls">montée au beurre</span> is a French technique (literally "butter mounting") where cold butter is whisked into a hot sauce off heat, adding gloss, body and a rounded richness that nothing else can replicate.</p>
+    </div>
+
+    <!-- ===== 20. USER ===== -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">The sauce is absolutely gorgeous now. Rich, glossy, incredible. How do I serve?</div>
+    </div>
+
+    <!-- ===== 21. AI serving suggestions ===== -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">You've made something exceptional — serve it properly. Three classic options, each correct in its own way:</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);">
+          <span style="font-size:20px;flex-shrink:0;">🥔</span>
+          <div>
+            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--text);">Buttery mashed potato</div>
+            <div style="font-size:var(--fs-xs);color:var(--text-2);margin-top:2px;line-height:var(--lh-snug);">Julia's choice. The richness of the pommes purée is the perfect foil for the wine-dark sauce. Make it obscenely buttery — this is not the time for restraint.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);">
+          <span style="font-size:20px;flex-shrink:0;">🍝</span>
+          <div>
+            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--text);">Buttered egg noodles</div>
+            <div style="font-size:var(--fs-xs);color:var(--text-2);margin-top:2px;line-height:var(--lh-snug);">The classic bistro presentation. Wide pappardelle or egg noodles tossed in butter, with the bourguignon spooned over. The noodles soak up the sauce beautifully.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);">
+          <span style="font-size:20px;flex-shrink:0;">🥖</span>
+          <div>
+            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--text);">Crusty bread only</div>
+            <div style="font-size:var(--fs-xs);color:var(--text-2);margin-top:2px;line-height:var(--lh-snug);">If your bread is exceptional, sometimes less is more. Tear it into the sauce. Drink the wine you cooked with.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 22. ENTITY BUBBLES — related recipes ===== -->
+    <div class="msg-ai">
+      <div class="entity-section-label">You might also like</div>
+      <div class="entity-bubble-row">
+        <div class="entity-bubble">
+          <div class="entity-thumb">
+            <div style="width:100%;height:100%;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);"></div>
+          </div>
+          <div class="entity-info">
+            <div class="entity-name">Coq au Vin</div>
+            <div class="entity-sub">2h 15min · French</div>
+          </div>
+        </div>
+        <div class="entity-bubble">
+          <div class="entity-thumb">
+            <div style="width:100%;height:100%;background:linear-gradient(160deg,#E8D0A8 0%,#C8A050 40%,#785830 100%);"></div>
+          </div>
+          <div class="entity-info">
+            <div class="entity-name">Lamb Daube</div>
+            <div class="entity-sub">3h · Provençal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 23. COMPACT RECIPE BOOKMARK ===== -->
+    <div class="msg-ai">
+      <div class="recipe-bookmark">
+        <div class="recipe-bookmark-head">
+          <span style="font-size:16px;">✅</span>
+          <div class="recipe-bookmark-title">Beef Bourguignon — Completed</div>
+          <span style="font-size:var(--fs-xs);color:var(--success);">Mar 5</span>
+        </div>
+        <div class="recipe-bookmark-body">
+          <div>
+            <div style="font-size:var(--fs-xs);color:var(--text-3);margin-bottom:5px;">Rate this cook</div>
+            <div class="star-rating">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star empty">★</span>
+            </div>
+          </div>
+          <button class="btn btn-outline btn-sm">View saved recipe</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 24. VARIATION TEASER ===== -->
+    <div class="msg-ai">
+      <div class="variation-teaser">
+        <div class="variation-teaser-icon">🔀</div>
+        <div class="variation-teaser-text">
+          <div class="variation-teaser-title">3 variations available</div>
+          <div class="variation-teaser-sub">Pépin's 90-min shortcut · Slow cooker · Instant Pot version</div>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--brand);flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+    </div>
+
+    <!-- ===== 25. USER ===== -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">That was genuinely the best thing I've ever cooked. Can you save my notes from tonight?</div>
+    </div>
+
+    <!-- ===== 26. AI NOTES ===== -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">Done! I've added these learnings to your Beef Bourguignon notes so you can replicate (and improve on) your first cook:</p>
+      <div class="ai-notes">
+        <div class="ai-notes-head">
+          <div class="ai-notes-orb">✦</div>
+          <div class="ai-notes-title">Your cook notes — Beef Bourguignon</div>
+        </div>
+        <div class="ai-note-card">
+          <div class="ai-note-type pro">Pro technique</div>
+          <div class="ai-note-text">Searing took ~15 mins in batches — worth every minute. The fond was exceptional. Never rush this step.</div>
+        </div>
+        <div class="ai-note-card">
+          <div class="ai-note-type shortcut">Next time</div>
+          <div class="ai-note-text">Sauce was thin after 2 hrs but reduced beautifully in 12 mins. Don't panic — this is normal. Add butter finish at the end.</div>
+        </div>
+        <div class="ai-note-card">
+          <div class="ai-note-type variation">Variation</div>
+          <div class="ai-note-text">Used Côtes du Rhône (Grenache blend) — worked brilliantly. Try a Burgundy (Pinot Noir) next time for a more classical result.</div>
+        </div>
+        <div class="ai-note-card">
+          <div class="ai-note-type pro" style="color:#6366F1;">Serving</div>
+          <div class="ai-note-text">Served with buttered pappardelle — the wide noodles absorbed the sauce perfectly. Parsley on top. Will repeat.</div>
+        </div>
+      </div>
+
+      <!-- 27. Final chips -->
+      <div class="chip-row">
+        <button class="chip" style="background:var(--brand);color:#fff;border-color:var(--brand);">View saved recipe</button>
+        <button class="chip">Add to list</button>
+        <button class="chip">Share</button>
+        <button class="chip">Similar recipes</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <div class="chip"><span class="chip-emoji">🍳</span>Cook mode</div>
+      <div class="chip"><span class="chip-emoji">🛒</span>Add to list</div>
+      <div class="chip"><span class="chip-emoji">❓</span>Quick question</div>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field"><span style="color:var(--text-3);">Message mise...</span></div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

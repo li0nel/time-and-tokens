@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Boeuf Bourguignon · Source Attribution</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .hero-subtitle {
+      font-size: var(--fs-sm);
+      color: rgba(255,255,255,0.72);
+      margin-top: 4px;
+      font-style: italic;
+    }
+    .source-section-head {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-3);
+      margin-bottom: 12px;
+      margin-top: 24px;
+    }
+    .source-section-head:first-child { margin-top: 0; }
+    .source-book-card {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--brand-muted);
+      border-radius: var(--r-xl);
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .source-book-cover {
+      width: 56px; height: 76px;
+      background: linear-gradient(145deg, #7B1C1C 0%, #3D0E0E 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+      box-shadow: 4px 4px 12px rgba(0,0,0,0.25);
+    }
+    .source-book-title { font-size: var(--fs-base); font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 4px; }
+    .source-book-author { font-size: var(--fs-sm); color: var(--text-2); margin-bottom: 3px; }
+    .source-book-pub { font-size: var(--fs-xs); color: var(--text-3); margin-bottom: 8px; }
+    .source-imported-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: var(--brand-50);
+      border: 1px solid var(--brand-muted);
+      border-radius: var(--r-full);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--brand);
+    }
+    .also-found-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all var(--t-fast);
+    }
+    .also-found-row:hover { background: var(--bg-elevated); }
+    .also-found-icon {
+      width: 38px; height: 38px;
+      border-radius: var(--r-md);
+      background: var(--bg-elevated);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .also-found-domain { font-size: var(--fs-sm); font-weight: 600; color: var(--brand); }
+    .also-found-meta { font-size: var(--fs-xs); color: var(--text-3); margin-top: 2px; }
+    .also-found-rating { font-size: var(--fs-xs); color: var(--warning); font-weight: 600; margin-top: 2px; }
+    .version-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .version-pill {
+      padding: 8px 16px;
+      border-radius: var(--r-full);
+      border: 1.5px solid var(--border);
+      background: var(--bg-surface);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: all var(--t-fast);
+    }
+    .version-pill.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .why-card {
+      display: flex;
+      gap: 12px;
+      padding: 13px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+    }
+    .why-card-title { font-size: var(--fs-sm); font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .why-card-text { font-size: var(--fs-sm); line-height: var(--lh-normal); color: var(--text-2); }
+    .youll-make-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .youll-make-row:last-child { border-bottom: none; }
+    .legal-note {
+      font-size: var(--fs-xs);
+      color: var(--text-4);
+      line-height: var(--lh-normal);
+      font-style: italic;
+      text-align: center;
+      padding: 16px 4px 8px;
+    }
+    .divider-section {
+      height: 6px;
+      background: var(--bg-elevated);
+      margin: 24px -20px;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- HERO IMAGE (4:3) -->
+  <div class="recipe-hero-wrap">
+    <div class="recipe-hero-img" style="background:linear-gradient(160deg,#D4B0A8 0%,#8B4838 40%,#4A1818 100%);display:flex;align-items:center;justify-content:center;font-size:80px;">🥩</div>
+    <div class="recipe-hero-gradient"></div>
+    <div class="recipe-hero-actions">
+      <button class="hero-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div style="display:flex;gap:8px;">
+        <button class="hero-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        <button class="hero-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+    </div>
+    <div class="recipe-hero-title-block">
+      <span class="recipe-hero-cuisine">French · Burgundy</span>
+      <h1 class="recipe-hero-name">Boeuf Bourguignon</h1>
+      <div class="hero-subtitle">Julia Child · Mastering the Art of French Cooking</div>
+    </div>
+  </div>
+
+  <!-- META BAR -->
+  <div class="recipe-body">
+    <div class="recipe-meta-bar">
+      <div class="recipe-meta-col"><div class="recipe-meta-val">45</div><div class="recipe-meta-lbl">MIN PREP</div></div>
+      <div class="recipe-meta-col"><div class="recipe-meta-val">3h 30</div><div class="recipe-meta-lbl">MIN COOK</div></div>
+      <div class="recipe-meta-col"><div class="recipe-meta-val">6</div><div class="recipe-meta-lbl">SERVES</div></div>
+      <div class="recipe-meta-col"><div class="recipe-meta-val">⭐⭐⭐</div><div class="recipe-meta-lbl">LEVEL</div></div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar" style="top:44px;">
+    <div class="tab-item active">Overview</div>
+    <div class="tab-item">Ingredients</div>
+    <div class="tab-item">Instructions</div>
+    <div class="tab-item">Notes (5)</div>
+  </div>
+
+  <!-- SOURCES SECTION (prominent, before overview content) -->
+  <div class="recipe-body" style="padding-top:24px;">
+
+    <!-- ORIGINAL SOURCE -->
+    <div class="source-section-head" style="margin-top:0;">Original source</div>
+    <div class="source-book-card">
+      <div class="source-book-cover">📚</div>
+      <div style="flex:1;">
+        <div class="source-book-title">Mastering the Art of French Cooking</div>
+        <div class="source-book-author">Julia Child, Louisette Bertholle & Simone Beck</div>
+        <div class="source-book-pub">Alfred A. Knopf · 1961 · Vol. 1, pg. 315</div>
+        <span class="source-imported-badge">✦ Imported by mise · 15 Feb 2025</span>
+      </div>
+    </div>
+
+    <!-- ALSO FOUND IN -->
+    <div class="source-section-head">Also found in</div>
+    <div class="also-found-row">
+      <div class="also-found-icon">🌐</div>
+      <div style="flex:1;">
+        <div class="also-found-domain">seriouseats.com/beef-bourguignon</div>
+        <div class="also-found-meta">Serious Eats · J. Kenji López-Alt</div>
+        <div class="also-found-rating">⭐ 4.9 · 2,847 community ratings</div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--text-3);"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+    <div class="also-found-row">
+      <div class="also-found-icon">🎬</div>
+      <div style="flex:1;">
+        <div class="also-found-domain">youtube.com/juliachild</div>
+        <div class="also-found-meta">The French Chef · Season 2, Episode 1 · 1963</div>
+        <div class="also-found-rating">▶ Julia Child's original television episode</div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--text-3);"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+    <div class="also-found-row">
+      <div class="also-found-icon">📖</div>
+      <div style="flex:1;">
+        <div class="also-found-domain">cooking.nytimes.com/recipes</div>
+        <div class="also-found-meta">NYT Cooking · Video recipe with step-by-step photos</div>
+        <div class="also-found-rating">⭐ 4.8 · 847 verified reviews</div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--text-3);"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
+    <!-- SAVED VERSIONS -->
+    <div class="source-section-head">Saved versions</div>
+    <div class="version-pills">
+      <div class="version-pill active">Julia Child</div>
+      <div class="version-pill">J. Pépin modernized</div>
+      <div class="version-pill">Quick weeknight</div>
+    </div>
+    <div style="font-size:var(--fs-xs);color:var(--text-3);margin-top:8px;">Currently viewing: Julia Child · 1961 original</div>
+
+  </div>
+
+  <!-- SECTION DIVIDER -->
+  <div class="divider-section"></div>
+
+  <!-- OVERVIEW CONTENT -->
+  <div class="recipe-body" style="padding-top:0;">
+
+    <p style="font-size:var(--fs-base);line-height:var(--lh-relaxed);color:var(--text);margin-bottom:8px;">
+      Boeuf Bourguignon is the definitive French braised beef — slowly cooked in an entire bottle of Burgundy wine with lardons, pearl onions, and mushrooms until the beef becomes impossibly tender and the sauce transforms into something dark, glossy, and profound.
+    </p>
+    <p style="font-size:var(--fs-base);line-height:var(--lh-relaxed);color:var(--text-2);margin-bottom:20px;">
+      Julia Child introduced this dish to an entire generation of American home cooks through her 1961 cookbook and subsequent television series. Her genius was in demystifying French technique without sacrificing rigor. This recipe remains the definitive reference nearly 65 years later.
+    </p>
+
+    <!-- Cuisine tags -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;">
+      <span class="tag-cuisine">🇫🇷 French</span>
+      <span class="tag-cuisine">🍷 Burgundy</span>
+      <span class="tag-cuisine">🍖 Braise</span>
+      <span class="tag-cuisine">❄️ Make ahead</span>
+    </div>
+
+    <!-- Why it works -->
+    <div class="section-title">Why it works</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
+      <div class="why-card">
+        <span style="font-size:18px;flex-shrink:0;margin-top:1px;">🍷</span>
+        <div>
+          <div class="why-card-title">A whole bottle of wine, no shortcuts</div>
+          <div class="why-card-text">A full bottle of Burgundy (or good Pinot Noir) is what gives this dish its depth. Never use "cooking wine" — if you wouldn't drink it, don't cook with it.</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <span style="font-size:18px;flex-shrink:0;margin-top:1px;">🥩</span>
+        <div>
+          <div class="why-card-title">Patience transforms tough cuts</div>
+          <div class="why-card-text">Chuck or brisket contains the collagen that converts to gelatin over long slow cooking, giving the sauce its luxurious, coating body. Tender cuts would disintegrate.</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <span style="font-size:18px;flex-shrink:0;margin-top:1px;">🍄</span>
+        <div>
+          <div class="why-card-title">Garnish cooked separately</div>
+          <div class="why-card-text">Mushrooms and pearl onions are sautéed separately and added at the end. They hold their shape and provide textural contrast to the silky braised beef.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- You'll make -->
+    <div class="section-title">You'll make</div>
+    <div style="background:var(--bg-elevated);border-radius:var(--r-lg);padding:4px 16px;margin-bottom:28px;">
+      <div class="youll-make-row">
+        <span style="font-size:18px;">🥩</span>
+        <span style="font-size:var(--fs-sm);color:var(--text);">Deeply braised beef in dark, glossy Burgundy wine sauce</span>
+      </div>
+      <div class="youll-make-row">
+        <span style="font-size:18px;">🧅</span>
+        <span style="font-size:var(--fs-sm);color:var(--text);">Lardons (bacon) and pearl onions integrated into the braise</span>
+      </div>
+      <div class="youll-make-row">
+        <span style="font-size:18px;">🍄</span>
+        <span style="font-size:var(--fs-sm);color:var(--text);">Sautéed mushrooms added as garnish at the end</span>
+      </div>
+    </div>
+
+    <!-- AI Notes teaser -->
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--brand-50);border:1px solid var(--brand-muted);border-radius:var(--r-lg);margin-bottom:24px;cursor:pointer;">
+      <div style="width:26px;height:26px;background:var(--brand);border-radius:var(--r-full);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex-shrink:0;">✦</div>
+      <div style="flex:1;">
+        <div style="font-size:var(--fs-sm);font-weight:600;color:var(--brand);">mise. has 5 notes for this recipe</div>
+        <div style="font-size:var(--fs-xs);color:var(--text-2);margin-top:2px;">Wine pairing · Make-ahead · Shortcut · Variation · Pro method</div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--brand);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
+    <!-- Legal note -->
+    <div class="legal-note">
+      This recipe is attributed to Julia Child's "Mastering the Art of French Cooking" (Alfred A. Knopf, 1961). Saved for personal use only. mise. stores only your personal notes, scaling, and annotations — not recipe content. For the full original, please refer to the original publication.
+    </div>
+
+  </div>
+
+  <!-- STICKY ACTION BAR -->
+  <div style="background:var(--bg);border-top:1px solid var(--border-subtle);padding:12px 20px 34px;display:flex;gap:10px;position:sticky;bottom:0;">
+    <button class="btn btn-outline" style="flex:1;">Cook Now 👨‍🍳</button>
+    <button class="btn btn-primary" style="flex:1;">+ Add to List</button>
+  </div>
+
+</div>
+</body>
+</html>

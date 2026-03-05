@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Ingredient Substitutions</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .sub-badge-best {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: var(--r-full);
+    }
+    .conversion-box {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+    }
+    .conversion-box-head {
+      background: var(--bg-elevated);
+      padding: 10px 14px;
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .conversion-box-body {
+      padding: 14px 16px;
+    }
+    .conversion-formula {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .conversion-pill {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      padding: 8px 12px;
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+      text-align: center;
+    }
+    .conversion-equals {
+      font-size: var(--fs-lg);
+      color: var(--text-3);
+      font-weight: 300;
+    }
+    .conversion-result {
+      background: var(--brand-light);
+      border: 1px solid var(--brand-muted);
+      border-radius: var(--r-md);
+      padding: 8px 12px;
+      font-size: var(--fs-sm);
+      font-weight: 700;
+      color: var(--brand);
+      flex: 1;
+      text-align: center;
+    }
+    .conversion-tip {
+      font-size: var(--fs-xs);
+      color: var(--text-2);
+      line-height: var(--lh-normal);
+      padding-top: 4px;
+      border-top: 1px solid var(--border-subtle);
+      margin-top: 10px;
+      padding: 10px 0 0;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED -->
+  <div class="chat-feed">
+
+    <!-- 1. User message -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">I don't have fish sauce — I'm making the Massaman Curry and only just noticed. What can I use?</div>
+    </div>
+
+    <!-- 2. AI response — no bubble, no avatar -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">Fish sauce is mainly there for its deep savoury umami — the fermented funk is secondary. Good news: you have several solid options that will work well in a Massaman:</p>
+
+      <!-- 3. Substitutions widget -->
+      <div class="sub-widget">
+
+        <!-- Option 1: BEST -->
+        <div class="sub-item">
+          <div class="sub-rank best">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div class="sub-info" style="flex:1;">
+            <div class="sub-name">Soy sauce + fresh lime <span class="sub-badge-best">BEST</span></div>
+            <div class="sub-ratio">Use ¾ the amount called for</div>
+            <div class="sub-note">Closest in umami depth. Add ½ tsp lime juice to mimic the fermented funk. Works perfectly in curry — barely noticeable difference.</div>
+          </div>
+        </div>
+
+        <!-- Option 2 -->
+        <div class="sub-item">
+          <div class="sub-rank">2</div>
+          <div class="sub-info" style="flex:1;">
+            <div class="sub-name">Worcestershire sauce</div>
+            <div class="sub-ratio">Use 1:1 ratio</div>
+            <div class="sub-note">Good depth and complexity — it actually contains anchovies, similar base to fish sauce. Slightly sweeter but works beautifully in a Massaman with all those aromatics.</div>
+          </div>
+        </div>
+
+        <!-- Option 3 -->
+        <div class="sub-item" style="border-bottom:none;">
+          <div class="sub-rank">3</div>
+          <div class="sub-info" style="flex:1;">
+            <div class="sub-name">White miso + water</div>
+            <div class="sub-ratio">Use ½ the amount, diluted to liquid consistency</div>
+            <div class="sub-note">Excellent umami alternative. Will slightly change the colour to a lighter tone. White miso preferred over red — it's milder and less dominant. Also makes it vegan.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 4. Recommendation text -->
+      <p class="msg-ai-text">For Massaman specifically — go with the soy + lime combo. It'll be 90% as good and honestly most guests won't know the difference. Start with slightly less than the recipe calls for and taste as you go, since soy can be saltier than fish sauce.</p>
+
+      <div class="chip-row">
+        <button class="chip" style="background:var(--brand);color:#fff;border-color:var(--brand);">Got it, using soy+lime</button>
+        <button class="chip">What ratio exactly?</button>
+        <button class="chip">What else might I be missing?</button>
+      </div>
+    </div>
+
+    <!-- 5. User second question -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">Also I realized I have coconut cream, not coconut milk. Is that a problem?</div>
+    </div>
+
+    <!-- 6. AI response -->
+    <div class="msg-ai">
+      <p class="msg-ai-text">Great catch! Coconut cream is actually <strong>more concentrated and richer</strong> than coconut milk — it's not a problem at all, just needs a tiny adjustment. You're essentially working with the full-fat undiluted version. Here's how to convert:</p>
+
+      <!-- 7. Conversion widget -->
+      <div class="conversion-box">
+        <div class="conversion-box-head">
+          🥥 COCONUT CREAM → MILK CONVERSION
+        </div>
+        <div class="conversion-box-body">
+          <div class="conversion-formula">
+            <div class="conversion-pill">1 part<br>coconut cream</div>
+            <div class="conversion-equals">+</div>
+            <div class="conversion-pill">1 part<br>water</div>
+            <div class="conversion-equals">=</div>
+            <div class="conversion-result">Coconut<br>milk</div>
+          </div>
+          <div class="conversion-tip">
+            <strong>Or:</strong> Use it completely undiluted for an even richer, more indulgent curry 🤌 — Pailin (Hot Thai Kitchen) actually prefers this approach. The Massaman will be noticeably creamier and more luxurious. Just reduce any added oil slightly since the cream is already high in fat.
+          </div>
+        </div>
+      </div>
+
+      <p class="msg-ai-text" style="color:var(--text-2);font-size:var(--fs-sm);">Pro tip: If you have a can of coconut cream with solid cream on top and liquid underneath — that thick solid part is basically double cream. Use the whole can stirred together and you'll be in great shape.</p>
+
+      <!-- 8. Quick chips -->
+      <div class="chip-row">
+        <button class="chip" style="background:var(--brand);color:#fff;border-color:var(--brand);">Continue the recipe</button>
+        <button class="chip">Other substitutions?</button>
+        <button class="chip">Check my pantry</button>
+        <button class="chip">Start cooking</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <div class="chip"><span class="chip-emoji">🍳</span>Cook mode</div>
+      <div class="chip"><span class="chip-emoji">🛒</span>Add to list</div>
+      <div class="chip"><span class="chip-emoji">❓</span>Quick question</div>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field"><span style="color:var(--text-3);">Message mise...</span></div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

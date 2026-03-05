@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Recipe</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-3);
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      margin: 4px 0;
+    }
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+    .recent-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+    }
+    .recent-row:last-child { border-bottom: none; }
+    .recent-thumb {
+      width: 46px; height: 46px;
+      border-radius: var(--r-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .recent-info { flex: 1; }
+    .recent-name { font-size: var(--fs-sm); font-weight: 600; color: var(--text); }
+    .recent-time { font-size: var(--fs-xs); color: var(--text-3); margin-top: 2px; }
+    .recent-arrow { color: var(--text-4); }
+    .recent-section { padding: 0 20px 40px; }
+    .recent-section-title { font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-3); margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <button class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Chat
+    </button>
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state">
+    <div class="empty-icon">🍲</div>
+    <div class="empty-title">No recipe selected</div>
+    <p class="empty-desc">Search for a recipe above, or chat with mise to get personalized recommendations</p>
+    <div class="empty-actions">
+      <button class="btn btn-primary btn-lg" style="width:100%;">Search Recipes</button>
+      <button class="btn btn-outline btn-lg" style="width:100%;">Open Chat</button>
+    </div>
+  </div>
+
+  <!-- OR DIVIDER -->
+  <div style="padding: 0 32px;">
+    <div class="or-divider">or</div>
+  </div>
+
+  <!-- RECENT RECIPES -->
+  <div class="recent-section" style="margin-top: 20px;">
+    <div class="recent-section-title">Recent recipes</div>
+    <div class="recent-row">
+      <div class="recent-thumb" style="background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);">🍗</div>
+      <div class="recent-info">
+        <div class="recent-name">Hainanese Chicken Rice</div>
+        <div class="recent-time">Viewed 2h ago</div>
+      </div>
+      <div class="recent-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+    <div class="recent-row">
+      <div class="recent-thumb" style="background:linear-gradient(160deg,#F5D76E 0%,#E89228 40%,#C8481C 100%);">🍛</div>
+      <div class="recent-info">
+        <div class="recent-name">Massaman Curry</div>
+        <div class="recent-time">Viewed yesterday</div>
+      </div>
+      <div class="recent-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+    <div class="recent-row">
+      <div class="recent-thumb" style="background:linear-gradient(160deg,#C8E8A8 0%,#5A8A3C 40%,#2D5016 100%);">🌿</div>
+      <div class="recent-info">
+        <div class="recent-name">Thai Green Curry</div>
+        <div class="recent-time">Viewed 3 days ago</div>
+      </div>
+      <div class="recent-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

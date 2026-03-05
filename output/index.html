@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Screen Gallery</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body {
+      background: #111110;
+      min-width: 100%;
+      margin: 0;
+      width: auto;
+    }
+    .gallery-header {
+      padding: 48px 40px 28px;
+      color: white;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 8px;
+    }
+    .gallery-title {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: white;
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+    }
+    .gallery-title .brand { color: #C8481C; }
+    .gallery-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 8px;
+      letter-spacing: -0.2px;
+    }
+    .gallery-stats {
+      display: flex;
+      gap: 24px;
+      margin-top: 20px;
+    }
+    .gallery-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .gallery-stat-num {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: white;
+    }
+    .gallery-stat-lbl {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-block {
+      padding: 0 40px 40px;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: rgba(255,255,255,0.3);
+      padding: 32px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+    .screen-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .screen-card {
+      background: #1C1C1A;
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      border: 1px solid rgba(255,255,255,0.07);
+      display: block;
+    }
+    .screen-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      border-color: rgba(200,72,28,0.3);
+    }
+    .screen-preview {
+      width: 100%;
+      aspect-ratio: 9/11;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .screen-preview-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+    }
+    .preview-emoji {
+      font-size: 32px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
+    }
+    .preview-lines {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      opacity: 0.6;
+    }
+    .preview-line {
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(0,0,0,0.15);
+    }
+    .preview-line.short { width: 60%; }
+    .preview-line.medium { width: 80%; }
+    .preview-line.long { width: 100%; }
+    .screen-info {
+      padding: 11px 13px 13px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .screen-num {
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.5px;
+      font-family: 'SF Mono', Consolas, monospace;
+    }
+    .screen-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.82);
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+    .screen-type {
+      font-size: 10px;
+      color: rgba(255,255,255,0.28);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .type-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Chat style */
+    .preview-chat {
+      background: linear-gradient(160deg, #FAFAF8 0%, #EDE8E0 100%);
+    }
+    .info-chat .screen-type .type-dot { background: #6366F1; }
+
+    /* Recipe style */
+    .preview-recipe {
+      background: linear-gradient(160deg, #FFF5F2 0%, #F5C8B4 100%);
+    }
+    .info-recipe .screen-type .type-dot { background: #C8481C; }
+
+    /* Shopping style */
+    .preview-shopping {
+      background: linear-gradient(160deg, #F0FDF4 0%, #BBF7D0 100%);
+    }
+    .info-shopping .screen-type .type-dot { background: #15803D; }
+
+    /* Overlay link indicator */
+    .screen-card:hover .screen-num { color: rgba(200,72,28,0.8); }
+
+    @media (max-width: 800px) {
+      .gallery-header { padding: 32px 20px 20px; }
+      .section-block { padding: 0 20px 32px; }
+      .screen-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="gallery-header">
+    <div class="gallery-title">mise<span class="brand">.</span>&nbsp;screens</div>
+    <div class="gallery-subtitle">50 mobile screen variations — Chat · Recipe Card · Shopping List</div>
+    <div class="gallery-stats">
+      <div class="gallery-stat">
+        <div class="gallery-stat-num">50</div>
+        <div class="gallery-stat-lbl">Screens</div>
+      </div>
+      <div class="gallery-stat">
+        <div class="gallery-stat-num">3</div>
+        <div class="gallery-stat-lbl">Views</div>
+      </div>
+      <div class="gallery-stat">
+        <div class="gallery-stat-num">390px</div>
+        <div class="gallery-stat-lbl">Mobile width</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT VIEWS -->
+  <div class="section-block">
+    <div class="section-label">💬 Chat Views — 01 through 18</div>
+    <div class="screen-grid">
+
+      <a class="screen-card" href="screens/view-01-chat-empty.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">💬</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 01</div>
+          <div class="screen-name">Chat Empty</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-02-chat-welcome.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">👋</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 02</div>
+          <div class="screen-name">Chat Welcome</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-03-chat-recipe-card.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🍽️</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line long"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 03</div>
+          <div class="screen-name">Chat Recipe Card</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-04-chat-recipe-carousel.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🎠</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 04</div>
+          <div class="screen-name">Recipe Carousel</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-05-chat-ingredients-widget.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🧅</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line long"></div>
+              <div class="preview-line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 05</div>
+          <div class="screen-name">Ingredients Widget</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-06-chat-cook-steps.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🍳</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 06</div>
+          <div class="screen-name">Cook Steps</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-07-chat-tips-widget.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">💡</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line long"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 07</div>
+          <div class="screen-name">Tips Widget</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-08-chat-search-mode.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🔍</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 08</div>
+          <div class="screen-name">Search Mode</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-09-chat-entity-detection.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🏷️</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line long"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 09</div>
+          <div class="screen-name">Entity Detection</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-10-chat-cook-mode.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner" style="background:linear-gradient(160deg,#FFF5F2 0%,#C8481C 100%);">
+            <div class="preview-emoji">👨‍🍳</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(255,255,255,0.4);"></div>
+              <div class="preview-line medium" style="background:rgba(255,255,255,0.4);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 10</div>
+          <div class="screen-name">Cook Mode</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-11-chat-cook-rescue.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#FFFBEB 0%,#FDE68A 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🚨</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(180,83,9,0.2);"></div>
+              <div class="preview-line medium" style="background:rgba(180,83,9,0.2);"></div>
+              <div class="preview-line long" style="background:rgba(180,83,9,0.2);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 11</div>
+          <div class="screen-name">Cook Rescue</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-12-chat-massaman-full.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🍛</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line long"></div>
+              <div class="preview-line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 12</div>
+          <div class="screen-name">Massaman Full</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-13-chat-comparison.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">⚖️</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 13</div>
+          <div class="screen-name">Comparison</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-14-chat-substitutions.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🔄</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line long"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 14</div>
+          <div class="screen-name">Substitutions</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-15-chat-brainstorm.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🧠</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 15</div>
+          <div class="screen-name">Brainstorm</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-16-chat-shortcuts.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">⚡</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line long"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 16</div>
+          <div class="screen-name">Shortcuts</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-17-chat-all-widgets.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🎛️</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 17</div>
+          <div class="screen-name">All Widgets</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-18-chat-at-mention.html">
+        <div class="screen-preview preview-chat">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">@</div>
+            <div class="preview-lines">
+              <div class="preview-line long"></div>
+              <div class="preview-line medium"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-chat">
+          <div class="screen-num">VIEW 18</div>
+          <div class="screen-name">At-Mention</div>
+          <div class="screen-type"><span class="type-dot"></span>Chat</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- RECIPE VIEWS -->
+  <div class="section-block">
+    <div class="section-label">📖 Recipe Views — 19 through 35</div>
+    <div class="screen-grid">
+
+      <a class="screen-card" href="screens/view-19-recipe-empty.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📄</div>
+            <div class="preview-lines">
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line short" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 19</div>
+          <div class="screen-name">Recipe Empty</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-20-recipe-hainanese.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🍗</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 20</div>
+          <div class="screen-name">Hainanese</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-21-recipe-ingredients-tab.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🧅</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line short" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 21</div>
+          <div class="screen-name">Ingredients Tab</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-22-recipe-instructions-tab.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📝</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 22</div>
+          <div class="screen-name">Instructions Tab</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-23-recipe-ai-notes.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#FFF5F2 0%,#FDDFD3 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">✨</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.2);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.2);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 23</div>
+          <div class="screen-name">AI Notes</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-24-recipe-add-to-list-overlay.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🛒</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 24</div>
+          <div class="screen-name">Add to List Overlay</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-25-recipe-added-to-list.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#F0FDF4 0%,#C8F0D4 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">✅</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 25</div>
+          <div class="screen-name">Added to List</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-26-recipe-massaman-long.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🍛</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 26</div>
+          <div class="screen-name">Massaman Long</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-27-recipe-source-attribution.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🔗</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 27</div>
+          <div class="screen-name">Source Attribution</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-28-recipe-scaled-8.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">⚖️</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 28</div>
+          <div class="screen-name">Scaled ×8</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-29-recipe-chef-tips-expanded.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">👨‍🍳</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 29</div>
+          <div class="screen-name">Chef Tips Expanded</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-30-recipe-glossary-popup.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📚</div>
+            <div class="preview-lines">
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 30</div>
+          <div class="screen-name">Glossary Popup</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-31-recipe-variation-selector.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🔀</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 31</div>
+          <div class="screen-name">Variation Selector</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-32-recipe-image-gallery.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🖼️</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 32</div>
+          <div class="screen-name">Image Gallery</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-33-recipe-night-mode.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#1E1D1A 0%,#121210 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🌙</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(255,255,255,0.08);"></div>
+              <div class="preview-line medium" style="background:rgba(255,255,255,0.08);"></div>
+              <div class="preview-line long" style="background:rgba(255,255,255,0.08);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 33</div>
+          <div class="screen-name">Night Mode</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-34-recipe-compact-widget.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📌</div>
+            <div class="preview-lines">
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 34</div>
+          <div class="screen-name">Compact Widget</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-35-recipe-print-share.html">
+        <div class="screen-preview preview-recipe">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🔗</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-recipe">
+          <div class="screen-num">VIEW 35</div>
+          <div class="screen-name">Print &amp; Share</div>
+          <div class="screen-type"><span class="type-dot"></span>Recipe Card</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SHOPPING LIST VIEWS -->
+  <div class="section-block">
+    <div class="section-label">🛒 Shopping List Views — 36 through 50</div>
+    <div class="screen-grid">
+
+      <a class="screen-card" href="screens/view-36-shopping-empty.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🛒</div>
+            <div class="preview-lines">
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line short" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 36</div>
+          <div class="screen-name">Shopping Empty</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-37-shopping-by-recipe-2.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📋</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 37</div>
+          <div class="screen-name">By Recipe (2)</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-38-shopping-by-recipe-4.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📋</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 38</div>
+          <div class="screen-name">By Recipe (4)</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-39-shopping-by-aisle.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🏪</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 39</div>
+          <div class="screen-name">By Aisle</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-40-shopping-in-store.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#EFF6FF 0%,#BFDBFE 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📍</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(29,78,216,0.12);"></div>
+              <div class="preview-line medium" style="background:rgba(29,78,216,0.12);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 40</div>
+          <div class="screen-name">In Store</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-41-shopping-mixed.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🔀</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line short" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 41</div>
+          <div class="screen-name">Mixed State</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-42-shopping-nearly-complete.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#F0FDF4 0%,#86EFAC 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🎯</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.2);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.2);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 42</div>
+          <div class="screen-name">Nearly Complete</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-43-shopping-add-overlay.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">➕</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 43</div>
+          <div class="screen-name">Add Overlay</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-44-shopping-scaling-modal.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">⚖️</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 44</div>
+          <div class="screen-name">Scaling Modal</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-45-shopping-search.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🔍</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line short" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 45</div>
+          <div class="screen-name">Search &amp; Filter</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-46-shopping-all-done.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#F0FDF4 0%,#4ADE80 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">🎉</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.2);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.2);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 46</div>
+          <div class="screen-name">All Done!</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-47-shopping-bulk-actions.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">☑️</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 47</div>
+          <div class="screen-name">Bulk Actions</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-48-shopping-meal-plan.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#FFF5F2 0%,#FDDFD3 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📅</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(200,72,28,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(200,72,28,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 48</div>
+          <div class="screen-name">Meal Plan Week</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-49-shopping-manual-add.html">
+        <div class="screen-preview preview-shopping">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">✏️</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line short" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 49</div>
+          <div class="screen-name">Manual Add</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+      <a class="screen-card" href="screens/view-50-shopping-summary.html">
+        <div class="screen-preview" style="background:linear-gradient(160deg,#F0FDF4 0%,#A7F3D0 100%);">
+          <div class="screen-preview-inner">
+            <div class="preview-emoji">📊</div>
+            <div class="preview-lines">
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line medium" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line long" style="background:rgba(21,128,61,0.15);"></div>
+              <div class="preview-line short" style="background:rgba(21,128,61,0.15);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info info-shopping">
+          <div class="screen-num">VIEW 50</div>
+          <div class="screen-name">Shopping Summary</div>
+          <div class="screen-type"><span class="type-dot"></span>Shopping</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <div style="padding:20px 40px 60px;text-align:center;">
+    <div style="font-size:12px;color:rgba(255,255,255,0.18);letter-spacing:-0.1px;">mise. · 50 screens · 3 view types · designed for cooking AI</div>
+  </div>
+</body>
+</html>

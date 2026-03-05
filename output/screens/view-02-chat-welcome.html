@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Welcome Chat</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .ai-avatar {
+      width: 30px;
+      height: 30px;
+      background: var(--brand);
+      border-radius: var(--r-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      letter-spacing: -0.5px;
+    }
+    .msg-ai-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .msg-ai-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .ai-greeting-block {
+      background: linear-gradient(135deg, var(--brand-50) 0%, #fff 80%);
+      border: 1px solid var(--brand-muted);
+      border-radius: 4px 18px 18px 18px;
+      padding: 16px 18px;
+    }
+    .ai-greeting-text {
+      font-size: var(--fs-base);
+      line-height: var(--lh-normal);
+      color: var(--text);
+    }
+    .ai-greeting-text p {
+      margin-bottom: 10px;
+    }
+    .ai-greeting-text p:last-child {
+      margin-bottom: 0;
+    }
+    .ai-greeting-text strong {
+      color: var(--brand);
+      font-weight: 700;
+    }
+    .ai-greeting-question {
+      font-size: var(--fs-base);
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--brand-muted);
+    }
+    .input-quick-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: var(--r-full);
+      border: 1.5px solid var(--border);
+      background: var(--bg-surface);
+      font-size: var(--fs-xs);
+      color: var(--text-2);
+      white-space: nowrap;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all var(--t-fast);
+    }
+    .input-quick-chip:hover {
+      background: var(--bg-elevated);
+    }
+    .time-stamp {
+      font-size: var(--fs-xs);
+      color: var(--text-4);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT FEED -->
+  <div class="chat-feed">
+
+    <div class="time-stamp">Just now</div>
+
+    <!-- AI Welcome Message -->
+    <div class="msg-ai-row">
+      <div class="ai-avatar">m.</div>
+      <div class="msg-ai-content">
+        <div class="ai-greeting-block">
+          <div class="ai-greeting-text">
+            <p>Good evening! I'm <strong>mise</strong>, your AI cooking companion.</p>
+            <p>I can help you find recipes, guide you through cooking step by step, build your shopping list, and learn the techniques behind great dishes.</p>
+            <div class="ai-greeting-question">What are you in the mood for tonight?</div>
+          </div>
+        </div>
+
+        <!-- Suggestion chips below the greeting -->
+        <div class="chip-row" style="margin-top: 12px; padding: 0;">
+          <button class="chip">Surprise me 🎲</button>
+          <button class="chip">I have leftover chicken 🐔</button>
+          <button class="chip">Teach me knife skills 🔪</button>
+          <button class="chip">Easy weeknight dinner 🍽️</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar-wrap">
+    <div class="input-chips-row">
+      <button class="input-quick-chip">Brainstorm</button>
+      <button class="input-quick-chip">Pantry mode</button>
+      <button class="input-quick-chip">Cook now</button>
+      <button class="input-quick-chip">Shopping list</button>
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field">
+        <span style="color:var(--text-3);">Message mise...</span>
+      </div>
+      <button class="input-action-btn input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

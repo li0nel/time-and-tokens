@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Hainanese Chicken Rice (Print / Share)</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+
+    /* ===== STATE LABEL DIVIDERS ===== */
+    .state-divider {
+      background: var(--bg-elevated);
+      border-top: 2px dashed var(--border);
+      border-bottom: 2px dashed var(--border);
+      padding: 10px 20px;
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      text-align: center;
+    }
+
+    /* ===== BACKGROUND RECIPE (dimmed, shown behind sheet) ===== */
+    .bg-recipe-dimmed {
+      opacity: 0.3;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ===== SHARE SHEET ===== */
+    .share-backdrop {
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(3px);
+    }
+    .share-sheet {
+      background: var(--bg-surface);
+      border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+      padding-bottom: 34px;
+    }
+    .share-handle {
+      width: 36px; height: 4px;
+      background: var(--border);
+      border-radius: var(--r-full);
+      margin: 10px auto 0;
+    }
+    .share-header {
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .share-title {
+      font-size: var(--fs-lg);
+      font-weight: 800;
+      letter-spacing: -0.4px;
+    }
+    .share-recipe-mini {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .share-recipe-mini-img {
+      width: 50px; height: 50px;
+      border-radius: var(--r-md);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .share-recipe-mini-title {
+      font-size: var(--fs-sm);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .share-recipe-mini-meta {
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+    }
+    .share-options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border-subtle);
+      border-top: 1px solid var(--border-subtle);
+    }
+    .share-option {
+      background: var(--bg-surface);
+      padding: 18px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background var(--t-fast);
+    }
+    .share-option:hover { background: var(--bg-elevated); }
+    .share-option-icon {
+      font-size: 26px;
+      line-height: 1;
+    }
+    .share-option-label {
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      color: var(--text-2);
+      text-align: center;
+    }
+    .share-cancel {
+      margin: 14px 20px 0;
+    }
+
+    /* ===== PRINT PREVIEW ===== */
+    .print-backdrop {
+      background: rgba(0,0,0,0.3);
+    }
+    .print-modal {
+      background: #fff;
+      border-radius: var(--r-xl) var(--r-xl) 0 0;
+      padding: 24px 24px 34px;
+      color: #111;
+    }
+    .print-modal-handle {
+      width: 36px; height: 4px;
+      background: #ddd;
+      border-radius: var(--r-full);
+      margin: 0 auto 20px;
+    }
+    .print-recipe-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: #111;
+      margin-bottom: 12px;
+    }
+    .print-meta-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-top: 1.5px solid #eee;
+      border-bottom: 1.5px solid #eee;
+      padding: 10px 0;
+      margin-bottom: 20px;
+    }
+    .print-meta-item {
+      font-size: 12px;
+      color: #555;
+    }
+    .print-meta-item strong { color: #111; }
+    .print-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: #888;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 6px;
+    }
+    .print-ingr-list {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+    .print-ingr-item {
+      display: flex;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 13px;
+      color: #222;
+      line-height: 1.4;
+    }
+    .print-ingr-item:last-child { border-bottom: none; }
+    .print-ingr-amount {
+      min-width: 80px;
+      font-weight: 600;
+      color: #333;
+      font-variant-numeric: tabular-nums;
+    }
+    .print-instr-list {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+    .print-instr-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .print-instr-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #666;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .print-instr-text {
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #222;
+    }
+    .print-footer-actions {
+      display: flex;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+    }
+    .print-btn-primary {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 18px;
+      background: #111;
+      color: #fff;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .print-btn-outline {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 18px;
+      background: transparent;
+      color: #333;
+      border: 1.5px solid #ddd;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/><rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.2" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- ===================== STATE A: SHARE SHEET ===================== -->
+
+  <!-- Background recipe (dimmed) -->
+  <div class="bg-recipe-dimmed">
+    <div style="width:100%;height:180px;background:linear-gradient(160deg,#F0D5A8 0%,#D4A050 40%,#8B5820 100%);display:flex;align-items:center;justify-content:center;font-size:60px;">🍗</div>
+    <div style="padding:16px 20px;">
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <div style="height:8px;background:var(--bg-elevated);border-radius:4px;width:36px;"></div>
+        <div style="height:8px;background:var(--bg-elevated);border-radius:4px;width:50px;"></div>
+        <div style="height:8px;background:var(--bg-elevated);border-radius:4px;width:40px;"></div>
+      </div>
+      <div style="height:14px;background:var(--bg-elevated);border-radius:var(--r-sm);width:55%;margin-bottom:12px;"></div>
+      <div style="height:10px;background:var(--bg-elevated);border-radius:var(--r-sm);width:40%;margin-bottom:6px;"></div>
+      <div style="height:10px;background:var(--bg-elevated);border-radius:var(--r-sm);width:80%;margin-bottom:6px;"></div>
+      <div style="height:10px;background:var(--bg-elevated);border-radius:var(--r-sm);width:70%;margin-bottom:6px;"></div>
+      <div style="height:10px;background:var(--bg-elevated);border-radius:var(--r-sm);width:60%;"></div>
+    </div>
+  </div>
+
+  <!-- Share Sheet overlay -->
+  <div class="share-backdrop">
+    <div class="share-sheet">
+
+      <div class="share-handle"></div>
+
+      <!-- Header -->
+      <div class="share-header">
+        <div class="share-title">Share Recipe</div>
+      </div>
+
+      <!-- Mini recipe preview -->
+      <div class="share-recipe-mini">
+        <div class="share-recipe-mini-img">
+          <div style="width:100%;height:100%;background:linear-gradient(160deg,#F0D5A8,#8B5820);display:flex;align-items:center;justify-content:center;font-size:20px;">🍗</div>
+        </div>
+        <div>
+          <div class="share-recipe-mini-title">Hainanese Chicken Rice</div>
+          <div class="share-recipe-mini-meta">⏱ 1h 50min · 👥 4 serves · Chinese</div>
+        </div>
+      </div>
+
+      <!-- Share options 2×3 grid -->
+      <div class="share-options-grid">
+        <div class="share-option">
+          <div class="share-option-icon">📋</div>
+          <div class="share-option-label">Copy Link</div>
+        </div>
+        <div class="share-option">
+          <div class="share-option-icon">💬</div>
+          <div class="share-option-label">iMessage</div>
+        </div>
+        <div class="share-option">
+          <div class="share-option-icon">📸</div>
+          <div class="share-option-label">Save Image</div>
+        </div>
+        <div class="share-option">
+          <div class="share-option-icon">📱</div>
+          <div class="share-option-label">WhatsApp</div>
+        </div>
+        <div class="share-option">
+          <div class="share-option-icon">✉️</div>
+          <div class="share-option-label">Email</div>
+        </div>
+        <div class="share-option">
+          <div class="share-option-icon">🖨️</div>
+          <div class="share-option-label">Print</div>
+        </div>
+      </div>
+
+      <!-- Cancel button -->
+      <div class="share-cancel">
+        <button class="btn btn-outline" style="width:100%;">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== STATE DIVIDER ===================== -->
+  <div class="state-divider">— Print Preview —</div>
+
+  <!-- ===================== STATE B: PRINT PREVIEW ===================== -->
+
+  <!-- Background recipe (dimmed again, different content) -->
+  <div class="bg-recipe-dimmed">
+    <div style="padding:16px 20px 8px;">
+      <div style="height:14px;background:var(--bg-elevated);border-radius:var(--r-sm);width:65%;margin-bottom:8px;"></div>
+      <div style="height:10px;background:var(--bg-elevated);border-radius:var(--r-sm);width:45%;margin-bottom:6px;"></div>
+      <div style="height:10px;background:var(--bg-elevated);border-radius:var(--r-sm);width:85%;margin-bottom:6px;"></div>
+      <div style="height:10px;background:var(--bg-elevated);border-radius:var(--r-sm);width:50%;"></div>
+    </div>
+  </div>
+
+  <!-- Print modal overlay -->
+  <div class="print-backdrop">
+    <div class="print-modal">
+
+      <div class="print-modal-handle"></div>
+
+      <!-- Recipe title -->
+      <div class="print-recipe-title">Hainanese Chicken Rice</div>
+
+      <!-- Clean meta row -->
+      <div class="print-meta-row">
+        <div class="print-meta-item"><strong>20 min</strong> prep</div>
+        <div class="print-meta-item"><strong>1h 30min</strong> cook</div>
+        <div class="print-meta-item"><strong>4</strong> servings</div>
+        <div class="print-meta-item"><strong>Medium</strong></div>
+      </div>
+
+      <!-- INGREDIENTS -->
+      <div class="print-section-title">Ingredients</div>
+      <ul class="print-ingr-list">
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">1.5 kg</span>
+          <span>Whole chicken, room temperature</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">400g / 2 cups</span>
+          <span>Jasmine rice, rinsed</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">4cm piece</span>
+          <span>Fresh ginger, sliced</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">4 stalks</span>
+          <span>Spring onions</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">2 tbsp</span>
+          <span>Sesame oil (toasted)</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">2 tbsp</span>
+          <span>Light soy sauce</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">1 tbsp</span>
+          <span>Shaoxing rice wine</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">1 tsp</span>
+          <span>Sea salt</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">1 litre</span>
+          <span>Chicken stock</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">6</span>
+          <span>Red chillies (for sauce)</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">1</span>
+          <span>Lime, juiced</span>
+        </li>
+        <li class="print-ingr-item">
+          <span class="print-ingr-amount">1 tbsp</span>
+          <span>Fish sauce</span>
+        </li>
+      </ul>
+
+      <!-- INSTRUCTIONS -->
+      <div class="print-section-title">Instructions</div>
+      <ol class="print-instr-list">
+        <li class="print-instr-item">
+          <div class="print-instr-num">1</div>
+          <div class="print-instr-text">Bring a large pot of lightly salted water to a rolling boil. Lower the whole chicken in breast-side down. Return to a boil, then immediately reduce to a very gentle simmer at 80–85°C.</div>
+        </li>
+        <li class="print-instr-item">
+          <div class="print-instr-num">2</div>
+          <div class="print-instr-text">Add ginger slices and spring onion whites. Poach for 45–50 minutes for a 1.5 kg bird, or until juices run clear when the thigh is pierced at its thickest point.</div>
+        </li>
+        <li class="print-instr-item">
+          <div class="print-instr-num">3</div>
+          <div class="print-instr-text">Remove the chicken and immediately plunge into an ice bath for 10 minutes. This stops cooking and tightens the skin to create the glossy texture the dish is known for. Reserve all poaching liquid.</div>
+        </li>
+        <li class="print-instr-item">
+          <div class="print-instr-num">4</div>
+          <div class="print-instr-text">Heat sesame oil in a wok. Fry the rinsed rice with ginger until fragrant, about 3 minutes. Transfer to a rice cooker and add 2 parts poaching stock to 1 part rice. Cook until done.</div>
+        </li>
+        <li class="print-instr-item">
+          <div class="print-instr-num">5</div>
+          <div class="print-instr-text">Blend chillies, garlic, ginger, lime juice, fish sauce, and a splash of poaching liquid for the chilli sauce. Taste and adjust seasoning to balance heat, salt, and acid.</div>
+        </li>
+        <li class="print-instr-item">
+          <div class="print-instr-num">6</div>
+          <div class="print-instr-text">Slice the chilled chicken. Serve over a mound of fragrant rice with dark soy, fresh cucumber, chilli sauce, and ginger-scallion oil on the side.</div>
+        </li>
+      </ol>
+
+      <!-- Print footer actions -->
+      <div class="print-footer-actions">
+        <button class="print-btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print Recipe
+        </button>
+        <button class="print-btn-outline">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
