@@ -18,16 +18,21 @@
     </div>
   </div>
 
-  <!-- App Bar -->
-  <div class="app-bar">
-    <button class="icon-btn back-arrow">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+  <!-- Page Header -->
+  <header class="page-header">
+    <button class="page-header-back" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+        <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+      </svg>
     </button>
-    <span style="font-size:17px;font-weight:700;letter-spacing:-0.3px;">Shopping List</span>
-    <button class="icon-btn" style="opacity:0.3;" disabled>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="17" y2="18"/></svg>
+    <h1 class="page-header-title">Shopping List</h1>
+    <button class="page-header-cart" aria-label="Shopping cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
     </button>
-  </div>
+  </header>
 
   <!-- Empty State -->
   <div style="padding:0 24px 40px;">
@@ -42,14 +47,6 @@
 
       <div class="empty-title">Your list is empty</div>
       <p class="empty-desc">Add recipes to automatically build your shopping list. mise. handles the quantities and organisation.</p>
-
-      <div class="empty-actions" style="margin-top:24px;">
-        <button class="btn btn-primary btn-lg" style="width:100%;font-size:15px;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Add Recipe
-        </button>
-        <button class="btn btn-outline btn-lg" style="width:100%;font-size:15px;">Browse Recipes</button>
-      </div>
 
       <!-- Divider with "or" -->
       <div style="display:flex;align-items:center;gap:12px;width:100%;margin:8px 0;">

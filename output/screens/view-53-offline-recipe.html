@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Offline Recipe Card</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    /* ── Subtle offline chip pinned in the page-header ── */
+    .offline-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      background: var(--warning-bg);
+      border: 1px solid #F59E0B;
+      border-radius: var(--r-full);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--warning);
+      white-space: nowrap;
+      letter-spacing: 0.1px;
+    }
+    .offline-chip svg {
+      width: 11px;
+      height: 11px;
+      flex-shrink: 0;
+    }
+
+    /* ── Read-only label on hero area ── */
+    .hero-readonly-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      border-radius: var(--r-full);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+    .hero-readonly-badge svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* ── Cached indicator strip below hero ── */
+    .cached-strip {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+    }
+    .cached-strip svg {
+      width: 13px;
+      height: 13px;
+      color: var(--success);
+      flex-shrink: 0;
+    }
+    .cached-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: var(--r-full);
+      background: var(--success);
+      flex-shrink: 0;
+    }
+
+    /* ── Disabled "Ask AI" action chip ── */
+    .btn-ai-disabled {
+      opacity: 0.38;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    /* Scrollable content area */
+    .scroll-area {
+      overflow-y: auto;
+      padding-bottom: 140px;
+    }
+
+    /* Status icon faded for offline */
+    .signal-offline { opacity: 0.3; }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <!-- Signal bars faded to indicate no connection -->
+      <svg class="status-icon" width="17" height="12" viewBox="0 0 17 12" fill="currentColor" aria-label="No connection">
+        <rect x="0" y="8" width="3" height="4" rx="0.5" class="signal-offline"/>
+        <rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5" class="signal-offline"/>
+        <rect x="9" y="3" width="3" height="9" rx="0.5" class="signal-offline"/>
+        <rect x="13.5" y="0" width="3" height="12" rx="0.5" class="signal-offline"/>
+      </svg>
+      <!-- Battery -->
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none">
+        <rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/>
+        <rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/>
+        <rect x="2" y="2" width="12" height="8" rx="1.2" fill="currentColor"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- PAGE HEADER: back + title + offline chip (replaces cart icon) -->
+  <header class="page-header">
+    <button class="page-header-back" aria-label="Back to chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <h1 class="page-header-title">Thai Green Curry</h1>
+    <!-- Offline chip in the right slot instead of the cart icon -->
+    <span class="offline-chip" role="status" aria-label="Read-only — offline">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="1" y1="1" x2="23" y2="23"/>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+        <circle cx="12" cy="20" r="1"/>
+      </svg>
+      Read-only
+    </span>
+  </header>
+
+  <!-- SCROLLABLE CONTENT -->
+  <div class="scroll-area">
+
+    <!-- HERO IMAGE AREA -->
+    <div class="recipe-hero-wrap" style="position:relative;">
+      <div class="recipe-hero-img" style="background:linear-gradient(160deg,#6B7C4A 0%,#2D4A1E 100%);">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;opacity:0.35;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" width="40" height="40"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+      </div>
+      <div class="recipe-hero-gradient"></div>
+      <!-- Read-only badge overlaid on hero -->
+      <div class="hero-readonly-badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        Read-only — offline
+      </div>
+      <!-- Recipe title over gradient -->
+      <div class="recipe-hero-title-block">
+        <div class="recipe-hero-cuisine">Thai</div>
+        <div class="recipe-hero-name">Thai Green Curry</div>
+      </div>
+    </div>
+
+    <!-- CACHED STRIP: reassures user content is fully available -->
+    <div class="cached-strip" role="status" aria-label="Recipe saved locally — available offline">
+      <div class="cached-dot" aria-hidden="true"></div>
+      Saved to device · All content available offline
+    </div>
+
+    <!-- META BAR -->
+    <div class="recipe-body" style="padding-top:0;">
+      <div class="recipe-meta-bar" style="margin-bottom:20px;">
+        <div class="recipe-meta-col">
+          <div class="recipe-meta-val">35</div>
+          <div class="recipe-meta-lbl">min</div>
+        </div>
+        <div class="recipe-meta-col">
+          <div class="recipe-meta-val">4</div>
+          <div class="recipe-meta-lbl">servings</div>
+        </div>
+        <div class="recipe-meta-col">
+          <div class="recipe-meta-val">420</div>
+          <div class="recipe-meta-lbl">cal</div>
+        </div>
+      </div>
+
+      <!-- ACTION ROW: "Add to list" works; "Ask AI" disabled -->
+      <div style="display:flex;gap:10px;margin-bottom:24px;">
+        <button class="btn btn-secondary" style="flex:1;">
+          Add to list
+        </button>
+        <button class="btn btn-primary" style="flex:1;">
+          Cook now
+        </button>
+      </div>
+
+      <!-- INGREDIENTS -->
+      <div class="section-title">Ingredients</div>
+      <div class="ingr-full-item">
+        <span class="ingr-full-name">Chicken thigh, sliced</span>
+        <span class="ingr-full-amount">400g</span>
+      </div>
+      <div class="ingr-full-item">
+        <span class="ingr-full-name">Coconut milk</span>
+        <span class="ingr-full-amount">200ml</span>
+      </div>
+      <div class="ingr-full-item">
+        <span class="ingr-full-name">Green curry paste</span>
+        <span class="ingr-full-amount">3 tbsp</span>
+      </div>
+      <div class="ingr-full-item">
+        <span class="ingr-full-name">Thai basil leaves</span>
+        <span class="ingr-full-amount">1 cup</span>
+      </div>
+      <div class="ingr-full-item">
+        <span class="ingr-full-name">Red bell pepper, sliced</span>
+        <span class="ingr-full-amount">1</span>
+      </div>
+      <div class="ingr-full-item">
+        <span class="ingr-full-name">Fish sauce</span>
+        <span class="ingr-full-amount">2 tbsp</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- INSTRUCTIONS -->
+      <div class="section-title">Instructions</div>
+      <div class="instr-step">
+        <div class="step-num">1</div>
+        <div class="step-text">Heat coconut milk in a wok over medium heat. Add green curry paste and stir until fragrant, about 2 minutes.</div>
+      </div>
+      <div class="instr-step">
+        <div class="step-num">2</div>
+        <div class="step-text">Add sliced chicken and cook for 5 minutes until no longer pink. Stir in fish sauce.</div>
+      </div>
+      <div class="instr-step">
+        <div class="step-num">3</div>
+        <div class="step-text">Add bell pepper and simmer for 3 minutes. Remove from heat, fold in Thai basil. Serve over jasmine rice.</div>
+      </div>
+
+      <!-- AI NOTES: disabled state shown clearly -->
+      <div class="ai-notes" style="opacity:0.5;">
+        <div class="ai-notes-head">
+          <div class="ai-notes-orb" aria-hidden="true">✦</div>
+          <span class="ai-notes-title">AI Notes — unavailable offline</span>
+        </div>
+        <div style="font-size:var(--fs-sm);color:var(--text-2);padding:4px 0 6px;line-height:var(--lh-normal);">
+          Personalised notes and variations require a connection.
+        </div>
+      </div>
+
+    </div><!-- end recipe-body -->
+  </div><!-- end scroll-area -->
+
+  <!-- BOTTOM ACTION BAR: Ask AI chip disabled, rest works -->
+  <div class="input-bar-wrap" style="padding-bottom:var(--safe-bottom);">
+    <div class="input-chips-row" role="list" aria-label="Quick actions">
+      <!-- Ask AI: disabled offline -->
+      <button class="chip btn-ai-disabled" role="listitem" aria-disabled="true" title="Unavailable offline">
+        <span>✦</span>
+        Ask AI
+      </button>
+      <button class="chip" role="listitem">Add to list</button>
+      <button class="chip" role="listitem">Cook now</button>
+      <button class="chip" role="listitem">Variations</button>
+    </div>
+    <div class="input-row">
+      <div class="input-field" style="color:var(--text-4);cursor:not-allowed;background:var(--bg-elevated);" aria-disabled="true" role="textbox" aria-label="Ask AI — unavailable offline">
+        Ask AI about this recipe...
+      </div>
+      <button class="input-action-btn input-send" disabled aria-disabled="true" style="opacity:0.3;pointer-events:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

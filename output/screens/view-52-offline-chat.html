@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Offline Chat</title>
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    /* ── Offline banner: full-width amber strip pinned below the app-bar ── */
+    .offline-banner {
+      position: sticky;
+      top: calc(var(--header-h) + var(--appbar-h)); /* 44 + 52 = 96px */
+      z-index: 88;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      background: #FFFBEB;
+      border-bottom: 1px solid #F59E0B;
+      font-size: var(--fs-sm);
+      color: var(--warning);
+      font-weight: 500;
+    }
+    .offline-banner svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+    }
+    .offline-banner-text {
+      flex: 1;
+    }
+    .offline-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: #FEF3C7;
+      border: 1px solid #F59E0B;
+      border-radius: var(--r-full);
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      color: var(--warning);
+      letter-spacing: 0.2px;
+    }
+
+    /* ── Disabled input bar: greyed out, no interaction ── */
+    .input-bar-wrap.offline .input-field {
+      background: var(--bg-elevated);
+      color: var(--text-3);
+      cursor: not-allowed;
+      border-color: var(--border-subtle);
+    }
+    .input-bar-wrap.offline .input-action-btn {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .offline-input-msg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 5px 14px 0;
+      font-size: var(--fs-xs);
+      color: var(--text-3);
+      font-weight: 500;
+    }
+    .offline-input-msg svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* ── Status bar offline icon colour ── */
+    .status-icon-offline {
+      color: var(--warning);
+    }
+
+    /* ── System message bubble (centred, used for offline notice in chat) ── */
+    .msg-system {
+      display: flex;
+      justify-content: center;
+      padding: 4px 0;
+    }
+    .msg-system-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      background: var(--warning-bg);
+      border: 1px solid #F59E0B;
+      border-radius: var(--r-full);
+      font-size: var(--fs-xs);
+      color: var(--warning);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-frame">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-icons">
+      <!-- Offline: signal bars greyed out / crossed -->
+      <svg class="status-icon status-icon-offline" width="17" height="12" viewBox="0 0 17 12" fill="currentColor" aria-label="No signal">
+        <rect x="0" y="8" width="3" height="4" rx="0.5" opacity="0.25"/>
+        <rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5" opacity="0.25"/>
+        <rect x="9" y="3" width="3" height="9" rx="0.5" opacity="0.25"/>
+        <rect x="13.5" y="0" width="3" height="12" rx="0.5" opacity="0.25"/>
+        <!-- Strike-through line -->
+        <line x1="0" y1="12" x2="17" y2="0" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <!-- Battery: normal -->
+      <svg class="status-icon" width="25" height="12" viewBox="0 0 25 12" fill="none">
+        <rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="currentColor" stroke-width="1"/>
+        <rect x="22" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/>
+        <rect x="2" y="2" width="14" height="8" rx="1.2" fill="currentColor"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- APP BAR -->
+  <div class="app-bar">
+    <span class="app-logo">mise<span class="app-logo-dot">.</span></span>
+    <div class="header-actions">
+      <!-- Offline badge replaces the normal wifi/status icon -->
+      <span class="offline-badge" role="status" aria-label="You are offline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" aria-hidden="true">
+          <line x1="1" y1="1" x2="23" y2="23"/>
+          <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+          <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+          <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
+          <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+          <circle cx="12" cy="20" r="1"/>
+        </svg>
+        Offline
+      </span>
+      <button class="icon-btn" aria-label="Shopping list">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- OFFLINE BANNER: prominent but not full-screen -->
+  <div class="offline-banner" role="alert" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <span class="offline-banner-text">AI assistant is unavailable without a connection</span>
+  </div>
+
+  <!-- CHAT FEED: previous messages still visible, read-only -->
+  <div class="chat-feed" style="padding-bottom: 200px;">
+
+    <!-- Previous AI message -->
+    <div class="msg-ai">
+      <div class="msg-ai-text">
+        <p>Here's a quick weeknight dinner idea — <strong>Lemon Herb Chicken</strong> with roasted vegetables. Ready in about 35 minutes.</p>
+      </div>
+      <!-- Recipe widget — still readable offline -->
+      <div class="recipe-widget" style="opacity:0.92;">
+        <div class="recipe-widget-img" style="background:linear-gradient(135deg,#8B5820 0%,#C8481C 100%);height:120px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:42px;">🍋</span>
+        </div>
+        <div class="recipe-widget-body">
+          <div class="recipe-widget-title">Lemon Herb Chicken</div>
+          <div class="recipe-meta-row">
+            <div class="recipe-meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              35 min
+            </div>
+            <div class="recipe-meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              4 servings
+            </div>
+          </div>
+          <div class="recipe-widget-actions">
+            <button class="btn btn-secondary btn-sm" style="flex:1;">View recipe</button>
+            <button class="btn btn-primary btn-sm" style="flex:1;">Add to list</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Previous user message -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">Could you suggest a pasta variation for this?</div>
+    </div>
+
+    <!-- System pill: offline notice at the point connection dropped -->
+    <div class="msg-system" role="status">
+      <div class="msg-system-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11" aria-hidden="true">
+          <line x1="1" y1="1" x2="23" y2="23"/>
+          <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+          <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+          <circle cx="12" cy="20" r="1"/>
+        </svg>
+        Connection lost · Replies paused
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INPUT BAR: disabled state -->
+  <div class="input-bar-wrap offline" aria-label="Chat input — unavailable offline">
+    <div class="offline-input-msg" role="status">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="1" y1="1" x2="23" y2="23"/>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+        <circle cx="12" cy="20" r="1"/>
+      </svg>
+      AI unavailable offline
+    </div>
+    <div class="input-row">
+      <button class="input-action-btn input-icon" disabled aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="input-field" style="color:var(--text-4);cursor:not-allowed;" aria-disabled="true" role="textbox" aria-label="Chat input disabled — you are offline">
+        Ask about recipes...
+      </div>
+      <button class="input-action-btn input-icon" disabled aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="input-action-btn input-send" disabled aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
