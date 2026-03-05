@@ -356,6 +356,8 @@ input, textarea { font-family: inherit; }
   z-index: 90;
   padding-bottom: var(--safe-bottom);
 }
+/* Suggestion chips row: sits above the input row within the input-bar-wrap.
+   Supports floating mode (.input-chips-row.floating) positioned above the bar. */
 .input-chips-row {
   display: flex;
   gap: 8px;
@@ -364,6 +366,17 @@ input, textarea { font-family: inherit; }
   scrollbar-width: none;
 }
 .input-chips-row::-webkit-scrollbar { display: none; }
+/* Floating variant: positions chips above the input bar entirely */
+.input-chips-row.floating {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  padding: 8px 14px;
+  background: var(--bg);
+  border-top: 1px solid var(--border-subtle);
+  z-index: 91;
+}
 .input-row {
   display: flex;
   align-items: flex-end;
@@ -404,9 +417,12 @@ input, textarea { font-family: inherit; }
   transition: all var(--t-fast);
 }
 .input-action-btn svg { width: 18px; height: 18px; }
-.input-send { background: var(--brand); color: #fff; }
+/* Send button: hidden by default, shown when input has content (JS adds .has-text to .input-bar-wrap or .input-send) */
+.input-send { background: var(--brand); color: #fff; opacity: 0; pointer-events: none; }
 .input-send:hover { background: var(--brand-hover); }
-.input-send:disabled { background: var(--bg-elevated); color: var(--text-3); }
+.input-send:disabled { background: var(--bg-elevated); color: var(--text-3); opacity: 0; pointer-events: none; }
+.has-text .input-send,
+.input-send.visible { opacity: 1; pointer-events: auto; }
 .input-icon { background: var(--bg-elevated); color: var(--text-2); }
 .input-icon:hover { background: var(--border); }
 .input-icon.active { background: var(--brand-light); color: var(--brand); }
@@ -619,7 +635,7 @@ input, textarea { font-family: inherit; }
 .ingr-item:last-child { border-bottom: none; }
 .ingr-check {
   width: 20px; height: 20px;
-  border-radius: 6px;
+  border-radius: 4px;
   border: 2px solid var(--border);
   flex-shrink: 0;
   display: flex;
@@ -628,14 +644,18 @@ input, textarea { font-family: inherit; }
   cursor: pointer;
 }
 .ingr-check.checked { background: var(--brand); border-color: var(--brand); }
+/* Ingredient layout: name LEFT, qty RIGHT */
 .ingr-amount {
   font-size: var(--fs-sm);
   font-weight: 600;
-  color: var(--text);
-  min-width: 72px;
+  color: var(--text-2);
   font-variant-numeric: tabular-nums;
+  order: 3;
+  margin-left: auto;
+  flex-shrink: 0;
+  text-align: right;
 }
-.ingr-name { flex: 1; font-size: var(--fs-sm); color: var(--text); line-height: 1.4; }
+.ingr-name { flex: 1; font-size: var(--fs-sm); color: var(--text); line-height: 1.4; order: 2; }
 .ingr-note { font-size: var(--fs-xs); color: var(--text-3); margin-top: 1px; }
 /* Glossary term */
 .gls { color: var(--brand); border-bottom: 1px dashed var(--brand-muted); cursor: pointer; font-style: italic; }
@@ -977,7 +997,8 @@ input, textarea { font-family: inherit; }
   border-bottom: 1px solid var(--border-subtle);
 }
 .ingr-full-item:last-child { border-bottom: none; }
-.ingr-full-amount { font-size: var(--fs-sm); font-weight: 600; color: var(--text); min-width: 90px; font-variant-numeric: tabular-nums; }
+/* Ingredient full layout: name LEFT, qty RIGHT */
+.ingr-full-amount { font-size: var(--fs-sm); font-weight: 600; color: var(--text-2); font-variant-numeric: tabular-nums; order: 2; margin-left: auto; text-align: right; flex-shrink: 0; }
 .ingr-full-name { flex: 1; font-size: var(--fs-sm); color: var(--text); }
 .ingr-full-note { font-size: var(--fs-xs); color: var(--text-3); margin-top: 2px; }
 
@@ -1177,7 +1198,7 @@ input, textarea { font-family: inherit; }
 .shop-item:last-child { border-bottom: none; }
 .shop-check {
   width: 24px; height: 24px;
-  border-radius: var(--r-full);
+  border-radius: 4px;
   border: 2px solid var(--border-strong);
   flex-shrink: 0;
   display: flex;
@@ -1379,3 +1400,49 @@ input, textarea { font-family: inherit; }
 
 /* ======================== INLINE SEARCH DECORATIONS ======================== */
 .search-highlight { color: var(--brand); font-weight: 600; }
+
+/* ================================================================
+   GLOBAL DESIGN RULES (bwv.2)
+   Applied globally to enforce spec-1 design conventions.
+   ================================================================ */
+
+/* RULE 1 — No avatars: hide all avatar elements globally.
+   Individual views define .ai-avatar in their local <style> blocks;
+   this shared rule zeroes them out. */
+.avatar,
+.ai-avatar,
+.user-avatar,
+.msg-avatar {
+  display: none !important;
+}
+
+/* RULE 2 — Rounded-square checkboxes (4px radius) enforced above:
+   .ingr-check  border-radius: 4px  (ingredients widget)
+   .shop-check  border-radius: 4px  (shopping list)
+   Also cover any generic checkbox inputs. */
+input[type="checkbox"] {
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-strong);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+input[type="checkbox"]:checked {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+/* RULE 3 — Ingredient layout: name LEFT, qty RIGHT.
+   See .ingr-item, .ingr-name, .ingr-amount above. */
+
+/* RULE 4 — Send button hidden by default.
+   See .input-send above — opacity:0 / pointer-events:none by default.
+   Activated via .has-text parent class or .input-send.visible. */
+
+/* RULE 5 — Suggestion chips positioned above the input bar.
+   .input-bar-wrap is already position:fixed, which creates a containing
+   block for absolutely-positioned children. The .input-chips-row.floating
+   variant uses position:absolute; bottom:100% to float above the bar. */
