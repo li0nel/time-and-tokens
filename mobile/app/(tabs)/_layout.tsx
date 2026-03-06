@@ -1,71 +1,103 @@
-import React from 'react';
-import { SymbolView } from 'expo-symbols';
-import { Link, Tabs } from 'expo-router';
-import { Platform, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { Redirect, Tabs } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
+import { View, Text } from 'react-native'
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useAuth } from '../../hooks/useAuth'
+import { loadShoppingList } from '../../services/shopping'
+import type { ShoppingList } from '../../types/shopping'
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+// Brand terracotta colour used for the active tab indicator
+const BRAND_COLOR = '#C8481C'
+const INACTIVE_COLOR = '#A8A09A'
+const TAB_BAR_BG = '#FFFFFF'
+
+function ShoppingTabIcon({
+  color,
+  focused,
+}: {
+  color: string
+  focused: boolean
+}) {
+  const [itemCount, setItemCount] = useState(0)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function fetchCount() {
+      const list: ShoppingList = await loadShoppingList()
+      if (!cancelled) {
+        setItemCount(list.length)
+      }
+    }
+
+    void fetchCount()
+
+    return () => {
+      cancelled = true
+    }
+  }, [focused]) // Re-fetch when the tab becomes focused
+
+  return (
+    <View className="relative">
+      <Ionicons name="cart-outline" size={24} color={color} />
+      {itemCount > 0 && (
+        <View className="absolute -top-1 -right-1 bg-brand rounded-full min-w-[16px] h-4 items-center justify-center px-0.5">
+          <Text className="text-text-inv text-2xs font-semibold leading-tight">
+            {itemCount > 99 ? '99+' : String(itemCount)}
+          </Text>
+        </View>
+      )}
+    </View>
+  )
+}
+
+export default function TabsLayout() {
+  const { user, loading } = useAuth()
+
+  if (loading) return null
+  if (!user) return <Redirect href="/(auth)/sign-in" />
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        tabBarActiveTintColor: BRAND_COLOR,
+        tabBarInactiveTintColor: INACTIVE_COLOR,
+        tabBarStyle: {
+          backgroundColor: TAB_BAR_BG,
+          borderTopColor: '#F0EBE2',
+          borderTopWidth: 1,
+        },
+        headerShown: false,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
+          title: 'Chat',
           tabBarIcon: ({ color }) => (
-            <SymbolView
-              name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
-              }}
-              tintColor={color}
-              size={28}
-            />
-          ),
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable style={{ marginRight: 15 }}>
-                {({ pressed }) => (
-                  <SymbolView
-                    name={{ ios: 'info.circle', android: 'info', web: 'info' }}
-                    size={25}
-                    tintColor={Colors[colorScheme].text}
-                    style={{ opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+            <Ionicons name="chatbubble-outline" size={24} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="recipes"
         options={{
-          title: 'Tab Two',
+          title: 'Recipes',
           tabBarIcon: ({ color }) => (
-            <SymbolView
-              name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
-              }}
-              tintColor={color}
-              size={28}
-            />
+            <Ionicons name="book-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="shopping"
+        options={{
+          title: 'Shopping',
+          tabBarIcon: ({ color, focused }) => (
+            <ShoppingTabIcon color={color} focused={focused} />
           ),
         }}
       />
     </Tabs>
-  );
+  )
 }

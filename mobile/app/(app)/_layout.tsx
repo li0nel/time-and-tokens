@@ -1,19 +1,10 @@
-import { Redirect, Stack } from 'expo-router'
+import { Redirect } from 'expo-router'
 import React from 'react'
 
-import { useAuth } from '../../hooks/useAuth'
-
+/**
+ * The (app) route group now delegates to (tabs) which contains the full
+ * authenticated tab navigator with its own auth guard.
+ */
 export default function AppLayout() {
-  const { user, loading } = useAuth()
-
-  if (loading) return null
-  if (!user) return <Redirect href="/(auth)/sign-in" />
-
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    />
-  )
+  return <Redirect href="/(tabs)" />
 }
