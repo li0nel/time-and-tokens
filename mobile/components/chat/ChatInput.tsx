@@ -11,6 +11,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
+import { Feather } from '@expo/vector-icons'
 
 interface Props {
   onSend: (text: string) => void
@@ -18,9 +19,9 @@ interface Props {
 }
 
 /**
- * Chat input bar with a multiline TextInput and an animated send button.
- * Uses KeyboardStickyView from react-native-keyboard-controller when available,
- * otherwise falls back to KeyboardAvoidingView.
+ * Chat input bar matching the mockup's input-bar-wrap > input-row structure.
+ * The entire input row is a single rounded pill container with:
+ *   mic icon | text field | search icon | send button
  */
 function ChatInput({ onSend, disabled = false }: Props) {
   const [text, setText] = useState('')
@@ -29,7 +30,6 @@ function ChatInput({ onSend, disabled = false }: Props) {
   const isEmpty = text.trim().length === 0
   const sendDisabled = disabled || isEmpty
 
-  // Animate send button scale and opacity based on whether text is empty
   const buttonScale = useSharedValue(0.85)
   const buttonOpacity = useSharedValue(0.4)
 
@@ -38,7 +38,7 @@ function ChatInput({ onSend, disabled = false }: Props) {
       buttonScale.value = withTiming(hasText ? 1 : 0.85, { duration: 150 })
       buttonOpacity.value = withTiming(hasText ? 1 : 0.4, { duration: 150 })
     },
-    [buttonScale, buttonOpacity],
+    [buttonScale, buttonOpacity]
   )
 
   const handleChangeText = useCallback(
@@ -46,7 +46,7 @@ function ChatInput({ onSend, disabled = false }: Props) {
       setText(value)
       updateButtonAnimation(value.trim().length > 0)
     },
-    [updateButtonAnimation],
+    [updateButtonAnimation]
   )
 
   const handleSend = useCallback(() => {
@@ -63,55 +63,67 @@ function ChatInput({ onSend, disabled = false }: Props) {
   }))
 
   const inputBar = (
-    <View className="border-t border-border bg-bg-surface px-4 py-3 flex-row items-end gap-x-3">
-      <TextInput
-        ref={inputRef}
-        testID="chat-input"
-        className="flex-1 text-base text-text leading-normal bg-bg-elevated rounded-xl px-4 py-3 min-h-[44px] max-h-[120px] font-inter"
-        placeholder="Ask about recipes..."
-        placeholderTextColor="#A8A09A"
-        value={text}
-        onChangeText={handleChangeText}
-        multiline
-        blurOnSubmit={false}
-        onSubmitEditing={handleSend}
-        editable={!disabled}
-        returnKeyType="send"
-        style={{ textAlignVertical: 'center' }}
-      />
-      <Pressable
-        testID="send-button"
-        onPress={handleSend}
-        disabled={sendDisabled}
-        accessibilityRole="button"
-        accessibilityLabel="Send message"
+    <View className="border-t border-border-subtle bg-bg py-3 px-4">
+      {/* Single rounded container — input-row */}
+      <View
+        className="flex-row items-center bg-bg-surface border border-border rounded-[20px] px-3.5 py-2.5"
+        style={{ gap: 10 }}
       >
-        <Animated.View
-          style={animatedButtonStyle}
-          className="w-11 h-11 rounded-full bg-user-bubble items-center justify-center"
+        {/* Mic button */}
+        <Pressable
+          className="w-9 h-9 rounded-full bg-bg-elevated border border-border items-center justify-center flex-shrink-0"
+          accessibilityRole="button"
+          accessibilityLabel="Voice input"
         >
-          {/* Send arrow icon */}
-          <View className="items-center justify-center">
-            <View
-              style={{
-                width: 0,
-                height: 0,
-                borderLeftWidth: 6,
-                borderRightWidth: 6,
-                borderBottomWidth: 10,
-                borderLeftColor: 'transparent',
-                borderRightColor: 'transparent',
-                borderBottomColor: '#F5F2EC',
-                marginBottom: 1,
-              }}
-            />
-          </View>
-        </Animated.View>
-      </Pressable>
+          <Feather name="mic" size={18} color="#6B6360" />
+        </Pressable>
+
+        {/* Text field */}
+        <TextInput
+          ref={inputRef}
+          testID="chat-input"
+          className="flex-1 text-base text-text"
+          placeholder="Ask about recipes..."
+          placeholderTextColor="#A8A09A"
+          value={text}
+          onChangeText={handleChangeText}
+          multiline
+          blurOnSubmit={false}
+          onSubmitEditing={handleSend}
+          editable={!disabled}
+          returnKeyType="send"
+          style={{ maxHeight: 120, textAlignVertical: 'top' }}
+        />
+
+        {/* Search button */}
+        <Pressable
+          className="w-9 h-9 rounded-full bg-bg-elevated border border-border items-center justify-center flex-shrink-0"
+          accessibilityRole="button"
+          accessibilityLabel="Search recipes"
+        >
+          <Feather name="search" size={18} color="#6B6360" />
+        </Pressable>
+
+        {/* Send button */}
+        <Pressable
+          testID="send-button"
+          onPress={handleSend}
+          disabled={sendDisabled}
+          accessibilityRole="button"
+          accessibilityLabel="Send message"
+          className="flex-shrink-0"
+        >
+          <Animated.View
+            style={animatedButtonStyle}
+            className="w-9 h-9 rounded-full bg-user-bubble items-center justify-center"
+          >
+            <Feather name="send" size={15} color="#F5F2EC" />
+          </Animated.View>
+        </Pressable>
+      </View>
     </View>
   )
 
-  // Use KeyboardAvoidingView as fallback (KeyboardStickyView requires special setup)
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
