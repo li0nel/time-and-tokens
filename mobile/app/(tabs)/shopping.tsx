@@ -19,28 +19,52 @@ import type { ShoppingItem, ShoppingList } from '../../types/shopping'
 // Types
 // ---------------------------------------------------------------------------
 
-type GroupedByRecipe = {
-  recipeId: string
-  recipeTitle: string
+type SectionGroup = {
+  key: string
+  title: string
+  /** Emoji displayed in the section header (aisle mode only). */
+  emoji?: string
   items: ShoppingItem[]
 }
 
 type SortMode = 'recipe' | 'aisle'
 
 // ---------------------------------------------------------------------------
+// Aisle emoji map
+// ---------------------------------------------------------------------------
+
+const AISLE_EMOJI: Record<string, string> = {
+  'Meat & Seafood': '🥩',
+  Produce: '🥬',
+  Dairy: '🥛',
+  'Canned & Dry Goods': '🥫',
+  'Condiments & Sauces': '🍶',
+  'Spices & Herbs': '🌿',
+  Bakery: '🍞',
+  Frozen: '🧊',
+  Beverages: '🥤',
+  'Snacks & Sweets': '🍫',
+  Other: '🛒',
+}
+
+function aisleEmoji(aisle: string): string {
+  return AISLE_EMOJI[aisle] ?? '🛒'
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function groupByRecipe(list: ShoppingList): GroupedByRecipe[] {
-  const map = new Map<string, GroupedByRecipe>()
+function groupByRecipe(list: ShoppingList): SectionGroup[] {
+  const map = new Map<string, SectionGroup>()
   for (const item of list) {
     const existing = map.get(item.recipeId)
     if (existing) {
       existing.items.push(item)
     } else {
       map.set(item.recipeId, {
-        recipeId: item.recipeId,
-        recipeTitle: item.recipeTitle,
+        key: item.recipeId,
+        title: item.recipeTitle,
         items: [item],
       })
     }
@@ -48,17 +72,18 @@ function groupByRecipe(list: ShoppingList): GroupedByRecipe[] {
   return Array.from(map.values())
 }
 
-function groupByAisle(list: ShoppingList): GroupedByRecipe[] {
-  const map = new Map<string, GroupedByRecipe>()
+function groupByAisle(list: ShoppingList): SectionGroup[] {
+  const map = new Map<string, SectionGroup>()
   for (const item of list) {
-    const key = item.aisle || 'Other'
-    const existing = map.get(key)
+    const aisleKey = item.aisle || 'Other'
+    const existing = map.get(aisleKey)
     if (existing) {
       existing.items.push(item)
     } else {
-      map.set(key, {
-        recipeId: key,
-        recipeTitle: key,
+      map.set(aisleKey, {
+        key: aisleKey,
+        title: aisleKey,
+        emoji: aisleEmoji(aisleKey),
         items: [item],
       })
     }
@@ -157,9 +182,11 @@ function SegmentedControl({
 function ItemRow({
   item,
   onToggle,
+  showRecipe = false,
 }: {
   item: ShoppingItem
   onToggle: (id: string) => void
+  showRecipe?: boolean
 }) {
   return (
     <TouchableOpacity
@@ -182,13 +209,16 @@ function ItemRow({
         )}
       </View>
 
-      {/* Ingredient name */}
+      {/* Ingredient name + optional recipe label */}
       <View className="flex-1">
         <Text
           className={`text-base ${item.checked ? 'text-text-3 line-through' : 'text-text'}`}
         >
           {item.name}
         </Text>
+        {showRecipe && (
+          <Text className="text-xs text-text-3 mt-0.5">{item.recipeTitle}</Text>
+        )}
       </View>
 
       {/* Amount */}
@@ -201,28 +231,101 @@ function ItemRow({
   )
 }
 
-function SectionGroup({
+function RecipeThumbnail({ title }: { title: string }) {
+  // Derive a simple food emoji from the recipe title for the thumbnail placeholder
+  const lower = title.toLowerCase()
+  let emoji = '🍽️'
+  if (lower.includes('chicken') || lower.includes('poultry')) emoji = '🍗'
+  else if (lower.includes('beef') || lower.includes('steak')) emoji = '🥩'
+  else if (
+    lower.includes('fish') ||
+    lower.includes('salmon') ||
+    lower.includes('tuna')
+  )
+    emoji = '🐟'
+  else if (lower.includes('pasta') || lower.includes('spaghetti')) emoji = '🍝'
+  else if (lower.includes('pizza')) emoji = '🍕'
+  else if (lower.includes('salad')) emoji = '🥗'
+  else if (lower.includes('soup') || lower.includes('stew')) emoji = '🍲'
+  else if (lower.includes('curry')) emoji = '🍛'
+  else if (lower.includes('rice')) emoji = '🍚'
+  else if (
+    lower.includes('cake') ||
+    lower.includes('dessert') ||
+    lower.includes('sweet')
+  )
+    emoji = '🎂'
+
+  return (
+    <View className="w-8 h-8 rounded-md bg-bg-elevated items-center justify-center mr-2 overflow-hidden">
+      <Text className="text-lg">{emoji}</Text>
+    </View>
+  )
+}
+
+function RecipeSectionHeader({ group }: { group: SectionGroup }) {
+  return (
+    <View className="flex-row items-center py-2">
+      <RecipeThumbnail title={group.title} />
+      <Text
+        className="text-sm font-semibold text-text flex-1"
+        numberOfLines={1}
+      >
+        {group.title}
+      </Text>
+      <Text className="text-sm text-text-3 ml-2">
+        {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
+      </Text>
+    </View>
+  )
+}
+
+function AisleSectionHeader({ group }: { group: SectionGroup }) {
+  return (
+    <View className="flex-row items-center py-2">
+      <Text className="text-base mr-2">{group.emoji}</Text>
+      <Text
+        className="text-sm font-semibold text-text flex-1"
+        numberOfLines={1}
+      >
+        {group.title}
+      </Text>
+      <Text className="text-sm text-text-3 ml-2">
+        {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
+      </Text>
+    </View>
+  )
+}
+
+function RecipeSection({
   group,
   onToggle,
 }: {
-  group: GroupedByRecipe
+  group: SectionGroup
   onToggle: (id: string) => void
 }) {
   return (
     <View className="mb-4">
-      {/* Section header */}
-      <View className="flex-row items-center justify-between py-2">
-        <Text className="text-sm font-semibold text-text" numberOfLines={1}>
-          {group.recipeTitle}
-        </Text>
-        <Text className="text-sm text-text-3 ml-2">
-          {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
-        </Text>
-      </View>
-
-      {/* Items */}
+      <RecipeSectionHeader group={group} />
       {group.items.map((item) => (
         <ItemRow key={item.id} item={item} onToggle={onToggle} />
+      ))}
+    </View>
+  )
+}
+
+function AisleSection({
+  group,
+  onToggle,
+}: {
+  group: SectionGroup
+  onToggle: (id: string) => void
+}) {
+  return (
+    <View className="mb-4">
+      <AisleSectionHeader group={group} />
+      {group.items.map((item) => (
+        <ItemRow key={item.id} item={item} onToggle={onToggle} showRecipe />
       ))}
     </View>
   )
@@ -332,13 +435,21 @@ export default function ShoppingScreen() {
             className="flex-1 px-4"
             contentContainerStyle={{ paddingBottom: 32 }}
           >
-            {groups.map((group) => (
-              <SectionGroup
-                key={group.recipeId}
-                group={group}
-                onToggle={handleToggle}
-              />
-            ))}
+            {sortMode === 'recipe'
+              ? groups.map((group) => (
+                  <RecipeSection
+                    key={group.key}
+                    group={group}
+                    onToggle={handleToggle}
+                  />
+                ))
+              : groups.map((group) => (
+                  <AisleSection
+                    key={group.key}
+                    group={group}
+                    onToggle={handleToggle}
+                  />
+                ))}
           </ScrollView>
 
           {/* Footer: Clear completed */}
