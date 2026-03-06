@@ -115,17 +115,13 @@
     .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: #FAFAF8; }
 
     .hero-gallery {
-      display: flex; gap: 18px; justify-content: center; align-items: flex-start;
-      position: relative; z-index: 1; max-width: 1100px; margin: 0 auto;
+      display: flex; gap: 20px; justify-content: center; align-items: flex-start;
+      position: relative; z-index: 1; max-width: 1400px; margin: 0 auto;
     }
     .hero-gallery-item { flex-shrink: 0; }
-    .hero-gallery-item:nth-child(1) .gallery-phone,
-    .hero-gallery-item:nth-child(5) .gallery-phone { transform: translateY(20px); }
-    .hero-gallery-item:nth-child(2) .gallery-phone,
-    .hero-gallery-item:nth-child(4) .gallery-phone { transform: translateY(10px); }
     .gallery-phone {
-      width: 195px; height: 410px;
-      background: #1a1a19; border-radius: 30px; padding: 10px 9px;
+      width: 252px; height: 526px;
+      background: #1a1a19; border-radius: 40px; padding: 11px 11px;
       box-shadow:
         inset 0 0 0 1px rgba(255,255,255,0.10),
         0 0 0 1px rgba(0,0,0,0.7),
@@ -134,17 +130,17 @@
       position: relative;
     }
     .gallery-screen {
-      width: 177px; height: 390px; border-radius: 22px; overflow: hidden;
+      width: 230px; height: 504px; border-radius: 30px; overflow: hidden;
       background: #FAFAF8; position: relative;
     }
     .gallery-island {
-      position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
-      width: 58px; height: 16px; background: #1a1a19; border-radius: 8px;
+      position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+      width: 75px; height: 21px; background: #1a1a19; border-radius: 11px;
       z-index: 20; pointer-events: none;
     }
     .gallery-screen iframe {
       width: 390px; height: 844px; border: none;
-      transform: scale(0.4538); transform-origin: top left;
+      transform-origin: top left;
       pointer-events: none; display: block;
     }
     .gallery-caption {
@@ -214,7 +210,7 @@
         <div class="gallery-phone">
           <div class="gallery-screen">
             <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" onload="this.contentWindow.scrollTo(0,0)"></iframe>
+            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" style="transform: scale(0.59) translateY(0px); transform-origin: top left;"></iframe>
           </div>
         </div>
         <p class="gallery-caption">AI Chat</p>
@@ -223,7 +219,7 @@
         <div class="gallery-phone">
           <div class="gallery-screen">
             <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" onload="this.contentWindow.scrollTo(0,350)"></iframe>
+            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" style="transform: scale(0.59) translateY(-200px); transform-origin: top left;"></iframe>
           </div>
         </div>
         <p class="gallery-caption">Recipe Card</p>
@@ -232,7 +228,7 @@
         <div class="gallery-phone">
           <div class="gallery-screen">
             <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" onload="this.contentWindow.scrollTo(0,750)"></iframe>
+            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" style="transform: scale(0.59) translateY(-530px); transform-origin: top left;"></iframe>
           </div>
         </div>
         <p class="gallery-caption">Ingredients</p>
@@ -241,7 +237,7 @@
         <div class="gallery-phone">
           <div class="gallery-screen">
             <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" onload="this.contentWindow.scrollTo(0,1150)"></iframe>
+            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" style="transform: scale(0.59) translateY(-1050px); transform-origin: top left;"></iframe>
           </div>
         </div>
         <p class="gallery-caption">Cook Now</p>
@@ -250,7 +246,7 @@
         <div class="gallery-phone">
           <div class="gallery-screen">
             <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" onload="this.contentWindow.scrollTo(0,1700)"></iframe>
+            <iframe src="screens/view-17-chat-all-widgets.html" scrolling="no" style="transform: scale(0.59) translateY(-1680px); transform-origin: top left;"></iframe>
           </div>
         </div>
         <p class="gallery-caption">Rescue</p>
