@@ -7,7 +7,7 @@ import {
   type User,
 } from 'firebase/auth'
 import { Platform } from 'react-native'
-import { auth } from './firebase'
+import { getFirebaseAuth } from './firebase'
 
 /**
  * Sign in an existing user with email and password.
@@ -16,7 +16,7 @@ export async function signInWithEmail(
   email: string,
   password: string,
 ): Promise<User> {
-  const credential = await signInWithEmailAndPassword(auth, email, password)
+  const credential = await signInWithEmailAndPassword(getFirebaseAuth(), email, password)
   return credential.user
 }
 
@@ -28,7 +28,7 @@ export async function signUpWithEmail(
   password: string,
 ): Promise<User> {
   const credential = await createUserWithEmailAndPassword(
-    auth,
+    getFirebaseAuth(),
     email,
     password,
   )
@@ -44,7 +44,7 @@ export async function signUpWithEmail(
 export async function signInWithGoogle(): Promise<User> {
   if (Platform.OS === 'web') {
     const provider = new GoogleAuthProvider()
-    const credential = await signInWithPopup(auth, provider)
+    const credential = await signInWithPopup(getFirebaseAuth(), provider)
     return credential.user
   }
 
@@ -58,5 +58,5 @@ export async function signInWithGoogle(): Promise<User> {
  * Sign out the currently authenticated user.
  */
 export async function signOut(): Promise<void> {
-  await firebaseSignOut(auth)
+  await firebaseSignOut(getFirebaseAuth())
 }

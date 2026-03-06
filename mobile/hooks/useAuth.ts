@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { onAuthStateChanged, type User } from 'firebase/auth'
-import { auth } from '../services/firebase'
+import { getFirebaseAuth } from '../services/firebase'
 
 interface UseAuthReturn {
   user: User | null
@@ -23,7 +23,7 @@ export function useAuth(): UseAuthReturn {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(
-      auth,
+      getFirebaseAuth(),
       (firebaseUser) => {
         setUser(firebaseUser)
         setLoading(false)
