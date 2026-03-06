@@ -33,8 +33,7 @@
       display: inline-flex; align-items: center; gap: 7px;
       background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.14);
       color: #FAFAF8; padding: 8px 16px; border-radius: 9999px;
-      font-size: 12px; font-weight: 600;
-      transition: all 0.15s;
+      font-size: 12px; font-weight: 600; transition: all 0.15s;
     }
     .btn-store:hover { background: rgba(255,255,255,0.16); }
     .btn-see {
@@ -44,126 +43,91 @@
     }
     .btn-see:hover { color: #FAFAF8; border-color: rgba(255,255,255,0.3); }
 
-    /* ── Hero scroll container ── */
-    .hero-scroll {
-      height: 420vh;
-      position: relative;
+    /* ── Hero title — scrolls away normally ── */
+    .hero-title {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 48px 80px;
+      position: relative; overflow: hidden;
     }
+    .hero-title::before {
+      content: '';
+      position: absolute;
+      top: 30%; left: 50%; transform: translate(-50%, -50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse at center, rgba(200,72,28,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: #C8481C;
+      margin-bottom: 28px; position: relative; z-index: 1;
+    }
+    h1 {
+      font-size: clamp(60px, 9vw, 112px);
+      font-weight: 800; letter-spacing: -4px; line-height: 0.9;
+      margin-bottom: 12px; position: relative; z-index: 1;
+    }
+    h1 .accent { color: #C8481C; }
+    .h1-sub {
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 300; letter-spacing: -2px;
+      color: rgba(250,250,248,0.35); line-height: 1;
+      margin-bottom: 28px; position: relative; z-index: 1;
+    }
+    .sub {
+      font-size: 16px; color: rgba(250,250,248,0.42);
+      max-width: 400px; margin: 0 auto 44px;
+      line-height: 1.65; letter-spacing: -0.1px;
+      position: relative; z-index: 1;
+    }
+    .hero-actions {
+      display: flex; gap: 10px; align-items: center; justify-content: center;
+      position: relative; z-index: 1; flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #C8481C; color: #FAFAF8;
+      padding: 12px 24px; border-radius: 9999px;
+      font-size: 13px; font-weight: 600; transition: all 0.15s;
+    }
+    .btn-primary:hover { background: #E05520; transform: translateY(-1px); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+      color: #FAFAF8; padding: 11px 22px; border-radius: 9999px;
+      font-size: 13px; font-weight: 600; transition: all 0.15s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.14); }
 
+    /* ── Parallax scroll container — 520vh so there's ample scroll to reach the end ── */
+    .hero-scroll { height: 520vh; position: relative; }
+
+    /* Phone stays in view while page scrolls */
     .hero-sticky {
       position: sticky;
       top: 0;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 72px;
-      padding: 80px 60px 50px;
+      gap: 0;
+      padding: 70px 48px 40px;
       overflow: hidden;
     }
-
-    /* Ambient glow */
     .hero-sticky::before {
       content: '';
       position: absolute;
-      top: 40%; left: 50%; transform: translate(-50%, -50%);
-      width: 800px; height: 600px;
-      background: radial-gradient(ellipse at center, rgba(200,72,28,0.10) 0%, transparent 65%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 600px; height: 700px;
+      background: radial-gradient(ellipse at center, rgba(200,72,28,0.09) 0%, transparent 65%);
       pointer-events: none;
     }
 
-    /* ── Left column ── */
-    .hero-left {
-      flex: 0 0 400px;
-      position: relative;
-      z-index: 1;
-    }
-    .hero-eyebrow {
-      font-size: 11px; font-weight: 600; letter-spacing: 2px;
-      text-transform: uppercase; color: #C8481C;
-      margin-bottom: 24px;
-    }
-    h1 {
-      font-size: clamp(52px, 5.5vw, 80px);
-      font-weight: 800; letter-spacing: -3px; line-height: 0.92;
-      margin-bottom: 10px;
-    }
-    h1 .accent { color: #C8481C; }
-    .h1-sub {
-      font-size: clamp(30px, 3vw, 44px);
-      font-weight: 300; letter-spacing: -1.5px;
-      color: rgba(250,250,248,0.32); line-height: 1;
-      margin-bottom: 40px;
-    }
-
-    /* Chapter block — fades when chapter changes */
-    .chapter-block {
-      border-left: 2px solid rgba(200,72,28,0.4);
-      padding-left: 20px;
-      margin-bottom: 36px;
-      transition: opacity 0.35s ease, transform 0.35s ease;
-    }
-    .chapter-block.fading {
-      opacity: 0;
-      transform: translateY(-6px);
-    }
-    .chapter-num {
-      font-size: 10px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: #C8481C;
-      margin-bottom: 8px;
-    }
-    .chapter-title {
-      font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
-      margin-bottom: 8px; line-height: 1.2;
-    }
-    .chapter-desc {
-      font-size: 14px; color: rgba(250,250,248,0.42);
-      line-height: 1.65; max-width: 320px;
-    }
-
-    /* Progress dots */
-    .chapter-dots {
-      display: flex; gap: 7px; margin-bottom: 40px;
-    }
-    .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(255,255,255,0.18);
-      transition: background 0.4s, transform 0.3s;
-    }
-    .dot.active {
-      background: #C8481C;
-      transform: scale(1.3);
-    }
-
-    /* Download buttons */
-    .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: #C8481C; color: #FAFAF8;
-      padding: 11px 22px; border-radius: 9999px;
-      font-size: 13px; font-weight: 600;
-      transition: all 0.15s;
-    }
-    .btn-primary:hover { background: #E05520; transform: translateY(-1px); }
-    .btn-outline {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
-      color: #FAFAF8; padding: 10px 20px; border-radius: 9999px;
-      font-size: 13px; font-weight: 600;
-      transition: all 0.15s;
-    }
-    .btn-outline:hover { background: rgba(255,255,255,0.12); }
-
-    /* ── Right column — phone ── */
-    .hero-right {
-      flex: 0 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
-
+    /* ── Phone shell ── */
     .phone {
       width: 310px; height: 640px;
       background: #1a1a19; border-radius: 50px; padding: 16px 13px;
@@ -172,9 +136,8 @@
         0 0 0 1px rgba(0,0,0,0.8),
         0 60px 120px rgba(0,0,0,0.65),
         0 0 80px rgba(200,72,28,0.10);
-      position: relative;
+      position: relative; z-index: 1;
     }
-    /* Side buttons */
     .phone::before {
       content: ''; position: absolute;
       right: -2.5px; top: 140px; width: 2.5px; height: 70px;
@@ -195,23 +158,53 @@
       width: 88px; height: 24px; background: #1a1a19; border-radius: 12px;
       z-index: 20; pointer-events: none;
     }
+    /*
+      iframe renders at 390×844 content pixels, scaled to fit the 284×608 phone screen.
+      The scale is 284/390 = 0.7282. Only the chat-feed is scrolled via JS —
+      the status bar, app bar, and input bar stay fixed inside the iframe.
+    */
     #phoneIframe {
-      width: 390px; height: 3600px; border: none;
-      transform: scale(0.7282) translateY(0px);
+      width: 390px; height: 844px; border: none;
+      transform: scale(0.7282);
       transform-origin: top left;
       pointer-events: none; display: block;
-      will-change: transform;
     }
 
-    /* Scroll cue — fades out after first scroll */
+    /* ── Chapter strip below phone ── */
+    .chapter-strip {
+      margin-top: 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      position: relative; z-index: 1;
+    }
+    .chapter-block {
+      text-align: center;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .chapter-block.fading { opacity: 0; transform: translateY(-6px); }
+    .chapter-num {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: #C8481C; margin-bottom: 4px;
+    }
+    .chapter-title {
+      font-size: 17px; font-weight: 700; letter-spacing: -0.4px;
+      color: rgba(250,250,248,0.85);
+    }
+    .chapter-dots { display: flex; gap: 7px; justify-content: center; }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      transition: background 0.4s, transform 0.3s;
+    }
+    .dot.active { background: #C8481C; transform: scale(1.3); }
+
+    /* Scroll cue */
     .scroll-cue {
       position: absolute;
-      bottom: 32px; left: 50%; transform: translateX(-50%);
+      bottom: 28px; left: 50%; transform: translateX(-50%);
       display: flex; flex-direction: column; align-items: center; gap: 8px;
       font-size: 10px; font-weight: 600; letter-spacing: 2px;
-      text-transform: uppercase; color: rgba(250,250,248,0.25);
-      transition: opacity 0.6s;
-      pointer-events: none;
+      text-transform: uppercase; color: rgba(250,250,248,0.22);
+      transition: opacity 0.6s; pointer-events: none;
     }
     .scroll-cue.hidden { opacity: 0; }
     .scroll-cue svg { animation: bounce 2s ease-in-out infinite; }
@@ -261,24 +254,55 @@
     </div>
   </nav>
 
+  <!-- ═══════════════════════════════════════
+       HERO TITLE — scrolls away, then phone takes over
+  ═══════════════════════════════════════ -->
+  <section class="hero-title">
+    <p class="hero-eyebrow">AI Cooking Companion</p>
+    <h1>Not a<br><span class="accent">recipe</span><br>app.</h1>
+    <p class="h1-sub">A culinary education.</p>
+    <p class="sub">Mise teaches you to think like a chef — understanding technique, mastering vocabulary, and cooking with intention.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 814 1000" fill="currentColor"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-43.4-150.3-109.2C82.3 753.3 0 609.2 0 479.8 0 284.3 121 175.8 240 175.8c60.5 0 111 39.5 148.4 39.5 35.7 0 92.3-41.8 161.4-41.8 26 0 108.2 2.6 168.7 80.8zm-126.7-111.5c30.1-36.7 52-87.7 52-138.8 0-7.1-.6-14.3-1.9-20.1-49.4 1.9-108.5 33.1-143.9 75.1-26.6 30.8-52 80.5-52 132.2 0 8.4 1.3 16.9 1.9 19.5 3.2.6 8.4 1.3 13.6 1.3 43.5 0 97.9-28.7 130.3-69.2z"/></svg>
+        Download for iOS
+      </a>
+      <a href="#" class="btn-outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zm-11.046 0c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zM17.928 9.52l1.666-2.877a.344.344 0 00-.125-.47.347.347 0 00-.47.125l-1.687 2.917C15.98 8.4 14.1 8.003 12 8.003c-2.1 0-3.98.397-5.312 1.212L5.001 6.298a.347.347 0 00-.47-.125.344.344 0 00-.125.47l1.666 2.877C3.7 10.844 2.066 13.107 2 15.748h20c-.066-2.641-1.7-4.904-4.072-6.228z"/></svg>
+        Download for Android
+      </a>
+    </div>
+  </section>
+
   <!-- ═══════════════════════════════════════════════════
-       PARALLAX HERO — 420vh tall, phone stays sticky
+       PARALLAX PHONE — phone is sticky, only chat-feed scrolls
+       Status bar, app bar, and input bar stay fixed inside the frame.
   ═══════════════════════════════════════════════════ -->
   <section id="heroSection" class="hero-scroll">
     <div class="hero-sticky">
 
-      <!-- Left: headline + chapter story -->
-      <div class="hero-left">
-        <p class="hero-eyebrow">AI Cooking Companion</p>
-        <h1>Not a<br><span class="accent">recipe</span><br>app.</h1>
-        <p class="h1-sub">A culinary education.</p>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="island"></div>
+          <!--
+            iframe at its natural 390×844 size, scaled to 284×608.
+            JS scrolls only the .chat-feed inside — the header and input bar
+            stay sticky/fixed within the iframe as they do in the real app.
+          -->
+          <iframe
+            id="phoneIframe"
+            src="screens/view-17-chat-all-widgets.html"
+            scrolling="no">
+          </iframe>
+        </div>
+      </div>
 
+      <!-- Chapter label + dots -->
+      <div class="chapter-strip">
         <div class="chapter-block" id="chapterBlock">
           <div class="chapter-num" id="chapterNum">01 — AI Chat</div>
           <div class="chapter-title" id="chapterTitle">Ask anything.</div>
-          <p class="chapter-desc" id="chapterDesc">Tell mise what you want to cook. It understands context, suggests the right recipe, and gets you started — no searching required.</p>
         </div>
-
         <div class="chapter-dots">
           <div class="dot active" id="dot-0"></div>
           <div class="dot" id="dot-1"></div>
@@ -286,34 +310,8 @@
           <div class="dot" id="dot-3"></div>
           <div class="dot" id="dot-4"></div>
         </div>
-
-        <div class="hero-btns">
-          <a href="#" class="btn-primary">
-            <svg width="13" height="13" viewBox="0 0 814 1000" fill="currentColor"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-43.4-150.3-109.2C82.3 753.3 0 609.2 0 479.8 0 284.3 121 175.8 240 175.8c60.5 0 111 39.5 148.4 39.5 35.7 0 92.3-41.8 161.4-41.8 26 0 108.2 2.6 168.7 80.8zm-126.7-111.5c30.1-36.7 52-87.7 52-138.8 0-7.1-.6-14.3-1.9-20.1-49.4 1.9-108.5 33.1-143.9 75.1-26.6 30.8-52 80.5-52 132.2 0 8.4 1.3 16.9 1.9 19.5 3.2.6 8.4 1.3 13.6 1.3 43.5 0 97.9-28.7 130.3-69.2z"/></svg>
-            Download for iOS
-          </a>
-          <a href="#" class="btn-outline">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zm-11.046 0c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zM17.928 9.52l1.666-2.877a.344.344 0 00-.125-.47.347.347 0 00-.47.125l-1.687 2.917C15.98 8.4 14.1 8.003 12 8.003c-2.1 0-3.98.397-5.312 1.212L5.001 6.298a.347.347 0 00-.47-.125.344.344 0 00-.125.47l1.666 2.877C3.7 10.844 2.066 13.107 2 15.748h20c-.066-2.641-1.7-4.904-4.072-6.228z"/></svg>
-            Android
-          </a>
-        </div>
       </div>
 
-      <!-- Right: sticky phone -->
-      <div class="hero-right">
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="island"></div>
-            <iframe
-              id="phoneIframe"
-              src="screens/view-17-chat-all-widgets.html?gallery=1"
-              scrolling="no">
-            </iframe>
-          </div>
-        </div>
-      </div>
-
-      <!-- Scroll cue -->
       <div class="scroll-cue" id="scrollCue">
         scroll
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
@@ -369,106 +367,97 @@
 
   <script>
     (function () {
+      /*
+        Key insight: we DON'T scroll the entire iframe.
+        We only translateY the .chat-feed element inside it.
+        This keeps the status bar (sticky top), app bar (sticky),
+        and input bar (position:fixed) anchored to the phone frame.
+      */
       const SCALE = 0.7282;
-      // Visible content in the phone (screen height ÷ scale)
-      // phone-screen: 608px tall
-      const VISIBLE_PX = 608 / SCALE; // ≈ 835 content pixels visible at once
-      // Total estimated content height in content pixels (from view-17 at 390px wide)
-      const CONTENT_H = 3280;
-      const MAX_OFFSET = CONTENT_H - VISIBLE_PX; // ≈ 2445px max translateY
 
-      const CHAPTERS = [
-        {
-          num: '01 — AI Chat',
-          title: 'Ask anything.',
-          desc: 'Tell mise what you want to cook. It understands context, suggests the right recipe, and gets you started — no searching required.',
-          threshold: 0.00
-        },
-        {
-          num: '02 — Recipe',
-          title: 'The recipe.',
-          desc: "Julia Child's Boeuf Bourguignon — full history, technique notes, and timing. Surfaced in seconds, explained in full.",
-          threshold: 0.12
-        },
-        {
-          num: '03 — Ingredients',
-          title: '15 ingredients.',
-          desc: 'Organised, annotated with notes and substitutes. Add everything to your shopping list with one tap.',
-          threshold: 0.30
-        },
-        {
-          num: '04 — Cook Now',
-          title: "Let's cook.",
-          desc: 'Six steps, fully explained. Not just what to do — but why. Mise teaches technique, not just instructions.',
-          threshold: 0.62
-        },
-        {
-          num: '05 — Rescue',
-          title: 'Real-time rescue.',
-          desc: 'Two hours in, the sauce looks thin. Mise knows exactly what happened — and walks you through the fix.',
-          threshold: 0.82
-        }
+      /*
+        Visible chat content in content pixels:
+          phone-screen = 608px screen → 608/0.7282 = 835 content px total
+          status bar   = 44px content (sticky, covers top)
+          app bar      = 52px content (sticky, covers below)
+          input bar    ≈ 90px content (fixed, covers bottom)
+          → visible chat window ≈ 835 - 44 - 52 - 90 = 649 content px
+
+        Chat feed total height ≈ 3100px content.
+        MAX_OFFSET = 3100 - 649 ≈ 2451px — tuned to reach crusty bread bubble.
+      */
+      var MAX_OFFSET = 2500;
+
+      var CHAPTERS = [
+        { num: '01 — AI Chat',     title: 'Ask anything.',      threshold: 0.00 },
+        { num: '02 — Recipe',      title: 'The recipe.',         threshold: 0.10 },
+        { num: '03 — Ingredients', title: '15 ingredients.',     threshold: 0.24 },
+        { num: '04 — Cook Now',    title: "Let's cook.",         threshold: 0.58 },
+        { num: '05 — Rescue',      title: 'Real-time rescue.',   threshold: 0.82 }
       ];
 
-      const heroSection  = document.getElementById('heroSection');
-      const iframe       = document.getElementById('phoneIframe');
-      const chapterBlock = document.getElementById('chapterBlock');
-      const chapterNum   = document.getElementById('chapterNum');
-      const chapterTitle = document.getElementById('chapterTitle');
-      const chapterDesc  = document.getElementById('chapterDesc');
-      const scrollCue    = document.getElementById('scrollCue');
-      const dots         = CHAPTERS.map((_, i) => document.getElementById('dot-' + i));
+      var heroSection  = document.getElementById('heroSection');
+      var iframe       = document.getElementById('phoneIframe');
+      var chapterBlock = document.getElementById('chapterBlock');
+      var chapterNum   = document.getElementById('chapterNum');
+      var chapterTitle = document.getElementById('chapterTitle');
+      var scrollCue    = document.getElementById('scrollCue');
+      var dots         = CHAPTERS.map(function(_, i) { return document.getElementById('dot-' + i); });
 
-      let currentChapterIdx = 0;
-      let fadeTimer = null;
+      var currentChapterIdx = 0;
+      var fadeTimer = null;
+      var chatFeed = null; // the .chat-feed element inside the iframe
+
+      /* Wait for iframe to load, then grab the chat-feed element */
+      iframe.addEventListener('load', function () {
+        try {
+          chatFeed = iframe.contentDocument.querySelector('.chat-feed');
+          if (chatFeed) {
+            chatFeed.style.willChange = 'transform';
+            chatFeed.style.transition = 'none'; /* raw speed, no CSS easing */
+          }
+        } catch (e) {
+          /* cross-origin fallback — shouldn't happen with file:// */
+        }
+        onScroll();
+      });
 
       function setChapter(idx) {
         if (idx === currentChapterIdx) return;
         currentChapterIdx = idx;
-        const ch = CHAPTERS[idx];
-
-        // Fade out
+        var ch = CHAPTERS[idx];
         chapterBlock.classList.add('fading');
         clearTimeout(fadeTimer);
         fadeTimer = setTimeout(function () {
           chapterNum.textContent   = ch.num;
           chapterTitle.textContent = ch.title;
-          chapterDesc.textContent  = ch.desc;
           chapterBlock.classList.remove('fading');
-          // Update dots
-          dots.forEach(function (d, i) {
-            d.classList.toggle('active', i === idx);
-          });
+          dots.forEach(function (d, i) { d.classList.toggle('active', i === idx); });
         }, 280);
       }
 
       function onScroll() {
-        const heroTop        = heroSection.getBoundingClientRect().top;
-        const scrolled       = -heroTop; // px scrolled into section
-        const totalScrollable = heroSection.offsetHeight - window.innerHeight;
-        const progress       = Math.max(0, Math.min(1, scrolled / totalScrollable));
+        var heroTop       = heroSection.getBoundingClientRect().top;
+        var scrolled      = -heroTop;
+        var totalScroll   = heroSection.offsetHeight - window.innerHeight;
+        var progress      = Math.max(0, Math.min(1, scrolled / totalScroll));
 
-        // Move content inside phone
-        const offset = progress * MAX_OFFSET;
-        iframe.style.transform = 'scale(' + SCALE + ') translateY(-' + offset.toFixed(1) + 'px)';
-
-        // Hide scroll cue once user starts scrolling
-        if (scrolled > 40) {
-          scrollCue.classList.add('hidden');
-        } else {
-          scrollCue.classList.remove('hidden');
+        /* Scroll only the chat feed — header + input bar stay fixed */
+        var offset = progress * MAX_OFFSET;
+        if (chatFeed) {
+          chatFeed.style.transform = 'translateY(-' + offset.toFixed(1) + 'px)';
         }
 
-        // Update chapter
-        let nextChapter = 0;
-        for (let i = 0; i < CHAPTERS.length; i++) {
-          if (progress >= CHAPTERS[i].threshold) nextChapter = i;
+        scrollCue.classList.toggle('hidden', scrolled > 40);
+
+        var next = 0;
+        for (var i = 0; i < CHAPTERS.length; i++) {
+          if (progress >= CHAPTERS[i].threshold) next = i;
         }
-        setChapter(nextChapter);
+        setChapter(next);
       }
 
       window.addEventListener('scroll', onScroll, { passive: true });
-      // Run once on load to init state
       onScroll();
     })();
   </script>
