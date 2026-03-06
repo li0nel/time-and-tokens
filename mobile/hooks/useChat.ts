@@ -1,76 +1,20 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ChatSession } from 'firebase/ai'
 import type { Block, ChatMessage } from '../types/blocks'
-import { createUserMessage, createAssistantMessage, generateId } from '../utils/chat'
+import {
+  createChatSession,
+  sendChatMessage,
+  loadTodayHistory,
+  saveTodayHistory,
+} from '../services/chat'
+import {
+  createUserMessage,
+  createAssistantMessage,
+  generateId,
+} from '../utils/chat'
 
 // ---------------------------------------------------------------------------
-// Hardcoded mock messages for initial development / testing
-// ---------------------------------------------------------------------------
-
-const MOCK_BLOCKS_WELCOME: Block[] = [
-  {
-    type: 'text',
-    data: {
-      content:
-        'Welcome to **Mise**! I\'m your AI cooking companion. Ask me about recipes, ingredients, or techniques.',
-    },
-  },
-  {
-    type: 'quick_replies',
-    data: {
-      replies: [
-        'Show me a quick dinner idea',
-        'What can I make with chicken?',
-        'Suggest a vegetarian meal',
-      ],
-    },
-  },
-]
-
-const MOCK_BLOCKS_RECIPE: Block[] = [
-  {
-    type: 'text',
-    data: {
-      content: 'Here\'s a classic recipe that uses simple pantry ingredients:',
-    },
-  },
-  {
-    type: 'recipe_card',
-    data: {
-      recipeId: 'lemon-herb-chicken-001',
-      title: 'Roasted Lemon Herb Chicken',
-      description:
-        'A simple yet elegant one-pan roast with bright citrus and fragrant herbs.',
-      cookTime: '45 min',
-      servings: 4,
-      difficulty: 'easy',
-      cuisine: 'Mediterranean',
-    },
-  },
-  {
-    type: 'quick_replies',
-    data: {
-      replies: [
-        'Show ingredients',
-        'Step-by-step instructions',
-        'Find similar recipes',
-      ],
-    },
-  },
-]
-
-const INITIAL_MESSAGES: ChatMessage[] = [
-  createAssistantMessage(generateId(), MOCK_BLOCKS_WELCOME),
-  {
-    id: generateId(),
-    role: 'user',
-    content: 'Show me a quick dinner idea',
-    timestamp: new Date(Date.now() - 60_000),
-  },
-  createAssistantMessage(generateId(), MOCK_BLOCKS_RECIPE),
-]
-
-// ---------------------------------------------------------------------------
-// Hook
+// Hook interface
 // ---------------------------------------------------------------------------
 
 export interface UseChatReturn {
@@ -80,37 +24,106 @@ export interface UseChatReturn {
   handleAction: (text: string) => void
 }
 
+// ---------------------------------------------------------------------------
+// useChat
+// ---------------------------------------------------------------------------
+
 /**
- * Manages local chat state.
- * For now uses hardcoded initial messages and simple state management.
- * Will be wired to Gemini backend in a future bead.
+ * Manages chat state backed by Gemini via Firebase AI Logic.
+ *
+ * On mount:
+ *   1. Loads today's history from AsyncStorage.
+ *   2. Creates a Gemini chat session.
+ *
+ * sendMessage / handleAction:
+ *   - Adds the user message optimistically.
+ *   - Sets isThinking=true while waiting for the model.
+ *   - Appends the assistant response blocks.
+ *   - Persists history to AsyncStorage.
+ *   - On error, appends a fallback error text block.
  */
 export function useChat(): UseChatReturn {
-  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES)
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isThinking, setIsThinking] = useState(false)
 
-  const appendUserMessage = useCallback((text: string) => {
-    const msg = createUserMessage(generateId(), text)
-    setMessages((prev) => [...prev, msg])
+  const sessionRef = useRef<ChatSession | null>(null)
+
+  // On mount: load history and create session
+  useEffect(() => {
+    let cancelled = false
+
+    async function init() {
+      const history = await loadTodayHistory()
+      if (cancelled) return
+      if (history.length > 0) {
+        setMessages(history)
+      }
+      sessionRef.current = createChatSession()
+    }
+
+    void init()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const dispatchMessage = useCallback(async (text: string) => {
+    const userMsg = createUserMessage(generateId(), text)
+
+    // Optimistic update
+    setMessages((prev) => [...prev, userMsg])
+    setIsThinking(true)
+
+    try {
+      if (!sessionRef.current) {
+        sessionRef.current = createChatSession()
+      }
+
+      const blocks: Block[] = await sendChatMessage(sessionRef.current, text)
+      const assistantMsg = createAssistantMessage(generateId(), blocks)
+
+      setMessages((prev) => {
+        const updated = [...prev, assistantMsg]
+        void saveTodayHistory(updated)
+        return updated
+      })
+    } catch (err) {
+      const errorContent =
+        err instanceof Error
+          ? `Error: ${err.message}`
+          : 'Sorry, something went wrong. Please try again.'
+
+      const errorBlocks: Block[] = [
+        {
+          type: 'text',
+          data: { content: errorContent },
+        },
+      ]
+      const errorMsg = createAssistantMessage(generateId(), errorBlocks)
+
+      setMessages((prev) => {
+        const updated = [...prev, errorMsg]
+        void saveTodayHistory(updated)
+        return updated
+      })
+    } finally {
+      setIsThinking(false)
+    }
   }, [])
 
   const sendMessage = useCallback(
     (text: string) => {
-      appendUserMessage(text)
-      // Stub: simulate thinking briefly, no actual AI response yet
-      setIsThinking(true)
-      setTimeout(() => {
-        setIsThinking(false)
-      }, 1500)
+      void dispatchMessage(text)
     },
-    [appendUserMessage],
+    [dispatchMessage],
   )
 
   const handleAction = useCallback(
     (text: string) => {
-      sendMessage(text)
+      void dispatchMessage(text)
     },
-    [sendMessage],
+    [dispatchMessage],
   )
 
   return { messages, isThinking, sendMessage, handleAction }

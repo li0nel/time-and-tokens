@@ -166,10 +166,31 @@ jest.mock('firebase/auth', () => ({
 }))
 
 // Mock firebase/ai
-jest.mock('firebase/ai', () => ({
-  getAI: jest.fn(() => ({})),
-  GoogleAIBackend: jest.fn(() => ({})),
-}))
+jest.mock('firebase/ai', () => {
+  // Minimal Schema mock that returns plain objects — enough for module-level schema
+  // construction in services/chat.ts without needing the real firebase/ai runtime.
+  const mockSchemaValue = (extra = {}) => ({ type: 'mock', ...extra })
+  const Schema = {
+    object: jest.fn((params: unknown) => mockSchemaValue({ schemaType: 'object', params })),
+    array: jest.fn((params: unknown) => mockSchemaValue({ schemaType: 'array', params })),
+    string: jest.fn(() => mockSchemaValue({ schemaType: 'string' })),
+    number: jest.fn(() => mockSchemaValue({ schemaType: 'number' })),
+    integer: jest.fn(() => mockSchemaValue({ schemaType: 'integer' })),
+    boolean: jest.fn(() => mockSchemaValue({ schemaType: 'boolean' })),
+    enumString: jest.fn((params: unknown) =>
+      mockSchemaValue({ schemaType: 'enumString', params }),
+    ),
+    anyOf: jest.fn((params: unknown) => mockSchemaValue({ schemaType: 'anyOf', params })),
+  }
+  return {
+    getAI: jest.fn(() => ({})),
+    getGenerativeModel: jest.fn(() => ({
+      startChat: jest.fn(() => ({ sendMessage: jest.fn() })),
+    })),
+    GoogleAIBackend: jest.fn(() => ({})),
+    Schema,
+  }
+})
 
 // Mock firebase/firestore
 jest.mock('firebase/firestore', () => ({
