@@ -147,6 +147,8 @@ jest.mock('firebase/app', () => ({
 // Mock firebase/auth
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(() => ({})),
+  initializeAuth: jest.fn(() => ({})),
+  getReactNativePersistence: jest.fn(() => ({})),
   signInWithEmailAndPassword: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
   createUserWithEmailAndPassword: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
   signOut: jest.fn(() => Promise.resolve()),
@@ -155,7 +157,14 @@ jest.mock('firebase/auth', () => ({
     return jest.fn()
   }),
   GoogleAuthProvider: jest.fn(() => ({})),
+  signInWithPopup: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
   signInWithCredential: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+}))
+
+// Mock firebase/ai
+jest.mock('firebase/ai', () => ({
+  getAI: jest.fn(() => ({})),
+  GoogleAIBackend: jest.fn(() => ({})),
 }))
 
 // Mock firebase/firestore
