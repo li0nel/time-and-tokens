@@ -323,6 +323,8 @@
           <div class="dot" id="dot-2"></div>
           <div class="dot" id="dot-3"></div>
           <div class="dot" id="dot-4"></div>
+          <div class="dot" id="dot-5"></div>
+          <div class="dot" id="dot-6"></div>
         </div>
       </div>
 
@@ -400,14 +402,16 @@
         Chat feed total height ≈ 3100px content.
         MAX_OFFSET = 3100 - 649 ≈ 2451px — tuned to reach crusty bread bubble.
       */
-      var MAX_OFFSET = 4200;
+      var MAX_OFFSET = 5150;
 
       var CHAPTERS = [
         { num: '01 — AI Chat',     title: 'Ask anything.',      threshold: 0.00 },
-        { num: '02 — Recipe',      title: 'The recipe.',         threshold: 0.10 },
-        { num: '03 — Ingredients', title: '15 ingredients.',     threshold: 0.24 },
-        { num: '04 — Cook Now',    title: "Let's cook.",         threshold: 0.58 },
-        { num: '05 — Rescue',      title: 'Real-time rescue.',   threshold: 0.82 }
+        { num: '02 — Recipe',      title: 'View the recipe.',         threshold: 0.05 },
+        { num: '03 — Ingredients', title: 'Check ingredients inline.',     threshold: 0.15 },
+        { num: '04 — Chef Tips', title: 'Know what makes the difference.',     threshold: 0.25 },
+        { num: '05 — Cook Mode',    title: 'Cook mode has <em>not</em> left the chat.',         threshold: 0.38 },
+        { num: '06 — Rescue Mode',      title: 'Real-time rescue.',   threshold: 0.82 },
+        { num: '07 — Follow up',      title: 'Keep the conversation going.',   threshold: 0.9 }
       ];
 
       var heroSection  = document.getElementById('heroSection');
@@ -436,7 +440,7 @@
         clearTimeout(fadeTimer);
         fadeTimer = setTimeout(function () {
           chapterNum.textContent   = ch.num;
-          chapterTitle.textContent = ch.title;
+          chapterTitle.innerHTML = ch.title;
           chapterBlock.classList.remove('fading');
           dots.forEach(function (d, i) { d.classList.toggle('active', i === idx); });
         }, 280);
