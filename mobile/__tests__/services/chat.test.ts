@@ -24,6 +24,7 @@ function makeTextResponse(text: string) {
   return {
     response: {
       text: () => text,
+      functionCalls: () => undefined,
       candidates: [{ content: { parts: [{ text }], role: 'model' } }],
     },
   }
@@ -77,25 +78,12 @@ describe('buildSystemPrompt', () => {
 // ---------------------------------------------------------------------------
 
 describe('createChatSession', () => {
-  it('calls getGenerativeModel with gemini-2.0-flash model', () => {
+  it('calls getGenerativeModel with gemini-2.0-flash-lite model', () => {
     createChatSession()
     expect(mockGetGenerativeModel).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({ model: 'gemini-2.0-flash' }),
+      expect.objectContaining({ model: 'gemini-2.0-flash-lite' }),
     )
-  })
-
-  it('includes responseSchema in generationConfig', () => {
-    createChatSession()
-    const calls = mockGetGenerativeModel.mock.calls
-    expect(calls.length).toBeGreaterThan(0)
-    const modelParams = calls[0]?.[1]
-    expect(modelParams).toMatchObject({
-      generationConfig: expect.objectContaining({
-        responseMimeType: 'application/json',
-        responseSchema: expect.anything(),
-      }),
-    })
   })
 
   it('includes get_recipe_details tool declaration', () => {
@@ -189,7 +177,7 @@ describe('sendChatMessage', () => {
     }
   })
 
-  it('returns a fallback error block on invalid JSON', async () => {
+  it('returns a text block wrapping the raw content on invalid JSON', async () => {
     mockSendMessage.mockResolvedValue(makeTextResponse('not valid json {{'))
 
     const session = createChatSession()
@@ -199,7 +187,7 @@ describe('sendChatMessage', () => {
     const block = blocks[0]
     expect(block?.type).toBe('text')
     if (block?.type === 'text') {
-      expect(block.data.content).toContain('error')
+      expect(block.data.content).toBe('not valid json {{')
     }
   })
 

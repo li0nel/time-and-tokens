@@ -8,20 +8,90 @@
  *   - baseURL: http://localhost:8081 (configured in playwright.config.ts)
  *   - TEST_EMAIL and TEST_PASSWORD env vars for a valid Firebase test account.
  *
- * Full AI response tests require a live Firebase project with Gemini enabled.
- * Tests that interact with the AI are annotated with `test.skip` when
- * TEST_EMAIL / TEST_PASSWORD are not provided, so `npm run e2e` still passes
- * in environments without credentials.
+ * Gemini API calls are mocked via page.route() to avoid consuming real quota
+ * and to make tests deterministic. Auth calls (signInWithPassword) are real.
  */
 
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
+
+// ---------------------------------------------------------------------------
+// Mock Gemini responses
+// ---------------------------------------------------------------------------
+
+const GEMINI_URL_PATTERN = '**/models/**:generateContent'
+
+const MOCK_TEXT_RESPONSE = JSON.stringify({
+  candidates: [
+    {
+      content: {
+        role: 'model',
+        parts: [{ text: '{ "blocks": [{ "type": "text", "content": "Here is a great pasta dish for you!" }, { "type": "quick_replies", "replies": ["Show recipe card", "Give me ingredients"] }] }' }],
+      },
+      finishReason: 'STOP',
+    },
+  ],
+})
+
+const MOCK_RECIPE_CARD_RESPONSE = JSON.stringify({
+  candidates: [
+    {
+      content: {
+        role: 'model',
+        parts: [
+          {
+            text: '{ "blocks": [{ "type": "recipe_card", "recipeId": "recipe-004", "title": "Pasta Carbonara", "description": "A classic Roman pasta dish with eggs, Pecorino Romano, pancetta, and black pepper.", "cookTime": "20min", "servings": 2, "difficulty": "medium", "cuisine": "Italian" }, { "type": "quick_replies", "replies": ["Start cooking", "View ingredients"] }] }',
+          },
+        ],
+      },
+      finishReason: 'STOP',
+    },
+  ],
+})
+
+const MOCK_COOK_STEPS_RESPONSE = JSON.stringify({
+  candidates: [
+    {
+      content: {
+        role: 'model',
+        parts: [
+          {
+            text: '{ "blocks": [{ "type": "cook_steps", "recipeTitle": "Pasta Carbonara", "steps": [{ "stepNumber": 1, "instruction": "Cook spaghetti in salted boiling water until al dente." }, { "stepNumber": 2, "instruction": "Whisk eggs and cheese together. Season with black pepper." }, { "stepNumber": 3, "instruction": "Fry pancetta until crisp." }, { "stepNumber": 4, "instruction": "Combine pasta with pancetta fat, then stir in egg mixture off heat." }] }] }',
+          },
+        ],
+      },
+      finishReason: 'STOP',
+    },
+  ],
+})
+
+/** Set up Gemini API mock. The handler picks the response based on the request body. */
+async function mockGemini(page: Page) {
+  await page.route(GEMINI_URL_PATTERN, async (route) => {
+    const requestBody = route.request().postData() ?? ''
+    let responseBody = MOCK_TEXT_RESPONSE
+
+    // Check "Start cooking" first — it takes priority even when conversation
+    // history contains earlier keywords like "carbonara" or "spaghetti".
+    if (requestBody.includes('Start cooking')) {
+      responseBody = MOCK_COOK_STEPS_RESPONSE
+    } else if (requestBody.includes('recipe card') || requestBody.includes('carbonara') || requestBody.includes('spaghetti')) {
+      responseBody = MOCK_RECIPE_CARD_RESPONSE
+    }
+
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: responseBody,
+    })
+  })
+}
 
 // ---------------------------------------------------------------------------
 // Helper: sign in with email/password via the UI
 // ---------------------------------------------------------------------------
 
 async function signIn(
-  page: import('@playwright/test').Page,
+  page: Page,
   email: string,
   password: string,
 ) {
@@ -75,6 +145,7 @@ test.describe('Chat screen — authenticated', () => {
   test.skip(!hasCredentials, 'Requires TEST_EMAIL and TEST_PASSWORD env vars')
 
   test('chat input is present after sign-in', async ({ page }) => {
+    await mockGemini(page)
     await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
 
     // The chat input text field should be visible.
@@ -85,6 +156,7 @@ test.describe('Chat screen — authenticated', () => {
   })
 
   test('sends a message and sees a response', async ({ page }) => {
+    await mockGemini(page)
     await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
 
     // Type a cooking question.
@@ -99,19 +171,15 @@ test.describe('Chat screen — authenticated', () => {
     )
     await sendButton.click()
 
-    // The thinking indicator should appear briefly.
-    // (It may disappear quickly — just confirm it appeared or a response showed.)
-
     // Wait for the AI response to appear in the chat feed.
-    // The assistant message is rendered via ChatMessage/WidgetRenderer.
-    // Expect at least one assistant message block to appear.
     const assistantMessage = page.locator(
       '[data-testid="assistant-message"], [testid="assistant-message"]',
     )
-    await expect(assistantMessage.first()).toBeVisible({ timeout: 30000 })
+    await expect(assistantMessage.first()).toBeVisible({ timeout: 15000 })
   })
 
   test('recipe card renders with action buttons', async ({ page }) => {
+    await mockGemini(page)
     await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
 
     // Ask for a specific recipe card response.
@@ -126,18 +194,18 @@ test.describe('Chat screen — authenticated', () => {
     await sendButton.click()
 
     // Wait for a recipe card to appear.
-    // RecipeCard has data-testid="recipe-card".
     const recipeCard = page.locator(
       '[data-testid="recipe-card"], [testid="recipe-card"]',
     )
-    await expect(recipeCard.first()).toBeVisible({ timeout: 30000 })
+    await expect(recipeCard.first()).toBeVisible({ timeout: 15000 })
 
-    // The recipe card should have action buttons (View Ingredients, Start Cooking).
+    // The recipe card should have action buttons.
     const startCookingButton = page.getByText('Start Cooking')
     await expect(startCookingButton.first()).toBeVisible({ timeout: 5000 })
   })
 
   test('tapping Start Cooking sends a cook steps request', async ({ page }) => {
+    await mockGemini(page)
     await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
 
     // First get a recipe card.
@@ -155,7 +223,7 @@ test.describe('Chat screen — authenticated', () => {
     const recipeCard = page.locator(
       '[data-testid="recipe-card"], [testid="recipe-card"]',
     )
-    await expect(recipeCard.first()).toBeVisible({ timeout: 30000 })
+    await expect(recipeCard.first()).toBeVisible({ timeout: 15000 })
 
     // Tap 'Start Cooking' which injects a chat message and triggers a
     // cook_steps response from the AI.
@@ -166,6 +234,6 @@ test.describe('Chat screen — authenticated', () => {
     const cookSteps = page.locator(
       '[data-testid="cook-steps"], [testid="cook-steps"]',
     )
-    await expect(cookSteps.first()).toBeVisible({ timeout: 30000 })
+    await expect(cookSteps.first()).toBeVisible({ timeout: 15000 })
   })
 })

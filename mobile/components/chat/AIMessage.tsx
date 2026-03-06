@@ -7,6 +7,7 @@ import QuickReplies from './QuickReplies'
 interface Props {
   message: ChatMessage
   onAction: (message: string) => void
+  testID?: string
 }
 
 /**
@@ -14,10 +15,10 @@ interface Props {
  * Quick-replies blocks are rendered as a horizontal chip row via QuickReplies.
  * Falls back to plain text if no blocks are present.
  */
-function AIMessage({ message, onAction }: Props) {
+function AIMessage({ message, onAction, testID }: Props) {
   if (message.blocks && message.blocks.length > 0) {
     return (
-      <View className="px-4 py-1 gap-y-2">
+      <View testID={testID ?? 'assistant-message'} className="px-4 py-1 gap-y-2">
         {message.blocks.map((block, index) => {
           if (block.type === 'quick_replies') {
             return (
@@ -43,7 +44,7 @@ function AIMessage({ message, onAction }: Props) {
 
   // Fallback: render raw content as plain text
   return (
-    <View className="px-4 py-1">
+    <View testID={testID ?? 'assistant-message'} className="px-4 py-1">
       <Text className="text-text text-base leading-normal font-inter">
         {message.content}
       </Text>

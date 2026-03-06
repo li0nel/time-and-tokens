@@ -22,22 +22,25 @@ export function useAuth(): UseAuthReturn {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(
-      getFirebaseAuth(),
-      (firebaseUser) => {
-        setUser(firebaseUser)
-        setLoading(false)
-        setError(null)
-      },
-      (err) => {
-        setError(err.message)
-        setLoading(false)
-      },
-    )
-
-    return () => {
-      unsubscribe()
+    let unsubscribe: () => void = () => {}
+    try {
+      unsubscribe = onAuthStateChanged(
+        getFirebaseAuth(),
+        (firebaseUser) => {
+          setUser(firebaseUser)
+          setLoading(false)
+          setError(null)
+        },
+        (err) => {
+          setError(err.message)
+          setLoading(false)
+        },
+      )
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Firebase initialization failed')
+      setLoading(false)
     }
+    return () => unsubscribe()
   }, [])
 
   return { user, loading, error }

@@ -8,79 +8,10 @@
 
 import { getGenerativeModel, Schema } from 'firebase/ai'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import type { ChatSession } from 'firebase/ai'
+import type { ChatSession, FunctionResponsePart, GenerateContentResult } from 'firebase/ai'
 import type { Block, ChatMessage } from '../types/blocks'
 import { getRecipeCatalog, getRecipeById } from '../data/recipes'
 import { ai } from './gemini'
-
-// ---------------------------------------------------------------------------
-// Block schema — flat structure with all optional fields (Gemini lacks anyOf)
-// ---------------------------------------------------------------------------
-
-const blockSchema = Schema.object({
-  properties: {
-    type: Schema.enumString({
-      enum: ['text', 'recipe_card', 'ingredients', 'cook_steps', 'quick_replies'],
-    }),
-    // text fields
-    content: Schema.string(),
-    // recipe_card fields
-    recipeId: Schema.string(),
-    title: Schema.string(),
-    description: Schema.string(),
-    cookTime: Schema.string(),
-    servings: Schema.number(),
-    difficulty: Schema.enumString({ enum: ['easy', 'medium', 'hard'] }),
-    cuisine: Schema.string(),
-    // ingredients fields
-    recipeTitle: Schema.string(),
-    ingredients: Schema.array({
-      items: Schema.object({
-        properties: {
-          name: Schema.string(),
-          amount: Schema.string(),
-          unit: Schema.string(),
-        },
-        optionalProperties: ['unit'],
-      }),
-    }),
-    // cook_steps fields
-    steps: Schema.array({
-      items: Schema.object({
-        properties: {
-          stepNumber: Schema.number(),
-          instruction: Schema.string(),
-        },
-      }),
-    }),
-    // quick_replies fields
-    replies: Schema.array({ items: Schema.string() }),
-  },
-  optionalProperties: [
-    'content',
-    'recipeId',
-    'title',
-    'description',
-    'cookTime',
-    'servings',
-    'difficulty',
-    'cuisine',
-    'recipeTitle',
-    'ingredients',
-    'steps',
-    'replies',
-  ],
-})
-
-// ---------------------------------------------------------------------------
-// Response schema
-// ---------------------------------------------------------------------------
-
-const responseSchema = Schema.object({
-  properties: {
-    blocks: Schema.array({ items: blockSchema }),
-  },
-})
 
 // ---------------------------------------------------------------------------
 // System prompt
@@ -89,9 +20,11 @@ const responseSchema = Schema.object({
 export function buildSystemPrompt(catalog: string): string {
   return `You are Mise, a friendly and knowledgeable AI cooking assistant. Your goal is to help users discover recipes, understand ingredients, and guide them through cooking techniques.
 
-RESPONSE FORMAT:
-Always respond with valid JSON matching this structure:
+RESPONSE FORMAT — CRITICAL:
+You MUST ALWAYS respond with raw JSON only. No markdown, no prose, no code fences.
+Your entire response must be valid JSON matching this exact structure:
 { "blocks": [ ...block objects... ] }
+Never write plain text. Every response, including errors or "I don't know" replies, must be a JSON object with a blocks array containing at least one text block.
 
 BLOCK TYPES:
 Each response is made up of typed blocks. Use the most appropriate blocks for the context:
@@ -145,12 +78,8 @@ function handleGetRecipeDetails(args: Record<string, unknown>): unknown {
 
 export function createChatSession(): ChatSession {
   const model = getGenerativeModel(ai, {
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.0-flash-lite',
     systemInstruction: buildSystemPrompt(getRecipeCatalog()),
-    generationConfig: {
-      responseMimeType: 'application/json',
-      responseSchema,
-    },
     tools: [
       {
         functionDeclarations: [
@@ -163,8 +92,6 @@ export function createChatSession(): ChatSession {
                 recipe_id: Schema.string(),
               },
             }),
-            functionReference: (args: Record<string, unknown>) =>
-              handleGetRecipeDetails(args),
           },
         ],
       },
@@ -179,30 +106,51 @@ export function createChatSession(): ChatSession {
 // ---------------------------------------------------------------------------
 
 /**
+ * Tries to parse a JSON object with a "blocks" array from text.
+ * Handles cases where function-call result text is prepended before the JSON.
+ */
+function extractBlocksObject(text: string): { blocks: unknown[] } | null {
+  // Fast path: whole text is valid JSON
+  try {
+    const parsed = JSON.parse(text) as { blocks?: unknown[] }
+    if (parsed.blocks && Array.isArray(parsed.blocks)) return parsed as { blocks: unknown[] }
+  } catch {}
+
+  // Fallback: find the last {"blocks": ...} substring and parse from there
+  const blocksIdx = text.lastIndexOf('"blocks"')
+  if (blocksIdx !== -1) {
+    const openBrace = text.lastIndexOf('{', blocksIdx)
+    if (openBrace !== -1) {
+      try {
+        const candidate = JSON.parse(text.substring(openBrace)) as { blocks?: unknown[] }
+        if (candidate.blocks && Array.isArray(candidate.blocks))
+          return candidate as { blocks: unknown[] }
+      } catch {}
+    }
+  }
+  return null
+}
+
+/**
  * Parses a raw JSON response text from Gemini into a Block[].
  * Returns a fallback error block on parse failure.
  */
 function parseBlocks(text: string): Block[] {
-  try {
-    const parsed = JSON.parse(text) as { blocks?: unknown[] }
-    if (!parsed.blocks || !Array.isArray(parsed.blocks)) {
-      return [
-        {
-          type: 'text',
-          data: { content: 'Sorry, I had trouble formatting my response. Please try again.' },
-        },
-      ]
-    }
-    // Map flat block schema to typed Block discriminated union
-    return parsed.blocks.map(flatBlockToBlock).filter(Boolean) as Block[]
-  } catch {
-    return [
-      {
-        type: 'text',
-        data: { content: 'Sorry, I encountered an error. Please try again.' },
-      },
-    ]
+  const obj = extractBlocksObject(text)
+  if (obj) {
+    return obj.blocks.map(flatBlockToBlock).filter(Boolean) as Block[]
   }
+
+  // Gemini returned plain text instead of JSON — wrap it as a text block
+  if (typeof text === 'string' && text.trim().length > 0) {
+    return [{ type: 'text', data: { content: text.trim() } }]
+  }
+  return [
+    {
+      type: 'text',
+      data: { content: 'Sorry, I encountered an error. Please try again.' },
+    },
+  ]
 }
 
 /**
@@ -296,9 +244,25 @@ export async function sendChatMessage(
   session: ChatSession,
   userText: string,
 ): Promise<Block[]> {
-  // The Firebase AI SDK handles automatic function calling internally
-  // when functionReference is provided in the tool declaration.
-  const result = await session.sendMessage(userText)
+  let result: GenerateContentResult = await session.sendMessage(userText)
+
+  // Handle function calls manually (loop until Gemini returns a text response)
+  for (let i = 0; i < 5; i++) {
+    const calls = result.response.functionCalls()
+    if (!calls || calls.length === 0) break
+
+    const parts: FunctionResponsePart[] = calls.map((call) => ({
+      functionResponse: {
+        name: call.name,
+        response: (call.name === 'get_recipe_details'
+          ? handleGetRecipeDetails(call.args as Record<string, unknown>)
+          : { error: `Unknown function: ${call.name}` }) as object,
+      },
+    }))
+
+    result = await session.sendMessage(parts)
+  }
+
   const text = result.response.text()
   return parseBlocks(text)
 }
