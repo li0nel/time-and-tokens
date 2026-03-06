@@ -68,6 +68,54 @@ const MOCK_COOK_STEPS_RESPONSE = JSON.stringify({
   ],
 })
 
+const MOCK_INGREDIENTS_RESPONSE = JSON.stringify({
+  candidates: [
+    {
+      content: {
+        role: 'model',
+        parts: [
+          {
+            text: '{ "blocks": [{ "type": "ingredients", "recipeTitle": "Pasta Carbonara", "servings": 2, "ingredients": [{ "name": "Spaghetti", "amount": "200", "unit": "g" }, { "name": "Pancetta", "amount": "100", "unit": "g" }, { "name": "Eggs", "amount": "2", "unit": "" }, { "name": "Pecorino Romano", "amount": "50", "unit": "g", "note": "finely grated" }] }, { "type": "quick_replies", "replies": ["Start cooking", "Add to shopping list"] }] }',
+          },
+        ],
+      },
+      finishReason: 'STOP',
+    },
+  ],
+})
+
+const MOCK_RECIPE_CAROUSEL_RESPONSE = JSON.stringify({
+  candidates: [
+    {
+      content: {
+        role: 'model',
+        parts: [
+          {
+            text: '{ "blocks": [{ "type": "recipe_carousel", "items": [{ "recipeId": "recipe-001", "title": "Spaghetti Carbonara", "cookTime": "20min", "servings": 2, "difficulty": "medium", "cuisine": "Italian" }, { "recipeId": "recipe-002", "title": "Chicken Tikka Masala", "cookTime": "45min", "servings": 4, "difficulty": "medium", "cuisine": "Indian" }, { "recipeId": "recipe-003", "title": "Greek Salad", "cookTime": "10min", "servings": 2, "difficulty": "easy", "cuisine": "Greek" }] }, { "type": "quick_replies", "replies": ["Show me the first one", "Something vegetarian"] }] }',
+          },
+        ],
+      },
+      finishReason: 'STOP',
+    },
+  ],
+})
+
+const MOCK_RESCUE_RESPONSE = JSON.stringify({
+  candidates: [
+    {
+      content: {
+        role: 'model',
+        parts: [
+          {
+            text: '{ "blocks": [{ "type": "rescue", "header": "Don\'t worry! Here\'s how to fix it.", "steps": [{ "stepNumber": 1, "instruction": "Remove the pan from heat immediately." }, { "stepNumber": 2, "instruction": "Add a splash of cold water to stop the cooking." }, { "stepNumber": 3, "instruction": "Stir gently to redistribute heat." }], "tip": "Lower your heat setting next time to prevent burning." }] }',
+          },
+        ],
+      },
+      finishReason: 'STOP',
+    },
+  ],
+})
+
 /** Set up Gemini API mock. The handler picks the response based on the request body. */
 async function mockGemini(page: Page) {
   await page.route(GEMINI_URL_PATTERN, async (route) => {
@@ -78,6 +126,12 @@ async function mockGemini(page: Page) {
     // history contains earlier keywords like "carbonara" or "spaghetti".
     if (requestBody.includes('Start cooking')) {
       responseBody = MOCK_COOK_STEPS_RESPONSE
+    } else if (requestBody.includes('show ingredients')) {
+      responseBody = MOCK_INGREDIENTS_RESPONSE
+    } else if (requestBody.includes('suggest recipes carousel')) {
+      responseBody = MOCK_RECIPE_CAROUSEL_RESPONSE
+    } else if (requestBody.includes('rescue help')) {
+      responseBody = MOCK_RESCUE_RESPONSE
     } else if (
       requestBody.includes('recipe card') ||
       requestBody.includes('carbonara') ||
@@ -316,5 +370,152 @@ test.describe('Chat screen — authenticated', () => {
       '[data-testid="cook-steps"], [testid="cook-steps"]'
     )
     await expect(cookSteps.first()).toBeVisible({ timeout: 15000 })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Widget block type tests
+  // ---------------------------------------------------------------------------
+
+  test('ingredients block renders with checkboxes and serve scaler', async ({
+    page,
+  }) => {
+    await mockGemini(page)
+    await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
+
+    // Trigger an ingredients block response.
+    const chatInput = page.locator(
+      '[data-testid="chat-input"], [testid="chat-input"]'
+    )
+    await chatInput.fill('show ingredients for carbonara')
+
+    const sendButton = page.locator(
+      '[data-testid="send-button"], [testid="send-button"]'
+    )
+    await sendButton.click()
+
+    // Assert the ingredients-list widget is visible.
+    const ingredientsList = page.locator(
+      '[data-testid="ingredients-list"], [testid="ingredients-list"]'
+    )
+    await expect(ingredientsList.first()).toBeVisible({ timeout: 15000 })
+
+    // Assert the serve scaler decrement button (-) is visible.
+    const decrementButton = page.locator(
+      '[data-testid="btn-decrement-servings"], [testid="btn-decrement-servings"]'
+    )
+    await expect(decrementButton.first()).toBeVisible({ timeout: 5000 })
+
+    // Assert the serve scaler increment button (+) is visible.
+    const incrementButton = page.locator(
+      '[data-testid="btn-increment-servings"], [testid="btn-increment-servings"]'
+    )
+    await expect(incrementButton.first()).toBeVisible({ timeout: 5000 })
+
+    // Assert at least one ingredient row (checkbox) is rendered.
+    const firstIngredientRow = page.locator(
+      '[data-testid="ingredient-row-0"], [testid="ingredient-row-0"]'
+    )
+    await expect(firstIngredientRow.first()).toBeVisible({ timeout: 5000 })
+  })
+
+  test('cook steps block renders with Previous and Next nav buttons', async ({
+    page,
+  }) => {
+    await mockGemini(page)
+    await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
+
+    // First get a recipe card, then tap Start Cooking to get cook steps.
+    const chatInput = page.locator(
+      '[data-testid="chat-input"], [testid="chat-input"]'
+    )
+    await chatInput.fill('Show me a recipe card for spaghetti carbonara')
+
+    const sendButton = page.locator(
+      '[data-testid="send-button"], [testid="send-button"]'
+    )
+    await sendButton.click()
+
+    // Wait for the recipe card.
+    const recipeCard = page.locator(
+      '[data-testid="recipe-card"], [testid="recipe-card"]'
+    )
+    await expect(recipeCard.first()).toBeVisible({ timeout: 15000 })
+
+    // Tap 'Start Cooking' to trigger cook_steps response.
+    const startCookingButton = page.getByText('Start Cooking')
+    await startCookingButton.first().click()
+
+    // Assert the cook-steps widget is visible.
+    const cookSteps = page.locator(
+      '[data-testid="cook-steps"], [testid="cook-steps"]'
+    )
+    await expect(cookSteps.first()).toBeVisible({ timeout: 15000 })
+
+    // Assert Previous navigation button is visible.
+    const prevButton = page.getByRole('button', { name: /previous step/i })
+    await expect(prevButton.first()).toBeVisible({ timeout: 5000 })
+
+    // Assert Next navigation button is visible.
+    const nextButton = page.getByRole('button', { name: /next step/i })
+    await expect(nextButton.first()).toBeVisible({ timeout: 5000 })
+  })
+
+  test('recipe carousel block renders with horizontally scrollable cards', async ({
+    page,
+  }) => {
+    await mockGemini(page)
+    await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
+
+    // Trigger a recipe carousel response.
+    const chatInput = page.locator(
+      '[data-testid="chat-input"], [testid="chat-input"]'
+    )
+    await chatInput.fill('suggest recipes carousel for dinner tonight')
+
+    const sendButton = page.locator(
+      '[data-testid="send-button"], [testid="send-button"]'
+    )
+    await sendButton.click()
+
+    // Assert the recipe-carousel container is visible.
+    const carousel = page.locator(
+      '[data-testid="recipe-carousel"], [testid="recipe-carousel"]'
+    )
+    await expect(carousel.first()).toBeVisible({ timeout: 15000 })
+
+    // Assert at least one carousel card is visible (recipe-001 from mock).
+    const firstCard = page.locator(
+      '[data-testid="carousel-card-recipe-001"], [testid="carousel-card-recipe-001"]'
+    )
+    await expect(firstCard.first()).toBeVisible({ timeout: 5000 })
+  })
+
+  test('rescue block renders with numbered recovery steps', async ({
+    page,
+  }) => {
+    await mockGemini(page)
+    await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
+
+    // Trigger a rescue block response.
+    const chatInput = page.locator(
+      '[data-testid="chat-input"], [testid="chat-input"]'
+    )
+    await chatInput.fill('rescue help my sauce is burning')
+
+    const sendButton = page.locator(
+      '[data-testid="send-button"], [testid="send-button"]'
+    )
+    await sendButton.click()
+
+    // Assert the rescue-widget container is visible.
+    const rescueWidget = page.locator(
+      '[data-testid="rescue-widget"], [testid="rescue-widget"]'
+    )
+    await expect(rescueWidget.first()).toBeVisible({ timeout: 15000 })
+
+    // Assert the header text from the mock response is shown.
+    await expect(page.getByText(/Don't worry/i).first()).toBeVisible({
+      timeout: 5000,
+    })
   })
 })
