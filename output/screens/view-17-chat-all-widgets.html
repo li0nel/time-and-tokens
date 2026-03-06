@@ -562,5 +562,12 @@
   </div>
 
 </div>
+<script>
+  if (location.search.includes('gallery')) {
+    var s = document.createElement('style');
+    s.textContent = '.input-bar-wrap{display:none!important}.chat-feed{padding-bottom:20px!important}';
+    document.head.appendChild(s);
+  }
+</script>
 </body>
 </html>
