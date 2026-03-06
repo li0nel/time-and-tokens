@@ -1,3 +1,85 @@
+// Mock react-native-reanimated with a lightweight inline mock that avoids
+// native worklets initialization errors in Jest.
+jest.mock('react-native-reanimated', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const React = require('react') as typeof import('react')
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native') as typeof import('react-native')
+
+  const NOOP = () => {}
+  const ID = <T>(t: T): T => t
+
+  return {
+    __esModule: true,
+    default: {
+      View,
+      Text: View,
+      Image: View,
+      ScrollView: View,
+      FlatList: View,
+    },
+    // Animated View that just renders as a regular View in tests
+    View,
+    Text: View,
+    Image: View,
+    ScrollView: View,
+    FlatList: View,
+    // Hooks — return stable no-op values
+    useSharedValue: (initial: unknown) => ({ value: initial }),
+    useAnimatedStyle: (factory: () => object) => {
+      try {
+        return factory()
+      } catch {
+        return {}
+      }
+    },
+    useAnimatedRef: () => React.createRef(),
+    useAnimatedScrollHandler: () => NOOP,
+    useAnimatedGestureHandler: () => NOOP,
+    useAnimatedReaction: NOOP,
+    useDerivedValue: (factory: () => unknown) => ({ value: factory() }),
+    useAnimatedProps: ID,
+    // Animation creators — just call the callback immediately with value
+    withTiming: (toValue: unknown, _config?: unknown, callback?: ((finished: boolean) => void) | null) => {
+      callback?.(true)
+      return toValue
+    },
+    withSpring: (toValue: unknown, _config?: unknown, callback?: ((finished: boolean) => void) | null) => {
+      callback?.(true)
+      return toValue
+    },
+    withRepeat: (animation: unknown) => animation,
+    withSequence: (...animations: unknown[]) => animations[animations.length - 1],
+    withDelay: (_delay: unknown, animation: unknown) => animation,
+    withDecay: (config: { velocity: unknown }) => config.velocity,
+    cancelAnimation: NOOP,
+    runOnJS: (fn: (...args: unknown[]) => unknown) => fn,
+    runOnUI: (fn: (...args: unknown[]) => unknown) => fn,
+    interpolate: (_value: unknown, _range: unknown, _outputRange: unknown[]) => _outputRange[0],
+    Extrapolation: { CLAMP: 'clamp', EXTEND: 'extend', IDENTITY: 'identity' },
+    Easing: {
+      linear: ID,
+      ease: ID,
+      quad: ID,
+      cubic: ID,
+      bezier: () => ID,
+      in: ID,
+      out: ID,
+      inOut: ID,
+    },
+    // Animated component factory — wraps in React.forwardRef
+    createAnimatedComponent: (Component: React.ComponentType) => React.forwardRef((props: object, ref) =>
+      React.createElement(Component, { ...props, ref } as React.ComponentPropsWithRef<typeof Component>)
+    ),
+    FadeIn: {},
+    FadeOut: {},
+    SlideInRight: {},
+    SlideOutRight: {},
+    ReduceMotion: { Never: 'never', Always: 'always', System: 'system' },
+    setUpTests: NOOP,
+  }
+})
+
 // Mock @react-native-async-storage/async-storage
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(() => Promise.resolve(null)),
