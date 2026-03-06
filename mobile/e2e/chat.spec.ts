@@ -25,7 +25,11 @@ const MOCK_TEXT_RESPONSE = JSON.stringify({
     {
       content: {
         role: 'model',
-        parts: [{ text: '{ "blocks": [{ "type": "text", "content": "Here is a great pasta dish for you!" }, { "type": "quick_replies", "replies": ["Show recipe card", "Give me ingredients"] }] }' }],
+        parts: [
+          {
+            text: '{ "blocks": [{ "type": "text", "content": "Here is a great pasta dish for you!" }, { "type": "quick_replies", "replies": ["Show recipe card", "Give me ingredients"] }] }',
+          },
+        ],
       },
       finishReason: 'STOP',
     },
@@ -74,7 +78,11 @@ async function mockGemini(page: Page) {
     // history contains earlier keywords like "carbonara" or "spaghetti".
     if (requestBody.includes('Start cooking')) {
       responseBody = MOCK_COOK_STEPS_RESPONSE
-    } else if (requestBody.includes('recipe card') || requestBody.includes('carbonara') || requestBody.includes('spaghetti')) {
+    } else if (
+      requestBody.includes('recipe card') ||
+      requestBody.includes('carbonara') ||
+      requestBody.includes('spaghetti')
+    ) {
       responseBody = MOCK_RECIPE_CARD_RESPONSE
     }
 
@@ -90,15 +98,11 @@ async function mockGemini(page: Page) {
 // Helper: sign in with email/password via the UI
 // ---------------------------------------------------------------------------
 
-async function signIn(
-  page: Page,
-  email: string,
-  password: string,
-) {
+async function signIn(page: Page, email: string, password: string) {
   await page.goto('/')
 
   const emailInput = page.locator(
-    '[data-testid="email-input"], [testid="email-input"]',
+    '[data-testid="email-input"], [testid="email-input"]'
   )
   await expect(emailInput).toBeVisible({ timeout: 10000 })
 
@@ -112,7 +116,7 @@ async function signIn(
 
   // Wait for navigation to the chat screen (chat input appears).
   await expect(
-    page.locator('[data-testid="chat-input"], [testid="chat-input"]'),
+    page.locator('[data-testid="chat-input"], [testid="chat-input"]')
   ).toBeVisible({ timeout: 15000 })
 }
 
@@ -126,7 +130,7 @@ test.describe('Chat screen — unauthenticated', () => {
 
     // Should redirect away from chat to sign-in.
     await expect(
-      page.locator('[data-testid="email-input"], [testid="email-input"]'),
+      page.locator('[data-testid="email-input"], [testid="email-input"]')
     ).toBeVisible({ timeout: 10000 })
   })
 })
@@ -150,7 +154,7 @@ test.describe('Chat screen — authenticated', () => {
 
     // The chat input text field should be visible.
     const chatInput = page.locator(
-      '[data-testid="chat-input"], [testid="chat-input"]',
+      '[data-testid="chat-input"], [testid="chat-input"]'
     )
     await expect(chatInput).toBeVisible({ timeout: 10000 })
   })
@@ -161,19 +165,19 @@ test.describe('Chat screen — authenticated', () => {
 
     // Type a cooking question.
     const chatInput = page.locator(
-      '[data-testid="chat-input"], [testid="chat-input"]',
+      '[data-testid="chat-input"], [testid="chat-input"]'
     )
     await chatInput.fill('Suggest a quick pasta recipe')
 
     // Send the message.
     const sendButton = page.locator(
-      '[data-testid="send-button"], [testid="send-button"]',
+      '[data-testid="send-button"], [testid="send-button"]'
     )
     await sendButton.click()
 
     // Wait for the AI response to appear in the chat feed.
     const assistantMessage = page.locator(
-      '[data-testid="assistant-message"], [testid="assistant-message"]',
+      '[data-testid="assistant-message"], [testid="assistant-message"]'
     )
     await expect(assistantMessage.first()).toBeVisible({ timeout: 15000 })
   })
@@ -184,18 +188,18 @@ test.describe('Chat screen — authenticated', () => {
 
     // Ask for a specific recipe card response.
     const chatInput = page.locator(
-      '[data-testid="chat-input"], [testid="chat-input"]',
+      '[data-testid="chat-input"], [testid="chat-input"]'
     )
     await chatInput.fill('Show me a recipe card for spaghetti carbonara')
 
     const sendButton = page.locator(
-      '[data-testid="send-button"], [testid="send-button"]',
+      '[data-testid="send-button"], [testid="send-button"]'
     )
     await sendButton.click()
 
     // Wait for a recipe card to appear.
     const recipeCard = page.locator(
-      '[data-testid="recipe-card"], [testid="recipe-card"]',
+      '[data-testid="recipe-card"], [testid="recipe-card"]'
     )
     await expect(recipeCard.first()).toBeVisible({ timeout: 15000 })
 
@@ -204,24 +208,50 @@ test.describe('Chat screen — authenticated', () => {
     await expect(startCookingButton.first()).toBeVisible({ timeout: 5000 })
   })
 
+  test('AI response contains no error blocks', async ({ page }) => {
+    await mockGemini(page)
+    await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
+
+    // Send a generic message.
+    const chatInput = page.locator(
+      '[data-testid="chat-input"], [testid="chat-input"]'
+    )
+    await chatInput.fill('Hello')
+
+    const sendButton = page.locator(
+      '[data-testid="send-button"], [testid="send-button"]'
+    )
+    await sendButton.click()
+
+    // Wait for the AI response to appear.
+    const assistantMessage = page.locator(
+      '[data-testid="assistant-message"], [testid="assistant-message"]'
+    )
+    await expect(assistantMessage.first()).toBeVisible({ timeout: 15000 })
+
+    // Assert that no error block text is visible in the page.
+    await expect(page.getByText(/encountered an error/i)).not.toBeVisible()
+    await expect(page.getByText(/^Sorry/i)).not.toBeVisible()
+  })
+
   test('tapping Start Cooking sends a cook steps request', async ({ page }) => {
     await mockGemini(page)
     await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
 
     // First get a recipe card.
     const chatInput = page.locator(
-      '[data-testid="chat-input"], [testid="chat-input"]',
+      '[data-testid="chat-input"], [testid="chat-input"]'
     )
     await chatInput.fill('Show me a recipe card for spaghetti carbonara')
 
     const sendButton = page.locator(
-      '[data-testid="send-button"], [testid="send-button"]',
+      '[data-testid="send-button"], [testid="send-button"]'
     )
     await sendButton.click()
 
     // Wait for the recipe card.
     const recipeCard = page.locator(
-      '[data-testid="recipe-card"], [testid="recipe-card"]',
+      '[data-testid="recipe-card"], [testid="recipe-card"]'
     )
     await expect(recipeCard.first()).toBeVisible({ timeout: 15000 })
 
@@ -232,7 +262,7 @@ test.describe('Chat screen — authenticated', () => {
 
     // Expect a cook steps widget to appear in the chat.
     const cookSteps = page.locator(
-      '[data-testid="cook-steps"], [testid="cook-steps"]',
+      '[data-testid="cook-steps"], [testid="cook-steps"]'
     )
     await expect(cookSteps.first()).toBeVisible({ timeout: 15000 })
   })
