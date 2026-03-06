@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mise — Mise — The Chef in Your Pocket</title>
+  <title>Mise — AI that thinks in recipes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
   <style>
@@ -114,39 +114,41 @@
     }
     .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: #FAFAF8; }
 
-    .hero-gallery {
-      display: flex; gap: 20px; justify-content: center; align-items: flex-start;
-      position: relative; z-index: 1; max-width: 1400px; margin: 0 auto;
-    }
-    .hero-gallery-item { flex-shrink: 0; }
-    .gallery-phone {
-      width: 252px; height: 526px;
-      background: #1a1a19; border-radius: 40px; padding: 11px 11px;
+    .big-phone-wrap { position: relative; z-index: 1; }
+    .phone {
+      width: 310px; height: 640px;
+      background: #1a1a19; border-radius: 50px; padding: 16px 13px;
       box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.10),
-        0 0 0 1px rgba(0,0,0,0.7),
-        0 30px 60px rgba(0,0,0,0.5),
-        0 0 50px rgba(200,72,28,0.08);
+        inset 0 0 0 1px rgba(255,255,255,0.12),
+        0 0 0 1px rgba(0,0,0,0.8),
+        0 60px 120px rgba(0,0,0,0.6),
+        0 0 80px rgba(200,72,28,0.12);
       position: relative;
     }
-    .gallery-screen {
-      width: 230px; height: 504px; border-radius: 30px; overflow: hidden;
+    .phone::before {
+      content: ''; position: absolute;
+      right: -2.5px; top: 140px; width: 2.5px; height: 70px;
+      background: #252422; border-radius: 0 2px 2px 0;
+    }
+    .phone::after {
+      content: ''; position: absolute;
+      left: -2.5px; top: 120px; width: 2.5px; height: 38px;
+      background: #252422; border-radius: 2px 0 0 2px;
+      box-shadow: 0 56px 0 #252422;
+    }
+    .phone-screen {
+      width: 284px; height: 608px; border-radius: 36px; overflow: hidden;
       background: #FAFAF8; position: relative;
     }
-    .gallery-island {
-      position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
-      width: 75px; height: 21px; background: #1a1a19; border-radius: 11px;
+    .island {
+      position: absolute; top: 13px; left: 50%; transform: translateX(-50%);
+      width: 88px; height: 24px; background: #1a1a19; border-radius: 12px;
       z-index: 20; pointer-events: none;
     }
-    .gallery-screen iframe {
-      width: 390px; height: 3600px; border: none;
-      transform-origin: top left;
+    .phone-screen iframe {
+      width: 390px; height: 844px; border: none;
+      transform: scale(0.7282); transform-origin: top left;
       pointer-events: none; display: block;
-    }
-    .gallery-caption {
-      text-align: center; margin-top: 14px;
-      font-size: 11px; color: rgba(250,250,248,0.28); font-weight: 500;
-      letter-spacing: 0.2px;
     }
 
     .features { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
@@ -162,6 +164,39 @@
     .card-title { font-size: 19px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; line-height: 1.25; }
     .card-text { font-size: 14px; color: rgba(250,250,248,0.4); line-height: 1.6; }
 
+    .five-section { padding: 0 48px 80px; max-width: 1200px; margin: 0 auto; }
+    .five-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: rgba(250,250,248,0.22);
+      margin-bottom: 36px; text-align: center;
+    }
+    .five { display: flex; gap: 18px; justify-content: center; align-items: flex-start; }
+    .five-phone {
+      width: 172px; height: 358px;
+      background: #1a1a19; border-radius: 27px; padding: 9px 8px;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.09),
+        0 0 0 1px rgba(0,0,0,0.7),
+        0 20px 40px rgba(0,0,0,0.5);
+      position: relative; flex-shrink: 0;
+    }
+    .five-screen {
+      width: 156px; height: 340px; border-radius: 19px; overflow: hidden; background: #FAFAF8; position: relative;
+    }
+    .five-island {
+      position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+      width: 52px; height: 14px; background: #1a1a19; border-radius: 7px;
+      z-index: 20; pointer-events: none;
+    }
+    .five-screen iframe {
+      width: 390px; height: 844px; border: none;
+      transform: scale(0.4); transform-origin: top left;
+      pointer-events: none; display: block;
+    }
+    .five-caption { text-align: center; margin-top: 12px; font-size: 11px; color: rgba(250,250,248,0.25); font-weight: 500; }
+    .five .five-item:nth-child(3) .five-phone { transform: translateY(-16px); }
+    .five .five-item:nth-child(2) .five-phone { transform: translateY(-8px); }
+    .five .five-item:nth-child(4) .five-phone { transform: translateY(-8px); }
 
     footer {
       padding: 32px 48px; display: flex; justify-content: space-between; align-items: center;
@@ -182,7 +217,7 @@
         iOS
       </a>
       <a href="#" class="btn-store android">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zm-11.046 0c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zM17.928 9.52l1.666-2.877a.344.344 0 00-.125-.47.347.347 0 00-.47.125l-1.687 2.917C15.98 8.4 14.1 8.003 12 8.003c-2.1 0-3.98.397-5.312 1.212L5.001 6.298a.347.347 0 00-.47-.125.344.344 0 00-.125.47l1.666 2.877C3.7 10.844 2.066 13.107 2 15.748h20c-.066-2.641-1.7-4.904-4.072-6.228z"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3.634v16.732c0 .969 1.044 1.575 1.879 1.087L21 12 4.879 2.547C4.044 2.059 3 2.665 3 3.634z"/></svg>
         Android
       </a>
       <a href="#" class="btn-see">See features</a>
@@ -193,63 +228,24 @@
     <p class="hero-eyebrow">AI Cooking Companion</p>
     <h1>Not a<br><span class="accent">recipe</span><br>app.</h1>
     <p class="h1-sub">A culinary education.</p>
-    <p class="sub">Mise teaches you to think like a chef — understanding technique, mastering vocabulary, and cooking with intention.</p>
+    <p class="sub">Tell Mise what you want to cook. It curates the recipe, explains the technique, and builds your understanding from the ground up.</p>
     <div class="hero-actions">
       <a href="#" class="btn-primary">
         <svg width="14" height="14" viewBox="0 0 814 1000" fill="currentColor"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-43.4-150.3-109.2C82.3 753.3 0 609.2 0 479.8 0 284.3 121 175.8 240 175.8c60.5 0 111 39.5 148.4 39.5 35.7 0 92.3-41.8 161.4-41.8 26 0 108.2 2.6 168.7 80.8zm-126.7-111.5c30.1-36.7 52-87.7 52-138.8 0-7.1-.6-14.3-1.9-20.1-49.4 1.9-108.5 33.1-143.9 75.1-26.6 30.8-52 80.5-52 132.2 0 8.4 1.3 16.9 1.9 19.5 3.2.6 8.4 1.3 13.6 1.3 43.5 0 97.9-28.7 130.3-69.2z"/></svg>
         Download for iOS
       </a>
       <a href="#" class="btn-android-hero">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zm-11.046 0c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zM17.928 9.52l1.666-2.877a.344.344 0 00-.125-.47.347.347 0 00-.47.125l-1.687 2.917C15.98 8.4 14.1 8.003 12 8.003c-2.1 0-3.98.397-5.312 1.212L5.001 6.298a.347.347 0 00-.47-.125.344.344 0 00-.125.47l1.666 2.877C3.7 10.844 2.066 13.107 2 15.748h20c-.066-2.641-1.7-4.904-4.072-6.228z"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3.634v16.732c0 .969 1.044 1.575 1.879 1.087L21 12 4.879 2.547C4.044 2.059 3 2.665 3 3.634z"/></svg>
         Download for Android
       </a>
       <a href="#" class="btn-ghost">See features</a>
     </div>
-    <div class="hero-gallery">
-      <div class="hero-gallery-item">
-        <div class="gallery-phone">
-          <div class="gallery-screen">
-            <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html?gallery=1" scrolling="no" style="transform: scale(0.59) translateY(0px); transform-origin: top left;"></iframe>
-          </div>
+    <div class="big-phone-wrap">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="island"></div>
+          <iframe src="screens/view-03-chat-recipe-card.html" scrolling="no"></iframe>
         </div>
-        <p class="gallery-caption">AI Chat</p>
-      </div>
-      <div class="hero-gallery-item">
-        <div class="gallery-phone">
-          <div class="gallery-screen">
-            <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html?gallery=1" scrolling="no" style="transform: scale(0.59) translateY(-180px); transform-origin: top left;"></iframe>
-          </div>
-        </div>
-        <p class="gallery-caption">Recipe Card</p>
-      </div>
-      <div class="hero-gallery-item">
-        <div class="gallery-phone">
-          <div class="gallery-screen">
-            <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html?gallery=1" scrolling="no" style="transform: scale(0.59) translateY(-620px); transform-origin: top left;"></iframe>
-          </div>
-        </div>
-        <p class="gallery-caption">Ingredients</p>
-      </div>
-      <div class="hero-gallery-item">
-        <div class="gallery-phone">
-          <div class="gallery-screen">
-            <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html?gallery=1" scrolling="no" style="transform: scale(0.59) translateY(-1700px); transform-origin: top left;"></iframe>
-          </div>
-        </div>
-        <p class="gallery-caption">Cook Now</p>
-      </div>
-      <div class="hero-gallery-item">
-        <div class="gallery-phone">
-          <div class="gallery-screen">
-            <div class="gallery-island"></div>
-            <iframe src="screens/view-17-chat-all-widgets.html?gallery=1" scrolling="no" style="transform: scale(0.59) translateY(-2380px); transform-origin: top left;"></iframe>
-          </div>
-        </div>
-        <p class="gallery-caption">Rescue</p>
       </div>
     </div>
   </section>
@@ -293,6 +289,56 @@
     </div>
   </section>
 
+  <section class="five-section">
+    <p class="five-label">See it in action</p>
+    <div class="five">
+      <div class="five-item">
+        <div class="five-phone">
+          <div class="five-screen">
+            <div class="five-island"></div>
+            <iframe src="screens/view-03-chat-recipe-card.html" scrolling="no"></iframe>
+          </div>
+        </div>
+        <p class="five-caption">AI Chat</p>
+      </div>
+      <div class="five-item">
+        <div class="five-phone">
+          <div class="five-screen">
+            <div class="five-island"></div>
+            <iframe src="screens/view-04-chat-recipe-carousel.html" scrolling="no"></iframe>
+          </div>
+        </div>
+        <p class="five-caption">Variations</p>
+      </div>
+      <div class="five-item">
+        <div class="five-phone">
+          <div class="five-screen">
+            <div class="five-island"></div>
+            <iframe src="screens/view-10-chat-cook-mode.html" scrolling="no"></iframe>
+          </div>
+        </div>
+        <p class="five-caption">Cook Mode</p>
+      </div>
+      <div class="five-item">
+        <div class="five-phone">
+          <div class="five-screen">
+            <div class="five-island"></div>
+            <iframe src="screens/view-37-shopping-by-recipe-2.html" scrolling="no"></iframe>
+          </div>
+        </div>
+        <p class="five-caption">Shopping</p>
+      </div>
+      <div class="five-item">
+        <div class="five-phone">
+          <div class="five-screen">
+            <div class="five-island"></div>
+            <iframe src="screens/view-52-offline-chat.html" scrolling="no"></iframe>
+          </div>
+        </div>
+        <p class="five-caption">Offline</p>
+      </div>
+    </div>
+  </section>
 
   <footer>
     <div class="footer-logo">mise<span>.</span></div>

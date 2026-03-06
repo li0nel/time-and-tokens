@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — Bento Layout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: #F5F2EC;
+      color: #1C1917;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px;
+      background: #F5F2EC;
+    }
+    .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.9px; }
+    .logo span { color: #C8481C; }
+    .nav-cta {
+      background: #1C1917; color: #FAFAF8;
+      padding: 10px 22px; border-radius: 9999px;
+      font-size: 13px; font-weight: 600;
+      transition: all 0.15s;
+    }
+    .nav-cta:hover { background: #C8481C; }
+
+    /* HERO */
+    .hero {
+      padding: 60px 40px 48px; text-align: center;
+    }
+    h1 {
+      font-size: clamp(52px, 7.5vw, 96px);
+      font-weight: 800; letter-spacing: -3.5px; line-height: 0.92;
+      margin-bottom: 20px;
+    }
+    h1 .line2 { color: #6B6360; font-weight: 300; }
+    .sub {
+      font-size: 17px; color: #6B6360;
+      max-width: 420px; margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    /* BENTO GRID */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 12px;
+      padding: 40px 40px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    /* Card sizes */
+    .card-a { grid-column: span 5; } /* hero phone card */
+    .card-b { grid-column: span 7; } /* chat description */
+    .card-c { grid-column: span 4; } /* variations */
+    .card-d { grid-column: span 4; } /* shopping */
+    .card-e { grid-column: span 4; } /* offline */
+    .card-f { grid-column: span 7; } /* cook mode */
+    .card-g { grid-column: span 5; } /* cta */
+
+    /* Card content */
+    .card-body { padding: 36px 36px; }
+    .card-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: #C8481C; margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 26px; font-weight: 800; letter-spacing: -0.8px;
+      line-height: 1.15; margin-bottom: 12px;
+    }
+    .card-text { font-size: 15px; color: #6B6360; line-height: 1.6; }
+    .card-icon { font-size: 40px; margin-bottom: 16px; }
+
+    /* PHONE IN CARD */
+    .card-phone-wrap {
+      display: flex; justify-content: center; align-items: flex-end;
+      padding: 36px 0 0;
+      height: 480px;
+      overflow: hidden;
+    }
+    .phone {
+      width: 240px; height: 500px;
+      background: #1C1917; border-radius: 38px; padding: 12px 10px;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.1),
+        0 0 0 1px rgba(0,0,0,0.3),
+        0 30px 60px rgba(28,25,23,0.22);
+      position: relative; flex-shrink: 0;
+    }
+    .phone::before {
+      content: ''; position: absolute;
+      right: -2px; top: 110px; width: 2px; height: 54px;
+      background: #2e2824; border-radius: 0 2px 2px 0;
+    }
+    .phone::after {
+      content: ''; position: absolute;
+      left: -2px; top: 94px; width: 2px; height: 32px;
+      background: #2e2824; border-radius: 2px 0 0 2px;
+      box-shadow: 0 44px 0 #2e2824;
+    }
+    .phone-screen {
+      width: 220px; height: 476px;
+      border-radius: 28px; overflow: hidden;
+      background: #FAFAF8; position: relative;
+    }
+    .island {
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+      width: 70px; height: 20px; background: #1C1917; border-radius: 10px;
+      z-index: 20; pointer-events: none;
+    }
+    .phone-screen iframe {
+      width: 390px; height: 844px; border: none;
+      transform: scale(0.5641); transform-origin: top left;
+      pointer-events: none; display: block;
+    }
+
+    /* Specific card styles */
+    .card-a {
+      background: #1C1917;
+      display: flex; flex-direction: column;
+    }
+    .card-a .card-body { padding-bottom: 0; }
+    .card-a .card-label { color: rgba(200,72,28,0.9); }
+    .card-a .card-title { color: #FAFAF8; font-size: 30px; }
+    .card-a .card-text { color: rgba(250,250,248,0.45); }
+
+    .card-b {
+      background: #FCE9E2;
+    }
+    .card-b .card-body { padding: 52px 48px; }
+    .card-b .card-title { font-size: 38px; letter-spacing: -1.5px; line-height: 1.05; }
+
+    .card-c { background: #FAFAF8; }
+    .card-d { background: #fff; }
+    .card-e { background: #1C1917; }
+    .card-e .card-label { color: rgba(200,72,28,0.9); }
+    .card-e .card-title { color: #FAFAF8; }
+    .card-e .card-text { color: rgba(250,250,248,0.5); }
+
+    .card-f {
+      background: #FAFAF8;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }
+    .card-f .card-body { padding: 48px; }
+    .card-f .card-title { font-size: 30px; }
+    .card-f-visual {
+      display: flex; justify-content: center; align-items: flex-end;
+      overflow: hidden; padding: 32px 0 0;
+    }
+
+    .card-g {
+      background: #C8481C;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 56px 40px;
+      text-align: center;
+    }
+    .card-g h3 { font-size: 36px; font-weight: 800; letter-spacing: -1.5px; color: #FAFAF8; margin-bottom: 12px; }
+    .card-g p { font-size: 15px; color: rgba(255,255,255,0.65); margin-bottom: 32px; line-height: 1.5; }
+    .card-g .dl-btn {
+      background: #FAFAF8; color: #1C1917;
+      padding: 13px 28px; border-radius: 9999px;
+      font-size: 14px; font-weight: 700; letter-spacing: -0.2px;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.15s;
+    }
+    .card-g .dl-btn:hover { background: #fff; transform: scale(1.02); }
+
+    /* FOOTER */
+    footer {
+      padding: 28px 40px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.6px; }
+    .footer-logo span { color: #C8481C; }
+    .footer-copy { font-size: 13px; color: #A8A09A; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">mise<span>.</span></div>
+    <a href="#" class="nav-cta">Download Free</a>
+  </nav>
+
+  <section class="hero">
+    <h1>Recipes.<br><span class="line2">Reimagined.</span></h1>
+    <p class="sub">An AI companion that teaches you to cook, not just follow recipes.</p>
+  </section>
+
+  <div class="bento">
+
+    <!-- CARD A: Phone + headline -->
+    <div class="card card-a">
+      <div class="card-body">
+        <div class="card-label">AI Mentor</div>
+        <div class="card-title">Think like a professional chef</div>
+        <div class="card-text">Learn culinary vocabulary, understand technique, and cook with real intention.</div>
+      </div>
+      <div class="card-phone-wrap">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <iframe src="screens/view-05-chat-ingredients-widget.html" scrolling="no"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD B: Chat feature -->
+    <div class="card card-b">
+      <div class="card-body">
+        <div class="card-icon">💬</div>
+        <div class="card-label">Chat Everything</div>
+        <div class="card-title">Do everything from one conversation.</div>
+        <div class="card-text">Brainstorm meals, ask technique questions, substitute ingredients, plan your week — all through Mise's powerful chat interface. It's your culinary mentor, always on.</div>
+      </div>
+    </div>
+
+    <!-- CARD C: Variations -->
+    <div class="card card-c">
+      <div class="card-body">
+        <div class="card-icon">🔄</div>
+        <div class="card-label">Variations</div>
+        <div class="card-title">Fast or proper — you choose.</div>
+        <div class="card-text">Mise automatically extracts every variation of a recipe and explains what changes and why.</div>
+      </div>
+    </div>
+
+    <!-- CARD D: Shopping -->
+    <div class="card card-d">
+      <div class="card-body">
+        <div class="card-icon">🛒</div>
+        <div class="card-label">Shopping List</div>
+        <div class="card-title">Ergonomic by design.</div>
+        <div class="card-text">Organized by recipe or aisle. Built for how you actually move through a store.</div>
+      </div>
+    </div>
+
+    <!-- CARD E: Offline -->
+    <div class="card card-e">
+      <div class="card-body">
+        <div class="card-icon">📶</div>
+        <div class="card-label">Offline First</div>
+        <div class="card-title">Works anywhere. Always.</div>
+        <div class="card-text">No signal? No problem. All your recipes and shopping work offline.</div>
+      </div>
+    </div>
+
+    <!-- CARD F: Cook Mode -->
+    <div class="card card-f">
+      <div class="card-body">
+        <div class="card-label">Cook Mode</div>
+        <div class="card-title">Step-by-step guidance in the kitchen.</div>
+        <div class="card-text">Mise's focused cook mode keeps you on track. And if something goes wrong — the sauce breaks, the chicken's overcooked — Mise helps you rescue it in real time.</div>
+      </div>
+      <div class="card-f-visual">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <iframe src="screens/view-10-chat-cook-mode.html" scrolling="no"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD G: CTA -->
+    <div class="card card-g">
+      <h3>Start cooking smarter.</h3>
+      <p>Free to download. Available now on iOS.</p>
+      <a href="#" class="dl-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        App Store
+      </a>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-logo">mise<span>.</span></div>
+    <div class="footer-copy">© 2026 Mise. The chef in your pocket.</div>
+  </footer>
+
+</body>
+</html>

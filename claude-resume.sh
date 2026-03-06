@@ -18,12 +18,14 @@ for PANE in $PANE_IDS; do
     if [ -n "$RAW_OUTPUT" ]; then
         log "Usage limit detected in pane $PANE"
         PAUSED_PANES="$PAUSED_PANES $PANE"
-        
+
         # Grab the reset time from the first blocked pane we find (they will all be the same)
         if [ -z "$RESET_TIME" ]; then
             RESET_TIME=$(echo "$RAW_OUTPUT" | grep -oE '[0-9]+(:[0-9]+)?[apm]+')
             AGENT_TZ=$(echo "$RAW_OUTPUT" | grep -oE '\([^)]+\)' | tr -d '()')
         fi
+    else
+        log "Pane $PANE: no usage limit detected"
     fi
 done
 
