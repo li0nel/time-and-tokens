@@ -1,10 +1,15 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Pressable, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { router } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
 import ChatFeed from '../../components/chat/ChatFeed'
 import ChatInput from '../../components/chat/ChatInput'
 import ThinkingIndicator from '../../components/chat/ThinkingIndicator'
+import ToolCallStatusIndicator from '../../components/chat/ToolCallStatusIndicator'
 import { useChat } from '../../hooks/useChat'
+import { loadShoppingList } from '../../services/shopping'
+import type { ShoppingList } from '../../types/shopping'
 
 function EmptyState() {
   return (
@@ -25,7 +30,30 @@ function EmptyState() {
 }
 
 export default function ChatScreen() {
-  const { messages, isThinking, sendMessage, handleAction } = useChat()
+  const { messages, isThinking, toolCallStatus, sendMessage, handleAction } =
+    useChat()
+  const [cartCount, setCartCount] = useState(0)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function fetchCartCount() {
+      const list: ShoppingList = await loadShoppingList()
+      if (!cancelled) {
+        setCartCount(list.length)
+      }
+    }
+
+    void fetchCartCount()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  function handleCartPress() {
+    router.push('/(tabs)/shopping')
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-bg" edges={['top', 'left', 'right']}>
@@ -34,6 +62,18 @@ export default function ChatScreen() {
         <Text className="text-2xl font-black tracking-tighter text-text">
           mise<Text className="text-brand">.</Text>
         </Text>
+        <Pressable onPress={handleCartPress} className="p-1">
+          <View className="relative">
+            <Ionicons name="cart-outline" size={24} color="#1C1917" />
+            {cartCount > 0 && (
+              <View className="absolute -top-1 -right-1 bg-brand rounded-full min-w-[16px] h-4 items-center justify-center px-0.5">
+                <Text className="text-text-inv text-2xs font-semibold leading-tight">
+                  {cartCount > 99 ? '99+' : String(cartCount)}
+                </Text>
+              </View>
+            )}
+          </View>
+        </Pressable>
       </View>
 
       <View className="flex-1">
@@ -43,6 +83,9 @@ export default function ChatScreen() {
           <ChatFeed messages={messages} onAction={handleAction} />
         )}
         <ThinkingIndicator visible={isThinking} />
+        {isThinking && toolCallStatus !== null && (
+          <ToolCallStatusIndicator status={toolCallStatus} />
+        )}
         <ChatInput onSend={sendMessage} disabled={isThinking} />
       </View>
     </SafeAreaView>

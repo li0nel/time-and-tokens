@@ -20,6 +20,8 @@ import {
 export interface UseChatReturn {
   messages: ChatMessage[]
   isThinking: boolean
+  /** Non-null while an AI function call is in progress. */
+  toolCallStatus: string | null
   sendMessage: (text: string) => void
   handleAction: (text: string) => void
 }
@@ -45,6 +47,7 @@ export interface UseChatReturn {
 export function useChat(): UseChatReturn {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isThinking, setIsThinking] = useState(false)
+  const [toolCallStatus, setToolCallStatus] = useState<string | null>(null)
 
   const sessionRef = useRef<ChatSession | null>(null)
 
@@ -74,6 +77,7 @@ export function useChat(): UseChatReturn {
     // Optimistic update
     setMessages((prev) => [...prev, userMsg])
     setIsThinking(true)
+    setToolCallStatus('Looking up recipe details...')
 
     try {
       if (!sessionRef.current) {
@@ -109,6 +113,7 @@ export function useChat(): UseChatReturn {
       })
     } finally {
       setIsThinking(false)
+      setToolCallStatus(null)
     }
   }, [])
 
@@ -116,15 +121,15 @@ export function useChat(): UseChatReturn {
     (text: string) => {
       void dispatchMessage(text)
     },
-    [dispatchMessage],
+    [dispatchMessage]
   )
 
   const handleAction = useCallback(
     (text: string) => {
       void dispatchMessage(text)
     },
-    [dispatchMessage],
+    [dispatchMessage]
   )
 
-  return { messages, isThinking, sendMessage, handleAction }
+  return { messages, isThinking, toolCallStatus, sendMessage, handleAction }
 }

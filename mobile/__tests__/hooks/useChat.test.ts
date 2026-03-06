@@ -72,6 +72,16 @@ describe('useChat — initial state', () => {
     expect(result.current.isThinking).toBe(false)
   })
 
+  it('starts with toolCallStatus=null', async () => {
+    const { result } = renderHook(() => useChat())
+
+    await waitFor(() => {
+      expect(mockCreateChatSession).toHaveBeenCalled()
+    })
+
+    expect(result.current.toolCallStatus).toBeNull()
+  })
+
   it('loads today history on mount', async () => {
     const storedMessages: ChatMessage[] = [
       {
@@ -113,7 +123,7 @@ describe('useChat — sendMessage', () => {
       () =>
         new Promise<Block[]>((resolve) => {
           resolveAI = resolve
-        }),
+        })
     )
 
     const { result } = renderHook(() => useChat())
@@ -150,7 +160,7 @@ describe('useChat — sendMessage', () => {
       () =>
         new Promise<Block[]>((resolve) => {
           resolveAI = resolve
-        }),
+        })
     )
 
     const { result } = renderHook(() => useChat())
@@ -173,6 +183,56 @@ describe('useChat — sendMessage', () => {
 
     await waitFor(() => {
       expect(result.current.isThinking).toBe(false)
+    })
+  })
+
+  it('sets toolCallStatus while waiting for AI, then null after', async () => {
+    let resolveAI!: (blocks: Block[]) => void
+    mockSendChatMessage.mockImplementation(
+      () =>
+        new Promise<Block[]>((resolve) => {
+          resolveAI = resolve
+        })
+    )
+
+    const { result } = renderHook(() => useChat())
+
+    await waitFor(() => {
+      expect(mockCreateChatSession).toHaveBeenCalled()
+    })
+
+    act(() => {
+      result.current.sendMessage('Hello')
+    })
+
+    await waitFor(() => {
+      expect(result.current.toolCallStatus).not.toBeNull()
+    })
+
+    act(() => {
+      resolveAI([{ type: 'text', data: { content: 'Hi there!' } }])
+    })
+
+    await waitFor(() => {
+      expect(result.current.toolCallStatus).toBeNull()
+    })
+  })
+
+  it('clears toolCallStatus=null even after AI failure', async () => {
+    mockSendChatMessage.mockRejectedValue(new Error('Timeout'))
+
+    const { result } = renderHook(() => useChat())
+
+    await waitFor(() => {
+      expect(mockCreateChatSession).toHaveBeenCalled()
+    })
+
+    act(() => {
+      result.current.sendMessage('Fail please')
+    })
+
+    await waitFor(() => {
+      expect(result.current.toolCallStatus).toBeNull()
     })
   })
 
@@ -222,7 +282,8 @@ describe('useChat — sendMessage', () => {
       expect(mockSaveTodayHistory).toHaveBeenCalled()
     })
 
-    const savedMessages = mockSaveTodayHistory.mock.calls[0]?.[0] as ChatMessage[]
+    const savedMessages = mockSaveTodayHistory.mock
+      .calls[0]?.[0] as ChatMessage[]
     expect(savedMessages).toHaveLength(2)
   })
 
