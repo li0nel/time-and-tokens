@@ -1,0 +1,283 @@
+#!/bin/bash
+set -euo pipefail
+
+# ─── Constants ───────────────────────────────────────────────────────────────
+VERSION="1.0.0"
+DEFAULT_INTERVAL=600
+BUFFER_SEC=120
+NUDGE_TEXT="continue"
+
+# ─── Colors ──────────────────────────────────────────────────────────────────
+if [[ -t 1 ]]; then
+    BOLD="\033[1m"
+    DIM="\033[2m"
+    GREEN="\033[32m"
+    YELLOW="\033[33m"
+    RED="\033[31m"
+    CYAN="\033[36m"
+    RESET="\033[0m"
+else
+    BOLD="" DIM="" GREEN="" YELLOW="" RED="" CYAN="" RESET=""
+fi
+
+# ─── Helpers ─────────────────────────────────────────────────────────────────
+log()  { echo -e "${DIM}[$(date '+%H:%M:%S')]${RESET} $1"; }
+info() { log "${GREEN}▸${RESET} $1"; }
+warn() { log "${YELLOW}▸${RESET} $1"; }
+err()  { log "${RED}▸${RESET} $1"; }
+
+usage() {
+    cat <<EOF
+${BOLD}claude-nudge${RESET} v${VERSION} — auto-resume blocked Claude Code agents in tmux
+
+${BOLD}USAGE${RESET}
+    claude-nudge [OPTIONS] [SESSION]
+
+${BOLD}ARGUMENTS${RESET}
+    SESSION              tmux session name (interactive picker if omitted)
+
+${BOLD}OPTIONS${RESET}
+    -i, --interval SEC   polling interval in seconds (default: ${DEFAULT_INTERVAL})
+    -1, --once           run a single check then exit
+    -h, --help           show this help
+    -v, --version        show version
+
+${BOLD}EXAMPLES${RESET}
+    claude-nudge                     # pick session interactively, poll every 10m
+    claude-nudge my_swarm            # watch "my_swarm", poll every 10m
+    claude-nudge -i 300 my_swarm     # poll every 5m
+    claude-nudge --once my_swarm     # single check, then exit
+
+${BOLD}HOW IT WORKS${RESET}
+    Scans all panes in the target tmux session for the "out of extra usage"
+    message. When found, it parses the reset time, sleeps until then (plus a
+    ${BUFFER_SEC}s buffer), and sends "continue" + Enter to wake each blocked pane.
+EOF
+}
+
+# ─── Interactive session picker ──────────────────────────────────────────────
+pick_session() {
+    local sessions
+    sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null) || {
+        err "No tmux sessions found."
+        exit 1
+    }
+
+    local count
+    count=$(echo "$sessions" | wc -l | tr -d ' ')
+
+    if [[ "$count" -eq 1 ]]; then
+        echo "$sessions"
+        return
+    fi
+
+    # Try gum first for a nice interactive picker
+    if command -v gum &>/dev/null; then
+        echo "$sessions" | gum choose --header "Select a tmux session:"
+        return
+    fi
+
+    # Fallback: numbered list with arrow-key-style navigation
+    echo -e "\n${BOLD}Select a tmux session:${RESET}\n" >&2
+    local i=1
+    local session_array=()
+    while IFS= read -r s; do
+        session_array+=("$s")
+        # Get pane count for this session
+        local panes
+        panes=$(tmux list-panes -s -t "$s" 2>/dev/null | wc -l | tr -d ' ')
+        echo -e "  ${CYAN}${i})${RESET} ${BOLD}${s}${RESET} ${DIM}(${panes} panes)${RESET}" >&2
+        ((i++))
+    done <<< "$sessions"
+    echo "" >&2
+
+    local choice
+    while true; do
+        read -rp "  Enter number [1-${#session_array[@]}]: " choice
+        if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= ${#session_array[@]} )); then
+            echo "${session_array[$((choice - 1))]}"
+            return
+        fi
+        echo -e "  ${RED}Invalid choice.${RESET}" >&2
+    done
+}
+
+# ─── Parse reset time from the usage-limit message ──────────────────────────
+# Handles formats:
+#   "1pm"           "1:30pm"
+#   "Mar 6 at 1pm"  "Mar 6 at 1:30pm"
+parse_reset_time() {
+    local raw="$1"
+    local tz="$2"
+
+    # Extract date + time components
+    local month_day="" time_part=""
+
+    # Try "Mon DD at HH:MMam/pm" or "Mon DD at HHam/pm"
+    if [[ "$raw" =~ ([A-Z][a-z]{2})[[:space:]]+([0-9]{1,2})[[:space:]]+at[[:space:]]+([0-9]{1,2}(:[0-9]{2})?[aApP][mM]) ]]; then
+        month_day="${BASH_REMATCH[1]} ${BASH_REMATCH[2]}"
+        time_part="${BASH_REMATCH[3]}"
+    # Try bare time "HH:MMam/pm" or "HHam/pm"
+    elif [[ "$raw" =~ ([0-9]{1,2}(:[0-9]{2})?[aApP][mM]) ]]; then
+        time_part="${BASH_REMATCH[1]}"
+    else
+        return 1
+    fi
+
+    # Normalize to uppercase AM/PM for date parsing
+    time_part=$(echo "$time_part" | sed 's/am/AM/;s/pm/PM/')
+
+    local target_epoch
+    if [[ -n "$month_day" ]]; then
+        # Build a full date string: "Mar 6 2026 1:30PM"
+        local year
+        year=$(date +%Y)
+        local date_str="${month_day} ${year} ${time_part}"
+        if [[ "$time_part" == *":"* ]]; then
+            target_epoch=$(TZ="$tz" date -j -f "%b %d %Y %I:%M%p" "$date_str" +%s 2>/dev/null) || return 1
+        else
+            target_epoch=$(TZ="$tz" date -j -f "%b %d %Y %I%p" "$date_str" +%s 2>/dev/null) || return 1
+        fi
+    else
+        if [[ "$time_part" == *":"* ]]; then
+            target_epoch=$(TZ="$tz" date -j -f "%I:%M%p" "$time_part" +%s 2>/dev/null) || return 1
+        else
+            target_epoch=$(TZ="$tz" date -j -f "%I%p" "$time_part" +%s 2>/dev/null) || return 1
+        fi
+    fi
+
+    local now_epoch
+    now_epoch=$(TZ="$tz" date +%s)
+
+    # If no month/day was given and the computed time is in the past, roll forward a day
+    if [[ -z "$month_day" ]] && (( target_epoch - now_epoch < -43200 )); then
+        target_epoch=$(( target_epoch + 86400 ))
+    fi
+
+    echo "$target_epoch"
+}
+
+# ─── Core: scan and nudge ────────────────────────────────────────────────────
+check_and_nudge() {
+    local session="$1"
+
+    # Verify session exists
+    if ! tmux has-session -t "$session" 2>/dev/null; then
+        err "Session ${BOLD}${session}${RESET} not found."
+        return 1
+    fi
+
+    local pane_ids
+    pane_ids=$(tmux list-panes -s -t "$session" -F "#{pane_id}")
+    local total
+    total=$(echo "$pane_ids" | wc -l | tr -d ' ')
+
+    info "Scanning ${BOLD}${total}${RESET} panes in session ${BOLD}${session}${RESET}..."
+
+    local paused_panes=""
+    local reset_time=""
+    local agent_tz=""
+    local paused_count=0
+
+    for pane in $pane_ids; do
+        local raw_output
+        raw_output=$(tmux capture-pane -p -t "$pane" | tail -n 15 | grep "out of extra usage" | tail -n 1)
+
+        if [[ -n "$raw_output" ]]; then
+            ((paused_count++))
+            warn "Pane ${BOLD}${pane}${RESET}: usage limit hit"
+            paused_panes="$paused_panes $pane"
+
+            if [[ -z "$reset_time" ]]; then
+                reset_time="$raw_output"
+                agent_tz=$(echo "$raw_output" | grep -oE '\([^)]+\)' | tr -d '()') || true
+                [[ -z "$agent_tz" ]] && agent_tz="US/Pacific"
+            fi
+        else
+            info "Pane ${BOLD}${pane}${RESET}: ok"
+        fi
+    done
+
+    if [[ -z "$paused_panes" ]]; then
+        info "All ${total} panes running. Nothing to do."
+        return 0
+    fi
+
+    warn "${paused_count}/${total} panes blocked."
+
+    # Parse and sleep until reset
+    local target_epoch
+    target_epoch=$(parse_reset_time "$reset_time" "$agent_tz") || {
+        err "Could not parse reset time from: ${reset_time}"
+        return 1
+    }
+
+    local now_epoch
+    now_epoch=$(TZ="$agent_tz" date +%s)
+    local diff=$(( target_epoch - now_epoch ))
+
+    if (( diff > 0 )); then
+        local wait_sec=$(( diff + BUFFER_SEC ))
+        local wake_time
+        wake_time=$(date -j -f "%s" $(( $(date +%s) + wait_sec )) "+%H:%M:%S" 2>/dev/null || date -d "+${wait_sec} seconds" "+%H:%M:%S" 2>/dev/null || echo "~${wait_sec}s from now")
+        info "Sleeping ${BOLD}${wait_sec}s${RESET} (wake at ~${wake_time})..."
+        sleep "$wait_sec"
+        info "Sleep complete."
+    else
+        info "Reset time already passed. Nudging now."
+    fi
+
+    # Wake all paused panes
+    for pane in $paused_panes; do
+        info "Nudging pane ${BOLD}${pane}${RESET}..."
+        tmux send-keys -t "$pane" "$NUDGE_TEXT"
+        sleep 0.1
+        tmux send-keys -t "$pane" Enter
+    done
+
+    log "${GREEN}✓${RESET} Nudged ${paused_count} panes back to life."
+}
+
+# ─── Argument parsing ────────────────────────────────────────────────────────
+INTERVAL=$DEFAULT_INTERVAL
+ONCE=false
+SESSION=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)    usage; exit 0 ;;
+        -v|--version) echo "claude-nudge v${VERSION}"; exit 0 ;;
+        -1|--once)    ONCE=true; shift ;;
+        -i|--interval)
+            [[ -z "${2:-}" ]] && { err "--interval requires a value"; exit 1; }
+            INTERVAL="$2"; shift 2 ;;
+        -*)
+            err "Unknown option: $1"; echo ""; usage; exit 1 ;;
+        *)
+            SESSION="$1"; shift ;;
+    esac
+done
+
+# ─── Main ────────────────────────────────────────────────────────────────────
+if [[ -z "$SESSION" ]]; then
+    SESSION=$(pick_session)
+fi
+
+echo ""
+log "${BOLD}claude-nudge${RESET} watching session ${BOLD}${SESSION}${RESET}"
+if $ONCE; then
+    log "Mode: ${CYAN}single check${RESET}"
+else
+    log "Mode: ${CYAN}poll every ${INTERVAL}s${RESET}  (Ctrl-C to stop)"
+fi
+echo ""
+
+if $ONCE; then
+    check_and_nudge "$SESSION"
+else
+    while true; do
+        check_and_nudge "$SESSION" || true
+        info "Next check in ${INTERVAL}s..."
+        sleep "$INTERVAL"
+    done
+fi
