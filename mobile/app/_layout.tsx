@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { useAuth } from '../hooks/useAuth'
+import { OfflineBanner } from '../components/ui/OfflineBanner'
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -31,6 +32,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <KeyboardProvider>
         <Slot />
+        <OfflineBanner />
       </KeyboardProvider>
     </SafeAreaProvider>
   )
