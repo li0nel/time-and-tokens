@@ -1,38 +1,45 @@
 /**
- * recipes.ts — Recipe data contract for the Mise app.
- *
- * The Recipe interface defines the shape of documents stored in the hardcoded
- * recipe catalogue (`data/recipes.ts` at build time). Recipes are referenced
- * by `recipeId` inside `RecipeCardBlock` and `IngredientsBlock`.
- *
- * No actual recipe data is included here — populate via a separate seed file.
+ * recipes.ts — Recipe data and catalogue helpers for the Mise app.
  */
 
-import type { Ingredient, CookStep } from '../types/blocks';
+import type { Ingredient, CookStep } from '../types/blocks'
+import { RECIPES_PART1 } from './recipes-part1'
+import { RECIPES_PART2 } from './recipes-part2'
 
 // ---------------------------------------------------------------------------
 // Recipe interface
 // ---------------------------------------------------------------------------
 
 export interface Recipe {
-  /** Stable unique identifier. Used as Firestore document ID if/when synced. */
-  id: string;
-  title: string;
-  description: string;
-  /** Remote or local image URL. */
-  imageUrl?: string;
-  /** Human-readable cook time, e.g. "45 min". */
-  cookTime: string;
-  /** Human-readable prep time, e.g. "15 min". */
-  prepTime?: string;
-  servings: number;
-  difficulty: 'easy' | 'medium' | 'hard';
-  /** Cuisine style, e.g. "French", "Thai". */
-  cuisine?: string;
-  /** Ingredient list. Metric units only. */
-  ingredients: Ingredient[];
-  /** Ordered cooking steps. */
-  steps: CookStep[];
-  /** Free-form tags for semantic search context, e.g. ["chicken", "weeknight"]. */
-  tags: string[];
+  id: string
+  title: string
+  description: string
+  imageUrl?: string
+  cookTime: string
+  prepTime?: string
+  servings: number
+  difficulty: 'easy' | 'medium' | 'hard'
+  cuisine?: string
+  ingredients: Ingredient[]
+  steps: CookStep[]
+  tags: string[]
 }
+
+// ---------------------------------------------------------------------------
+// Catalogue
+// ---------------------------------------------------------------------------
+
+const RECIPES: Recipe[] = [...RECIPES_PART1, ...RECIPES_PART2]
+
+export function getRecipeById(id: string): Recipe | undefined {
+  return RECIPES.find((r) => r.id === id)
+}
+
+export function getRecipeCatalog(): string {
+  return RECIPES.map(
+    (r) =>
+      `id: ${r.id} | title: ${r.title} | cuisine: ${r.cuisine ?? 'Various'} | difficulty: ${r.difficulty} | time: ${r.cookTime} | tags: ${r.tags.join(', ')}`
+  ).join('\n')
+}
+
+export { RECIPES }
