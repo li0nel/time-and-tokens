@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise — The Chef in Your Pocket</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: #111110;
+      color: #FAFAF8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Nav ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(17,17,16,0.92);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .logo { font-size: 21px; font-weight: 800; letter-spacing: -0.8px; }
+    .logo span { color: #C8481C; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-store {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.14);
+      color: #FAFAF8; padding: 8px 16px; border-radius: 9999px;
+      font-size: 12px; font-weight: 600;
+      transition: all 0.15s;
+    }
+    .btn-store:hover { background: rgba(255,255,255,0.16); }
+    .btn-see {
+      border: 1px solid rgba(255,255,255,0.14); color: rgba(250,250,248,0.55);
+      padding: 8px 18px; border-radius: 9999px; font-size: 12px; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .btn-see:hover { color: #FAFAF8; border-color: rgba(255,255,255,0.3); }
+
+    /* ── Hero scroll container ── */
+    .hero-scroll {
+      height: 420vh;
+      position: relative;
+    }
+
+    .hero-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 72px;
+      padding: 80px 60px 50px;
+      overflow: hidden;
+    }
+
+    /* Ambient glow */
+    .hero-sticky::before {
+      content: '';
+      position: absolute;
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(200,72,28,0.10) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* ── Left column ── */
+    .hero-left {
+      flex: 0 0 400px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: #C8481C;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(52px, 5.5vw, 80px);
+      font-weight: 800; letter-spacing: -3px; line-height: 0.92;
+      margin-bottom: 10px;
+    }
+    h1 .accent { color: #C8481C; }
+    .h1-sub {
+      font-size: clamp(30px, 3vw, 44px);
+      font-weight: 300; letter-spacing: -1.5px;
+      color: rgba(250,250,248,0.32); line-height: 1;
+      margin-bottom: 40px;
+    }
+
+    /* Chapter block — fades when chapter changes */
+    .chapter-block {
+      border-left: 2px solid rgba(200,72,28,0.4);
+      padding-left: 20px;
+      margin-bottom: 36px;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .chapter-block.fading {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    .chapter-num {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: #C8481C;
+      margin-bottom: 8px;
+    }
+    .chapter-title {
+      font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
+      margin-bottom: 8px; line-height: 1.2;
+    }
+    .chapter-desc {
+      font-size: 14px; color: rgba(250,250,248,0.42);
+      line-height: 1.65; max-width: 320px;
+    }
+
+    /* Progress dots */
+    .chapter-dots {
+      display: flex; gap: 7px; margin-bottom: 40px;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      transition: background 0.4s, transform 0.3s;
+    }
+    .dot.active {
+      background: #C8481C;
+      transform: scale(1.3);
+    }
+
+    /* Download buttons */
+    .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #C8481C; color: #FAFAF8;
+      padding: 11px 22px; border-radius: 9999px;
+      font-size: 13px; font-weight: 600;
+      transition: all 0.15s;
+    }
+    .btn-primary:hover { background: #E05520; transform: translateY(-1px); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
+      color: #FAFAF8; padding: 10px 20px; border-radius: 9999px;
+      font-size: 13px; font-weight: 600;
+      transition: all 0.15s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.12); }
+
+    /* ── Right column — phone ── */
+    .hero-right {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .phone {
+      width: 310px; height: 640px;
+      background: #1a1a19; border-radius: 50px; padding: 16px 13px;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.12),
+        0 0 0 1px rgba(0,0,0,0.8),
+        0 60px 120px rgba(0,0,0,0.65),
+        0 0 80px rgba(200,72,28,0.10);
+      position: relative;
+    }
+    /* Side buttons */
+    .phone::before {
+      content: ''; position: absolute;
+      right: -2.5px; top: 140px; width: 2.5px; height: 70px;
+      background: #252422; border-radius: 0 2px 2px 0;
+    }
+    .phone::after {
+      content: ''; position: absolute;
+      left: -2.5px; top: 120px; width: 2.5px; height: 38px;
+      background: #252422; border-radius: 2px 0 0 2px;
+      box-shadow: 0 56px 0 #252422;
+    }
+    .phone-screen {
+      width: 284px; height: 608px; border-radius: 36px;
+      overflow: hidden; background: #FAFAF8; position: relative;
+    }
+    .island {
+      position: absolute; top: 13px; left: 50%; transform: translateX(-50%);
+      width: 88px; height: 24px; background: #1a1a19; border-radius: 12px;
+      z-index: 20; pointer-events: none;
+    }
+    #phoneIframe {
+      width: 390px; height: 3600px; border: none;
+      transform: scale(0.7282) translateY(0px);
+      transform-origin: top left;
+      pointer-events: none; display: block;
+      will-change: transform;
+    }
+
+    /* Scroll cue — fades out after first scroll */
+    .scroll-cue {
+      position: absolute;
+      bottom: 32px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(250,250,248,0.25);
+      transition: opacity 0.6s;
+      pointer-events: none;
+    }
+    .scroll-cue.hidden { opacity: 0; }
+    .scroll-cue svg { animation: bounce 2s ease-in-out infinite; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    /* ── Features ── */
+    .features { max-width: 1100px; margin: 0 auto; padding: 100px 48px 80px; }
+    .features-header { text-align: center; margin-bottom: 52px; }
+    .features-header h2 { font-size: 42px; font-weight: 800; letter-spacing: -1.8px; margin-bottom: 12px; }
+    .features-header p { font-size: 16px; color: rgba(250,250,248,0.4); }
+    .grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden;
+    }
+    .card { background: #161614; padding: 36px 30px; }
+    .card-num { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #C8481C; margin-bottom: 20px; }
+    .card-title { font-size: 19px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; line-height: 1.25; }
+    .card-text { font-size: 14px; color: rgba(250,250,248,0.4); line-height: 1.6; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 32px 48px; display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .footer-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.6px; }
+    .footer-logo span { color: #C8481C; }
+    .footer-copy { font-size: 13px; color: rgba(250,250,248,0.25); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">mise<span>.</span></div>
+    <div class="nav-actions">
+      <a href="#" class="btn-store">
+        <svg width="13" height="13" viewBox="0 0 814 1000" fill="currentColor"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-43.4-150.3-109.2C82.3 753.3 0 609.2 0 479.8 0 284.3 121 175.8 240 175.8c60.5 0 111 39.5 148.4 39.5 35.7 0 92.3-41.8 161.4-41.8 26 0 108.2 2.6 168.7 80.8zm-126.7-111.5c30.1-36.7 52-87.7 52-138.8 0-7.1-.6-14.3-1.9-20.1-49.4 1.9-108.5 33.1-143.9 75.1-26.6 30.8-52 80.5-52 132.2 0 8.4 1.3 16.9 1.9 19.5 3.2.6 8.4 1.3 13.6 1.3 43.5 0 97.9-28.7 130.3-69.2z"/></svg>
+        iOS
+      </a>
+      <a href="#" class="btn-store">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zm-11.046 0c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zM17.928 9.52l1.666-2.877a.344.344 0 00-.125-.47.347.347 0 00-.47.125l-1.687 2.917C15.98 8.4 14.1 8.003 12 8.003c-2.1 0-3.98.397-5.312 1.212L5.001 6.298a.347.347 0 00-.47-.125.344.344 0 00-.125.47l1.666 2.877C3.7 10.844 2.066 13.107 2 15.748h20c-.066-2.641-1.7-4.904-4.072-6.228z"/></svg>
+        Android
+      </a>
+      <a href="#" class="btn-see">See features</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════
+       PARALLAX HERO — 420vh tall, phone stays sticky
+  ═══════════════════════════════════════════════════ -->
+  <section id="heroSection" class="hero-scroll">
+    <div class="hero-sticky">
+
+      <!-- Left: headline + chapter story -->
+      <div class="hero-left">
+        <p class="hero-eyebrow">AI Cooking Companion</p>
+        <h1>Not a<br><span class="accent">recipe</span><br>app.</h1>
+        <p class="h1-sub">A culinary education.</p>
+
+        <div class="chapter-block" id="chapterBlock">
+          <div class="chapter-num" id="chapterNum">01 — AI Chat</div>
+          <div class="chapter-title" id="chapterTitle">Ask anything.</div>
+          <p class="chapter-desc" id="chapterDesc">Tell mise what you want to cook. It understands context, suggests the right recipe, and gets you started — no searching required.</p>
+        </div>
+
+        <div class="chapter-dots">
+          <div class="dot active" id="dot-0"></div>
+          <div class="dot" id="dot-1"></div>
+          <div class="dot" id="dot-2"></div>
+          <div class="dot" id="dot-3"></div>
+          <div class="dot" id="dot-4"></div>
+        </div>
+
+        <div class="hero-btns">
+          <a href="#" class="btn-primary">
+            <svg width="13" height="13" viewBox="0 0 814 1000" fill="currentColor"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-43.4-150.3-109.2C82.3 753.3 0 609.2 0 479.8 0 284.3 121 175.8 240 175.8c60.5 0 111 39.5 148.4 39.5 35.7 0 92.3-41.8 161.4-41.8 26 0 108.2 2.6 168.7 80.8zm-126.7-111.5c30.1-36.7 52-87.7 52-138.8 0-7.1-.6-14.3-1.9-20.1-49.4 1.9-108.5 33.1-143.9 75.1-26.6 30.8-52 80.5-52 132.2 0 8.4 1.3 16.9 1.9 19.5 3.2.6 8.4 1.3 13.6 1.3 43.5 0 97.9-28.7 130.3-69.2z"/></svg>
+            Download for iOS
+          </a>
+          <a href="#" class="btn-outline">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zm-11.046 0c-.356 0-.66-.277-.66-.638 0-.356.304-.633.66-.633.356 0 .66.277.66.633 0 .361-.304.638-.66.638zM17.928 9.52l1.666-2.877a.344.344 0 00-.125-.47.347.347 0 00-.47.125l-1.687 2.917C15.98 8.4 14.1 8.003 12 8.003c-2.1 0-3.98.397-5.312 1.212L5.001 6.298a.347.347 0 00-.47-.125.344.344 0 00-.125.47l1.666 2.877C3.7 10.844 2.066 13.107 2 15.748h20c-.066-2.641-1.7-4.904-4.072-6.228z"/></svg>
+            Android
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: sticky phone -->
+      <div class="hero-right">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <iframe
+              id="phoneIframe"
+              src="screens/view-17-chat-all-widgets.html?gallery=1"
+              scrolling="no">
+            </iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll cue -->
+      <div class="scroll-cue" id="scrollCue">
+        scroll
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="features-header">
+      <h2>Built different.</h2>
+      <p>Every feature designed to make you a better cook — not just a better recipe follower.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-num">01 — AI Mentor</div>
+        <div class="card-title">Learn the language of professional cooking</div>
+        <p class="card-text">Understand culinary terms, techniques, and the reasoning behind each step. Ask anything. Mise always explains.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">02 — Variations</div>
+        <div class="card-title">Every recipe has a fast version and a proper version</div>
+        <p class="card-text">Mise surfaces the full spectrum — from 20-minute shortcuts to weekend projects — and explains every difference.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">03 — Chat</div>
+        <div class="card-title">Your AI sous chef is always listening</div>
+        <p class="card-text">Brainstorm meals, substitute ingredients, troubleshoot dishes mid-cook. Do everything through one seamless chat.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">04 — Shopping</div>
+        <div class="card-title">The most ergonomic shopping list you've ever used</div>
+        <p class="card-text">Organized by recipe or aisle. Add from any recipe with a tap. Designed for how you actually move through a store.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">05 — Cook Mode</div>
+        <div class="card-title">Step-by-step guidance right when you need it</div>
+        <p class="card-text">Focused cook mode keeps you on track. And if something goes sideways, Mise helps you rescue it in real time.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">06 — Offline</div>
+        <div class="card-title">Works anywhere, with or without signal</div>
+        <p class="card-text">Your entire library — recipes, shopping lists, cook mode — works perfectly offline. Kitchen wifi is unreliable anyway.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">mise<span>.</span></div>
+    <div class="footer-copy">© 2025 Mise. All rights reserved.</div>
+  </footer>
+
+  <script>
+    (function () {
+      const SCALE = 0.7282;
+      // Visible content in the phone (screen height ÷ scale)
+      // phone-screen: 608px tall
+      const VISIBLE_PX = 608 / SCALE; // ≈ 835 content pixels visible at once
+      // Total estimated content height in content pixels (from view-17 at 390px wide)
+      const CONTENT_H = 3280;
+      const MAX_OFFSET = CONTENT_H - VISIBLE_PX; // ≈ 2445px max translateY
+
+      const CHAPTERS = [
+        {
+          num: '01 — AI Chat',
+          title: 'Ask anything.',
+          desc: 'Tell mise what you want to cook. It understands context, suggests the right recipe, and gets you started — no searching required.',
+          threshold: 0.00
+        },
+        {
+          num: '02 — Recipe',
+          title: 'The recipe.',
+          desc: "Julia Child's Boeuf Bourguignon — full history, technique notes, and timing. Surfaced in seconds, explained in full.",
+          threshold: 0.12
+        },
+        {
+          num: '03 — Ingredients',
+          title: '15 ingredients.',
+          desc: 'Organised, annotated with notes and substitutes. Add everything to your shopping list with one tap.',
+          threshold: 0.30
+        },
+        {
+          num: '04 — Cook Now',
+          title: "Let's cook.",
+          desc: 'Six steps, fully explained. Not just what to do — but why. Mise teaches technique, not just instructions.',
+          threshold: 0.62
+        },
+        {
+          num: '05 — Rescue',
+          title: 'Real-time rescue.',
+          desc: 'Two hours in, the sauce looks thin. Mise knows exactly what happened — and walks you through the fix.',
+          threshold: 0.82
+        }
+      ];
+
+      const heroSection  = document.getElementById('heroSection');
+      const iframe       = document.getElementById('phoneIframe');
+      const chapterBlock = document.getElementById('chapterBlock');
+      const chapterNum   = document.getElementById('chapterNum');
+      const chapterTitle = document.getElementById('chapterTitle');
+      const chapterDesc  = document.getElementById('chapterDesc');
+      const scrollCue    = document.getElementById('scrollCue');
+      const dots         = CHAPTERS.map((_, i) => document.getElementById('dot-' + i));
+
+      let currentChapterIdx = 0;
+      let fadeTimer = null;
+
+      function setChapter(idx) {
+        if (idx === currentChapterIdx) return;
+        currentChapterIdx = idx;
+        const ch = CHAPTERS[idx];
+
+        // Fade out
+        chapterBlock.classList.add('fading');
+        clearTimeout(fadeTimer);
+        fadeTimer = setTimeout(function () {
+          chapterNum.textContent   = ch.num;
+          chapterTitle.textContent = ch.title;
+          chapterDesc.textContent  = ch.desc;
+          chapterBlock.classList.remove('fading');
+          // Update dots
+          dots.forEach(function (d, i) {
+            d.classList.toggle('active', i === idx);
+          });
+        }, 280);
+      }
+
+      function onScroll() {
+        const heroTop        = heroSection.getBoundingClientRect().top;
+        const scrolled       = -heroTop; // px scrolled into section
+        const totalScrollable = heroSection.offsetHeight - window.innerHeight;
+        const progress       = Math.max(0, Math.min(1, scrolled / totalScrollable));
+
+        // Move content inside phone
+        const offset = progress * MAX_OFFSET;
+        iframe.style.transform = 'scale(' + SCALE + ') translateY(-' + offset.toFixed(1) + 'px)';
+
+        // Hide scroll cue once user starts scrolling
+        if (scrolled > 40) {
+          scrollCue.classList.add('hidden');
+        } else {
+          scrollCue.classList.remove('hidden');
+        }
+
+        // Update chapter
+        let nextChapter = 0;
+        for (let i = 0; i < CHAPTERS.length; i++) {
+          if (progress >= CHAPTERS[i].threshold) nextChapter = i;
+        }
+        setChapter(nextChapter);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      // Run once on load to init state
+      onScroll();
+    })();
+  </script>
+
+</body>
+</html>
