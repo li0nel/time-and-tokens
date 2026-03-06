@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import {
+  Alert,
   View,
   Text,
   TextInput,
@@ -52,6 +53,14 @@ export default function SignInScreen() {
     } finally {
       setLoading(false)
     }
+  }
+
+  function handleAppleSignIn() {
+    Alert.alert('Coming soon', 'Apple sign-in is not yet available.')
+  }
+
+  function handleForgotPassword() {
+    Alert.alert('Forgot password', 'Password reset is not yet available.')
   }
 
   return (
@@ -114,6 +123,16 @@ export default function SignInScreen() {
         />
       </View>
 
+      {/* Forgot password */}
+      <TouchableOpacity
+        className="self-end mb-4 -mt-1"
+        onPress={handleForgotPassword}
+        accessibilityRole="button"
+        accessibilityLabel="Forgot password?"
+      >
+        <Text className="text-xs font-medium text-brand">Forgot password?</Text>
+      </TouchableOpacity>
+
       {/* Sign In button */}
       <TouchableOpacity
         testID="sign-in-button"
@@ -152,10 +171,24 @@ export default function SignInScreen() {
         </Text>
       </TouchableOpacity>
 
+      {/* Apple Sign In */}
+      <TouchableOpacity
+        testID="apple-sign-in-button"
+        className="h-12 bg-bg-surface border border-border rounded-md flex-row items-center justify-center gap-2.5 mb-2.5 active:bg-bg-elevated"
+        onPress={handleAppleSignIn}
+        disabled={loading}
+        accessibilityRole="button"
+        accessibilityLabel="Continue with Apple"
+      >
+        <Text className="text-base font-semibold text-text tracking-tight">
+          Continue with Apple
+        </Text>
+      </TouchableOpacity>
+
       {/* Sign-up footer */}
       <View className="mt-8 items-center">
         <Text className="text-sm text-text-3">
-          {'Don\'t have an account? '}
+          {"Don't have an account? "}
           <Link href="/(auth)/sign-up" asChild>
             <Text className="text-brand font-semibold">Sign up</Text>
           </Link>
