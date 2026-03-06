@@ -78,7 +78,7 @@ function handleGetRecipeDetails(args: Record<string, unknown>): unknown {
 
 export function createChatSession(): ChatSession {
   const model = getGenerativeModel(ai, {
-    model: 'gemini-2.0-flash-lite',
+    model: 'gemini-2.5-flash',
     systemInstruction: buildSystemPrompt(getRecipeCatalog()),
     tools: [
       {

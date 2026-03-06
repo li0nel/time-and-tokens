@@ -82,7 +82,7 @@ describe('createChatSession', () => {
     createChatSession()
     expect(mockGetGenerativeModel).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({ model: 'gemini-2.0-flash-lite' }),
+      expect.objectContaining({ model: 'gemini-2.5-flash' }),
     )
   })
 
