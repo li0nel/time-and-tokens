@@ -97,6 +97,37 @@ function formatAmount(amount: string, unit: string): string {
 }
 
 // ---------------------------------------------------------------------------
+// In-Store Progress Bar
+// ---------------------------------------------------------------------------
+
+function InStoreProgressBar({
+  checkedCount,
+  totalCount,
+}: {
+  checkedCount: number
+  totalCount: number
+}) {
+  const pct = totalCount > 0 ? (checkedCount / totalCount) * 100 : 0
+
+  return (
+    <View className="px-4 pt-2.5 pb-2">
+      <Text className="text-xs font-semibold text-text-2 mb-1.5">
+        {checkedCount} of {totalCount} items
+        {checkedCount === totalCount && totalCount > 0 ? ' ✓' : ''}
+      </Text>
+      {/* Track */}
+      <View className="h-1.5 rounded-full bg-bg-elevated overflow-hidden">
+        {/* Fill */}
+        <View
+          className="h-full rounded-full bg-brand"
+          style={{ width: `${pct}%` }}
+        />
+      </View>
+    </View>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
 
@@ -183,14 +214,16 @@ function ItemRow({
   item,
   onToggle,
   showRecipe = false,
+  inStoreMode = false,
 }: {
   item: ShoppingItem
   onToggle: (id: string) => void
   showRecipe?: boolean
+  inStoreMode?: boolean
 }) {
   return (
     <TouchableOpacity
-      className="flex-row items-center py-3 border-b border-border-subtle"
+      className={`flex-row items-center py-3 border-b border-border-subtle ${item.checked && inStoreMode ? 'opacity-50' : ''}`}
       onPress={() => onToggle(item.id)}
       accessibilityRole="checkbox"
       accessibilityState={{ checked: item.checked }}
@@ -263,36 +296,76 @@ function RecipeThumbnail({ title }: { title: string }) {
   )
 }
 
-function RecipeSectionHeader({ group }: { group: SectionGroup }) {
+function RecipeSectionHeader({
+  group,
+  inStoreMode,
+}: {
+  group: SectionGroup
+  inStoreMode: boolean
+}) {
+  const allDone = inStoreMode && group.items.every((i) => i.checked)
   return (
-    <View className="flex-row items-center py-2">
+    <View
+      className={`flex-row items-center py-2 ${allDone ? 'opacity-60' : ''}`}
+    >
       <RecipeThumbnail title={group.title} />
       <Text
-        className="text-sm font-semibold text-text flex-1"
+        className={`text-sm font-semibold flex-1 ${allDone ? 'text-text-3' : 'text-text'}`}
         numberOfLines={1}
       >
+        {allDone ? '✓ ' : ''}
         {group.title}
       </Text>
-      <Text className="text-sm text-text-3 ml-2">
-        {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
-      </Text>
+      {inStoreMode ? (
+        <Text
+          className={`text-sm ml-2 ${allDone ? 'text-brand font-semibold' : 'text-text-3'}`}
+        >
+          {allDone
+            ? 'all done'
+            : `${group.items.filter((i) => i.checked).length} of ${group.items.length}`}
+        </Text>
+      ) : (
+        <Text className="text-sm text-text-3 ml-2">
+          {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
+        </Text>
+      )}
     </View>
   )
 }
 
-function AisleSectionHeader({ group }: { group: SectionGroup }) {
+function AisleSectionHeader({
+  group,
+  inStoreMode,
+}: {
+  group: SectionGroup
+  inStoreMode: boolean
+}) {
+  const allDone = inStoreMode && group.items.every((i) => i.checked)
   return (
-    <View className="flex-row items-center py-2">
+    <View
+      className={`flex-row items-center py-2 ${allDone ? 'opacity-60' : ''}`}
+    >
       <Text className="text-base mr-2">{group.emoji}</Text>
       <Text
-        className="text-sm font-semibold text-text flex-1"
+        className={`text-sm font-semibold flex-1 ${allDone ? 'text-text-3' : 'text-text'}`}
         numberOfLines={1}
       >
+        {allDone ? '✓ ' : ''}
         {group.title}
       </Text>
-      <Text className="text-sm text-text-3 ml-2">
-        {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
-      </Text>
+      {inStoreMode ? (
+        <Text
+          className={`text-sm ml-2 ${allDone ? 'text-brand font-semibold' : 'text-text-3'}`}
+        >
+          {allDone
+            ? 'all done'
+            : `${group.items.filter((i) => i.checked).length} of ${group.items.length}`}
+        </Text>
+      ) : (
+        <Text className="text-sm text-text-3 ml-2">
+          {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
+        </Text>
+      )}
     </View>
   )
 }
@@ -300,15 +373,22 @@ function AisleSectionHeader({ group }: { group: SectionGroup }) {
 function RecipeSection({
   group,
   onToggle,
+  inStoreMode,
 }: {
   group: SectionGroup
   onToggle: (id: string) => void
+  inStoreMode: boolean
 }) {
   return (
     <View className="mb-4">
-      <RecipeSectionHeader group={group} />
+      <RecipeSectionHeader group={group} inStoreMode={inStoreMode} />
       {group.items.map((item) => (
-        <ItemRow key={item.id} item={item} onToggle={onToggle} />
+        <ItemRow
+          key={item.id}
+          item={item}
+          onToggle={onToggle}
+          inStoreMode={inStoreMode}
+        />
       ))}
     </View>
   )
@@ -317,15 +397,23 @@ function RecipeSection({
 function AisleSection({
   group,
   onToggle,
+  inStoreMode,
 }: {
   group: SectionGroup
   onToggle: (id: string) => void
+  inStoreMode: boolean
 }) {
   return (
     <View className="mb-4">
-      <AisleSectionHeader group={group} />
+      <AisleSectionHeader group={group} inStoreMode={inStoreMode} />
       {group.items.map((item) => (
-        <ItemRow key={item.id} item={item} onToggle={onToggle} showRecipe />
+        <ItemRow
+          key={item.id}
+          item={item}
+          onToggle={onToggle}
+          showRecipe
+          inStoreMode={inStoreMode}
+        />
       ))}
     </View>
   )
@@ -341,6 +429,7 @@ export default function ShoppingScreen() {
   const [sortMode, setSortMode] = useState<SortMode>('recipe')
   const [loading, setLoading] = useState(true)
   const [clearing, setClearing] = useState(false)
+  const [inStoreMode, setInStoreMode] = useState(false)
 
   useFocusEffect(
     useCallback(() => {
@@ -381,6 +470,9 @@ export default function ShoppingScreen() {
   const isEmpty = list.length === 0
   const hasChecked = list.some((item) => item.checked)
 
+  const checkedCount = list.filter((item) => item.checked).length
+  const totalCount = list.length
+
   const groups =
     sortMode === 'recipe' ? groupByRecipe(list) : groupByAisle(list)
 
@@ -408,6 +500,25 @@ export default function ShoppingScreen() {
                   {recipeCount} {recipeCount === 1 ? 'recipe' : 'recipes'}
                 </Text>
               </View>
+              {/* In-store mode toggle */}
+              <TouchableOpacity
+                onPress={() => setInStoreMode((prev) => !prev)}
+                className={`flex-row items-center gap-1 rounded-full px-2.5 py-0.5 border ${
+                  inStoreMode
+                    ? 'bg-brand border-brand'
+                    : 'bg-transparent border-border-strong'
+                }`}
+                accessibilityRole="button"
+                accessibilityState={{ selected: inStoreMode }}
+                accessibilityLabel="Toggle in-store mode"
+              >
+                <Text className="text-sm">🛒</Text>
+                <Text
+                  className={`text-xs font-semibold ${inStoreMode ? 'text-text-inv' : 'text-text-2'}`}
+                >
+                  Shop
+                </Text>
+              </TouchableOpacity>
             </View>
           </>
         )}
@@ -421,6 +532,14 @@ export default function ShoppingScreen() {
         <EmptyState onChatPress={handleChatPress} />
       ) : (
         <>
+          {/* In-store progress bar */}
+          {inStoreMode && (
+            <InStoreProgressBar
+              checkedCount={checkedCount}
+              totalCount={totalCount}
+            />
+          )}
+
           {/* Sort toggle + metadata row */}
           <View className="px-4 pt-3 pb-2 flex-row items-center justify-between">
             <Text className="text-sm text-text-3">
@@ -441,6 +560,7 @@ export default function ShoppingScreen() {
                     key={group.key}
                     group={group}
                     onToggle={handleToggle}
+                    inStoreMode={inStoreMode}
                   />
                 ))
               : groups.map((group) => (
@@ -448,6 +568,7 @@ export default function ShoppingScreen() {
                     key={group.key}
                     group={group}
                     onToggle={handleToggle}
+                    inStoreMode={inStoreMode}
                   />
                 ))}
           </ScrollView>
