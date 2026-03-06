@@ -1,5 +1,6 @@
 import React, { memo } from 'react'
 import { Pressable, Text, View } from 'react-native'
+import { router } from 'expo-router'
 import type { RecipeCardBlock } from '../../types/blocks'
 
 interface Props {
@@ -8,28 +9,40 @@ interface Props {
   testID?: string
 }
 
-const DIFFICULTY_STARS: Record<RecipeCardBlock['data']['difficulty'], number> = {
-  easy: 1,
-  medium: 2,
-  hard: 3,
-}
+const DIFFICULTY_STARS: Record<RecipeCardBlock['data']['difficulty'], number> =
+  {
+    easy: 1,
+    medium: 2,
+    hard: 3,
+  }
 
-const DIFFICULTY_LABELS: Record<RecipeCardBlock['data']['difficulty'], string> = {
-  easy: 'Easy',
-  medium: 'Medium',
-  hard: 'Hard',
-}
+const DIFFICULTY_LABELS: Record<RecipeCardBlock['data']['difficulty'], string> =
+  {
+    easy: 'Easy',
+    medium: 'Medium',
+    hard: 'Hard',
+  }
 
 // Simple emoji selection based on cuisine / title keywords
 function getRecipeEmoji(title: string, cuisine?: string): string {
   const haystack = `${title} ${cuisine ?? ''}`.toLowerCase()
   if (haystack.includes('chicken')) return '🍗'
-  if (haystack.includes('fish') || haystack.includes('seafood') || haystack.includes('prawn')) return '🐟'
+  if (
+    haystack.includes('fish') ||
+    haystack.includes('seafood') ||
+    haystack.includes('prawn')
+  )
+    return '🐟'
   if (haystack.includes('beef') || haystack.includes('steak')) return '🥩'
   if (haystack.includes('pasta') || haystack.includes('italian')) return '🍝'
   if (haystack.includes('salad')) return '🥗'
   if (haystack.includes('soup') || haystack.includes('broth')) return '🍜'
-  if (haystack.includes('curry') || haystack.includes('thai') || haystack.includes('indian')) return '🍛'
+  if (
+    haystack.includes('curry') ||
+    haystack.includes('thai') ||
+    haystack.includes('indian')
+  )
+    return '🍛'
   if (haystack.includes('pizza')) return '🍕'
   if (haystack.includes('rice')) return '🍚'
   if (haystack.includes('taco') || haystack.includes('mexican')) return '🌮'
@@ -42,9 +55,34 @@ function getRecipeEmoji(title: string, cuisine?: string): string {
  * meta row (time / servings / cuisine), description, and two action buttons.
  */
 function RecipeCard({ block, onAction, testID }: Props) {
-  const { title, description, cookTime, servings, difficulty, cuisine } = block.data
+  const {
+    recipeId,
+    title,
+    description,
+    cookTime,
+    servings,
+    difficulty,
+    cuisine,
+    imageUrl,
+  } = block.data
   const stars = DIFFICULTY_STARS[difficulty]
   const emoji = getRecipeEmoji(title, cuisine)
+
+  function handleViewFullRecipe() {
+    router.push({
+      pathname: '/(tabs)/recipe/[id]',
+      params: {
+        id: recipeId,
+        title,
+        description: description ?? '',
+        cookTime,
+        servings: String(servings),
+        difficulty,
+        cuisine: cuisine ?? '',
+        imageUrl: imageUrl ?? '',
+      },
+    })
+  }
 
   return (
     <View
@@ -73,7 +111,10 @@ function RecipeCard({ block, onAction, testID }: Props) {
       {/* Card body */}
       <View className="p-4 gap-3">
         {/* Title */}
-        <Text className="text-lg font-semibold text-text leading-tight" numberOfLines={2}>
+        <Text
+          className="text-lg font-semibold text-text leading-tight"
+          numberOfLines={2}
+        >
           {title}
         </Text>
 
@@ -89,7 +130,9 @@ function RecipeCard({ block, onAction, testID }: Props) {
               ★
             </Text>
           ))}
-          <Text className="text-sm text-text-2 ml-1">{DIFFICULTY_LABELS[difficulty]}</Text>
+          <Text className="text-sm text-text-2 ml-1">
+            {DIFFICULTY_LABELS[difficulty]}
+          </Text>
         </View>
 
         {/* Meta row: time | servings | cuisine */}
@@ -129,17 +172,21 @@ function RecipeCard({ block, onAction, testID }: Props) {
             accessibilityRole="button"
             accessibilityLabel={`Start cooking ${title}`}
           >
-            <Text className="text-sm font-semibold text-white">Start Cooking</Text>
+            <Text className="text-sm font-semibold text-white">
+              Start Cooking
+            </Text>
           </Pressable>
 
           <Pressable
             testID="btn-view-full-recipe"
             className="flex-1 py-2.5 rounded-lg border border-brand items-center justify-center"
-            onPress={() => onAction(`Show full recipe for ${title}`)}
+            onPress={handleViewFullRecipe}
             accessibilityRole="button"
             accessibilityLabel={`View full recipe for ${title}`}
           >
-            <Text className="text-sm font-semibold text-brand">View Full Recipe</Text>
+            <Text className="text-sm font-semibold text-brand">
+              View Full Recipe
+            </Text>
           </Pressable>
         </View>
       </View>

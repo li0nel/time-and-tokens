@@ -106,6 +106,14 @@ export default function TabsLayout() {
           tabBarStyle: { display: 'none' },
         }}
       />
+      {/* Recipe detail — full-screen, no tab bar */}
+      <Tabs.Screen
+        name="recipe/[id]"
+        options={{
+          href: null,
+          tabBarStyle: { display: 'none' },
+        }}
+      />
     </Tabs>
   )
 }

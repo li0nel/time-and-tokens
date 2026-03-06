@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/react-native'
 import React from 'react'
+import { router } from 'expo-router'
 import type { RecipeCardBlock } from '../../types/blocks'
 import RecipeCard from '../../components/widgets/RecipeCard'
 
@@ -21,40 +22,57 @@ const block: RecipeCardBlock = {
 describe('RecipeCard', () => {
   beforeEach(() => {
     mockOnAction.mockClear()
+    ;(router.push as jest.Mock).mockClear()
   })
 
   it('renders the recipe title', () => {
-    const { getByText } = render(<RecipeCard block={block} onAction={mockOnAction} />)
+    const { getByText } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
     expect(getByText('Roasted Lemon Herb Chicken')).toBeTruthy()
   })
 
   it('renders the description', () => {
-    const { getByText } = render(<RecipeCard block={block} onAction={mockOnAction} />)
-    expect(getByText('Juicy roasted chicken with lemon and fresh herbs.')).toBeTruthy()
+    const { getByText } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
+    expect(
+      getByText('Juicy roasted chicken with lemon and fresh herbs.')
+    ).toBeTruthy()
   })
 
   it('renders cook time in the meta row', () => {
-    const { getByText } = render(<RecipeCard block={block} onAction={mockOnAction} />)
+    const { getByText } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
     expect(getByText('1h 15min')).toBeTruthy()
   })
 
   it('renders servings in the meta row', () => {
-    const { getByText } = render(<RecipeCard block={block} onAction={mockOnAction} />)
+    const { getByText } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
     expect(getByText('4 servings')).toBeTruthy()
   })
 
   it('renders cuisine in the meta row', () => {
-    const { getByText } = render(<RecipeCard block={block} onAction={mockOnAction} />)
+    const { getByText } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
     expect(getByText('French')).toBeTruthy()
   })
 
   it('renders the difficulty label', () => {
-    const { getByText } = render(<RecipeCard block={block} onAction={mockOnAction} />)
+    const { getByText } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
     expect(getByText('Easy')).toBeTruthy()
   })
 
   it('renders 1 filled star and 2 empty stars for easy difficulty', () => {
-    const { getByTestId } = render(<RecipeCard block={block} onAction={mockOnAction} />)
+    const { getByTestId } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
     // Stars use testID "star-0", "star-1", "star-2"
     expect(getByTestId('star-0')).toBeTruthy()
     expect(getByTestId('star-1')).toBeTruthy()
@@ -62,18 +80,30 @@ describe('RecipeCard', () => {
   })
 
   it('calls onAction with "Start cooking <title>" when Start Cooking is pressed', () => {
-    const { getByTestId } = render(<RecipeCard block={block} onAction={mockOnAction} />)
+    const { getByTestId } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
     fireEvent.press(getByTestId('btn-start-cooking'))
     expect(mockOnAction).toHaveBeenCalledTimes(1)
-    expect(mockOnAction).toHaveBeenCalledWith('Start cooking Roasted Lemon Herb Chicken')
+    expect(mockOnAction).toHaveBeenCalledWith(
+      'Start cooking Roasted Lemon Herb Chicken'
+    )
   })
 
-  it('calls onAction with "Show full recipe for <title>" when View Full Recipe is pressed', () => {
-    const { getByTestId } = render(<RecipeCard block={block} onAction={mockOnAction} />)
+  it('navigates to the recipe detail screen when View Full Recipe is pressed', () => {
+    const { getByTestId } = render(
+      <RecipeCard block={block} onAction={mockOnAction} />
+    )
     fireEvent.press(getByTestId('btn-view-full-recipe'))
-    expect(mockOnAction).toHaveBeenCalledTimes(1)
-    expect(mockOnAction).toHaveBeenCalledWith(
-      'Show full recipe for Roasted Lemon Herb Chicken'
+    expect(router.push).toHaveBeenCalledTimes(1)
+    expect(router.push).toHaveBeenCalledWith(
+      expect.objectContaining({
+        pathname: '/(tabs)/recipe/[id]',
+        params: expect.objectContaining({
+          id: 'r42',
+          title: 'Roasted Lemon Herb Chicken',
+        }),
+      })
     )
   })
 
@@ -82,7 +112,9 @@ describe('RecipeCard', () => {
       ...block,
       data: { ...block.data, difficulty: 'medium' },
     }
-    const { getByText } = render(<RecipeCard block={mediumBlock} onAction={mockOnAction} />)
+    const { getByText } = render(
+      <RecipeCard block={mediumBlock} onAction={mockOnAction} />
+    )
     expect(getByText('Medium')).toBeTruthy()
   })
 
@@ -91,7 +123,9 @@ describe('RecipeCard', () => {
       ...block,
       data: { ...block.data, difficulty: 'hard' },
     }
-    const { getByText } = render(<RecipeCard block={hardBlock} onAction={mockOnAction} />)
+    const { getByText } = render(
+      <RecipeCard block={hardBlock} onAction={mockOnAction} />
+    )
     expect(getByText('Hard')).toBeTruthy()
   })
 
