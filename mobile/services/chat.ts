@@ -8,7 +8,11 @@
 
 import { getGenerativeModel, Schema } from 'firebase/ai'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import type { ChatSession, FunctionResponsePart, GenerateContentResult } from 'firebase/ai'
+import type {
+  ChatSession,
+  FunctionResponsePart,
+  GenerateContentResult,
+} from 'firebase/ai'
 import type { Block, ChatMessage } from '../types/blocks'
 import { getRecipeCatalog, getRecipeById } from '../data/recipes'
 import { ai } from './gemini'
@@ -113,7 +117,8 @@ function extractBlocksObject(text: string): { blocks: unknown[] } | null {
   // Fast path: whole text is valid JSON
   try {
     const parsed = JSON.parse(text) as { blocks?: unknown[] }
-    if (parsed.blocks && Array.isArray(parsed.blocks)) return parsed as { blocks: unknown[] }
+    if (parsed.blocks && Array.isArray(parsed.blocks))
+      return parsed as { blocks: unknown[] }
   } catch {}
 
   // Fallback: find the last {"blocks": ...} substring and parse from there
@@ -122,7 +127,9 @@ function extractBlocksObject(text: string): { blocks: unknown[] } | null {
     const openBrace = text.lastIndexOf('{', blocksIdx)
     if (openBrace !== -1) {
       try {
-        const candidate = JSON.parse(text.substring(openBrace)) as { blocks?: unknown[] }
+        const candidate = JSON.parse(text.substring(openBrace)) as {
+          blocks?: unknown[]
+        }
         if (candidate.blocks && Array.isArray(candidate.blocks))
           return candidate as { blocks: unknown[] }
       } catch {}
@@ -227,11 +234,51 @@ function flatBlockToBlock(flat: unknown): Block | null {
     case 'quick_replies': {
       const rawReplies = b['replies']
       const replies = Array.isArray(rawReplies)
-        ? (rawReplies as unknown[]).filter((r) => typeof r === 'string') as string[]
+        ? ((rawReplies as unknown[]).filter(
+            (r) => typeof r === 'string'
+          ) as string[])
         : []
       return {
         type: 'quick_replies',
         data: { replies },
+      }
+    }
+
+    case 'recipe_carousel': {
+      const rawItems = b['items']
+      const items = Array.isArray(rawItems)
+        ? (rawItems as Record<string, unknown>[]).map((item) => ({
+            recipeId: (item['recipeId'] as string | undefined) ?? '',
+            title: (item['title'] as string | undefined) ?? '',
+            cookTime: (item['cookTime'] as string | undefined) ?? '',
+            servings: (item['servings'] as number | undefined) ?? 0,
+            difficulty: ((item['difficulty'] as string | undefined) ??
+              'easy') as 'easy' | 'medium' | 'hard',
+            cuisine: item['cuisine'] as string | undefined,
+            imageUrl: item['imageUrl'] as string | undefined,
+          }))
+        : []
+      return {
+        type: 'recipe_carousel',
+        data: { items },
+      }
+    }
+
+    case 'rescue': {
+      const rawSteps = b['steps']
+      const steps = Array.isArray(rawSteps)
+        ? (rawSteps as Record<string, unknown>[]).map((s) => ({
+            stepNumber: (s['stepNumber'] as number | undefined) ?? 0,
+            instruction: (s['instruction'] as string | undefined) ?? '',
+          }))
+        : []
+      return {
+        type: 'rescue',
+        data: {
+          header: (b['header'] as string | undefined) ?? '',
+          steps,
+          tip: b['tip'] as string | undefined,
+        },
       }
     }
 
@@ -242,7 +289,7 @@ function flatBlockToBlock(flat: unknown): Block | null {
 
 export async function sendChatMessage(
   session: ChatSession,
-  userText: string,
+  userText: string
 ): Promise<Block[]> {
   let result: GenerateContentResult = await session.sendMessage(userText)
 

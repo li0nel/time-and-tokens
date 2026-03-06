@@ -3,6 +3,8 @@ import type { Block } from '../../types/blocks'
 import CookSteps from './CookSteps'
 import IngredientsList from './IngredientsList'
 import RecipeCard from './RecipeCard'
+import RecipeCarousel from './RecipeCarousel'
+import RescueWidget from './RescueWidget'
 import TextBlock from './TextBlock'
 
 interface Props {
@@ -28,6 +30,10 @@ function WidgetRenderer({ block, onAction }: Props) {
     case 'quick_replies':
       // quick_replies is rendered by the chat layer as a chip row, not a widget
       return null
+    case 'recipe_carousel':
+      return <RecipeCarousel block={block} onAction={onAction} />
+    case 'rescue':
+      return <RescueWidget block={block} onAction={onAction} />
     default:
       return null
   }
