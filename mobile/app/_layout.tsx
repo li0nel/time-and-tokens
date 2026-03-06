@@ -1,7 +1,7 @@
 import '../global.css'
 
 import * as SplashScreen from 'expo-splash-screen'
-import { Redirect, Slot } from 'expo-router'
+import { Slot } from 'expo-router'
 import { useEffect } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
@@ -14,7 +14,7 @@ export { ErrorBoundary } from 'expo-router'
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const { user, loading } = useAuth()
+  const { loading } = useAuth()
 
   useEffect(() => {
     if (!loading) {
@@ -30,7 +30,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <KeyboardProvider>
-        {user ? <Slot /> : <Redirect href="/(auth)/sign-in" />}
+        <Slot />
       </KeyboardProvider>
     </SafeAreaProvider>
   )
