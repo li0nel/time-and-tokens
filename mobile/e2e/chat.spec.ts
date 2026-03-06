@@ -234,6 +234,57 @@ test.describe('Chat screen — authenticated', () => {
     await expect(page.getByText(/^Sorry/i)).not.toBeVisible()
   })
 
+  test('Gemini 500 error shows user-friendly error message without crashing', async ({
+    page,
+  }) => {
+    await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
+
+    // Override the Gemini route to return a 500 error for this test.
+    await page.route(GEMINI_URL_PATTERN, async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          error: { message: 'Internal Server Error', code: 500 },
+        }),
+      })
+    })
+
+    // Send a message that will trigger the mocked 500 response.
+    const chatInput = page.locator(
+      '[data-testid="chat-input"], [testid="chat-input"]'
+    )
+    await chatInput.fill('Suggest a pasta recipe')
+
+    const sendButton = page.locator(
+      '[data-testid="send-button"], [testid="send-button"]'
+    )
+    await sendButton.click()
+
+    // Wait for the assistant response to appear (error or success block).
+    const assistantMessage = page.locator(
+      '[data-testid="assistant-message"], [testid="assistant-message"]'
+    )
+    await expect(assistantMessage.first()).toBeVisible({ timeout: 15000 })
+
+    // Assert: a user-friendly error message is shown (not a crash).
+    // useChat.ts formats errors as "Error: <message>" or "Sorry, something went wrong."
+    await expect(page.getByText(/Error:|Sorry/i)).toBeVisible({ timeout: 5000 })
+
+    // Assert: no raw JSON visible (the error body must not be rendered as-is).
+    await expect(page.getByText(/"Internal Server Error"/)).not.toBeVisible()
+    await expect(page.getByText(/"code"\s*:\s*500/)).not.toBeVisible()
+
+    // Assert: no JavaScript error text visible on the page.
+    await expect(
+      page.getByText(/TypeError|ReferenceError|SyntaxError/)
+    ).not.toBeVisible()
+
+    // Assert: the chat input is still usable — app did not crash.
+    await expect(chatInput).toBeVisible()
+    await expect(chatInput).toBeEnabled()
+  })
+
   test('tapping Start Cooking sends a cook steps request', async ({ page }) => {
     await mockGemini(page)
     await signIn(page, TEST_EMAIL!, TEST_PASSWORD!)
