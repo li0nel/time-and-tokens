@@ -1,3 +1,6 @@
 .DS_Store
 output/claude_telemetry.json
 .claude/worktrees/
+
+# Playwright agent CLI session data
+.playwright-cli/

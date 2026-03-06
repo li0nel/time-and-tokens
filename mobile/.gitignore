@@ -39,3 +39,10 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Playwright agent CLI session data (contains credentials/PII)
+.playwright-cli/
+
+# Playwright outputs
+playwright-report/
+test-results/
