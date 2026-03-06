@@ -14,6 +14,7 @@ export default function SignUpScreen() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -28,6 +29,14 @@ export default function SignUpScreen() {
     }
     if (!password || password.length < 6) {
       setError('Password must be at least 6 characters.')
+      return
+    }
+    if (!confirmPassword) {
+      setError('Please confirm your password.')
+      return
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.')
       return
     }
 
@@ -110,7 +119,7 @@ export default function SignUpScreen() {
       </View>
 
       {/* Password */}
-      <View className="mb-5">
+      <View className="mb-3">
         <Text className="text-xs font-semibold text-text-2 uppercase tracking-wider mb-1.5">
           Password
         </Text>
@@ -127,17 +136,35 @@ export default function SignUpScreen() {
         />
       </View>
 
-      {/* Create Account button */}
+      {/* Confirm Password */}
+      <View className="mb-5">
+        <Text className="text-xs font-semibold text-text-2 uppercase tracking-wider mb-1.5">
+          Confirm Password
+        </Text>
+        <TextInput
+          testID="confirm-password-input"
+          className="h-12 bg-bg-surface border border-border rounded-md px-4 text-base text-text"
+          placeholder="Repeat your password"
+          placeholderTextColor="#C4BCB5"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+          autoComplete="new-password"
+          textContentType="newPassword"
+        />
+      </View>
+
+      {/* Sign Up button */}
       <TouchableOpacity
         testID="sign-up-button"
         className="h-[50px] bg-brand rounded-md items-center justify-center mb-1 active:scale-[0.985]"
         onPress={handleSignUp}
         disabled={loading}
         accessibilityRole="button"
-        accessibilityLabel="Create account"
+        accessibilityLabel="Sign up"
       >
         <Text className="text-base font-bold text-text-inv tracking-tight">
-          {loading ? 'Creating account…' : 'Create Account'}
+          {loading ? 'Creating account…' : 'Sign Up'}
         </Text>
       </TouchableOpacity>
 

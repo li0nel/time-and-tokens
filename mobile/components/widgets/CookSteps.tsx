@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
+import { router } from 'expo-router'
 import type { CookStep, CookStepsBlock } from '../../types/blocks'
 
 interface Props {
@@ -94,6 +95,17 @@ function CookSteps({ block, testID }: Props) {
   const { recipeTitle, steps } = block.data
   const [currentStep, setCurrentStep] = useState(0)
 
+  function handleViewInCookMode() {
+    router.push({
+      pathname: '/(tabs)/cook/[id]',
+      params: {
+        id: encodeURIComponent(recipeTitle),
+        steps: JSON.stringify(steps),
+        recipeTitle,
+      },
+    })
+  }
+
   const isFirst = currentStep === 0
   const isLast = currentStep === steps.length - 1
   const step = steps[currentStep]
@@ -153,6 +165,18 @@ function CookSteps({ block, testID }: Props) {
           </Text>
         </TouchableOpacity>
       </View>
+
+      {/* View all steps in dedicated cook mode screen */}
+      <TouchableOpacity
+        onPress={handleViewInCookMode}
+        className="items-center py-2"
+        accessibilityRole="button"
+        accessibilityLabel="View all steps in cook mode"
+      >
+        <Text className="text-xs font-semibold text-brand">
+          View all steps in Cook Mode ›
+        </Text>
+      </TouchableOpacity>
     </View>
   )
 }
