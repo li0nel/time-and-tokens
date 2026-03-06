@@ -382,10 +382,10 @@
   <script>
     (function () {
       /*
-        Key insight: we DON'T scroll the entire iframe.
-        We only translateY the .chat-feed element inside it.
-        This keeps the status bar (sticky top), app bar (sticky),
-        and input bar (position:fixed) anchored to the phone frame.
+        We scroll only .chat-feed inside the iframe via postMessage.
+        This keeps the status bar, app bar, and input bar anchored.
+        postMessage avoids the cross-origin block that file:// imposes
+        on iframe.contentDocument access.
       */
       const SCALE = 0.7282;
 
@@ -420,19 +420,11 @@
 
       var currentChapterIdx = 0;
       var fadeTimer = null;
-      var chatFeed = null; // the .chat-feed element inside the iframe
+      var iframeReady = false;
 
-      /* Wait for iframe to load, then grab the chat-feed element */
+      /* Wait for iframe to load before sending scroll messages */
       iframe.addEventListener('load', function () {
-        try {
-          chatFeed = iframe.contentDocument.querySelector('.chat-feed');
-          if (chatFeed) {
-            chatFeed.style.willChange = 'transform';
-            chatFeed.style.transition = 'none'; /* raw speed, no CSS easing */
-          }
-        } catch (e) {
-          /* cross-origin fallback — shouldn't happen with file:// */
-        }
+        iframeReady = true;
         onScroll();
       });
 
@@ -456,10 +448,10 @@
         var totalScroll   = heroSection.offsetHeight - window.innerHeight;
         var progress      = Math.max(0, Math.min(1, scrolled / totalScroll));
 
-        /* Scroll only the chat feed — header + input bar stay fixed */
+        /* Scroll only the chat feed via postMessage (avoids file:// cross-origin block) */
         var offset = progress * MAX_OFFSET;
-        if (chatFeed) {
-          chatFeed.style.transform = 'translateY(-' + offset.toFixed(1) + 'px)';
+        if (iframeReady) {
+          iframe.contentWindow.postMessage({ type: 'parallax-scroll', offset: offset.toFixed(1) }, '*');
         }
 
         scrollCue.classList.toggle('hidden', scrolled > 40);

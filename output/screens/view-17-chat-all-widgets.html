@@ -568,6 +568,19 @@
     s.textContent = '.input-bar-wrap{display:none!important}.chat-feed{padding-bottom:20px!important}';
     document.head.appendChild(s);
   }
+  /* Parallax: parent sends scroll offset via postMessage (avoids cross-origin block on file://) */
+  (function () {
+    var feed = null;
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.type === 'parallax-scroll') {
+        if (!feed) {
+          feed = document.querySelector('.chat-feed');
+          if (feed) { feed.style.willChange = 'transform'; feed.style.transition = 'none'; }
+        }
+        if (feed) feed.style.transform = 'translateY(-' + e.data.offset + 'px)';
+      }
+    });
+  })();
 </script>
 </body>
 </html>
