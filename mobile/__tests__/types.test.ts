@@ -17,10 +17,12 @@ import type {
   IngredientsBlock,
   CookStepsBlock,
   QuickRepliesBlock,
+  RecipeCarouselBlock,
+  RescueBlock,
   ChatMessage,
-} from '../types/blocks';
+} from '../types/blocks'
 
-import type { Recipe } from '../data/recipes';
+import type { Recipe } from '../data/recipes'
 
 // ---------------------------------------------------------------------------
 // BlockType union
@@ -32,15 +34,18 @@ const validBlockTypes: BlockType[] = [
   'ingredients',
   'cook_steps',
   'quick_replies',
-];
+  'recipe_carousel',
+  'rescue',
+]
 
 // Ensure all literals are present (if a type is added, the array above must be updated)
-type _AssertBlockTypeCoverage = (typeof validBlockTypes)[number] extends BlockType
-  ? BlockType extends (typeof validBlockTypes)[number]
-    ? true
+type _AssertBlockTypeCoverage =
+  (typeof validBlockTypes)[number] extends BlockType
+    ? BlockType extends (typeof validBlockTypes)[number]
+      ? true
+      : never
     : never
-  : never;
-const _blockTypeCoverageCheck: _AssertBlockTypeCoverage = true;
+const _blockTypeCoverageCheck: _AssertBlockTypeCoverage = true
 
 // ---------------------------------------------------------------------------
 // TextBlock
@@ -49,10 +54,10 @@ const _blockTypeCoverageCheck: _AssertBlockTypeCoverage = true;
 const textBlock = {
   type: 'text' as const,
   data: { content: 'What a wonderful choice!' },
-} satisfies TextBlock;
+} satisfies TextBlock
 
 // TextBlock must be assignable to Block
-const _textAsBlock: Block = textBlock;
+const _textAsBlock: Block = textBlock
 
 // ---------------------------------------------------------------------------
 // RecipeCardBlock
@@ -70,9 +75,9 @@ const recipeCard = {
     difficulty: 'hard' as const,
     cuisine: 'French',
   },
-} satisfies RecipeCardBlock;
+} satisfies RecipeCardBlock
 
-const _recipeCardAsBlock: Block = recipeCard;
+const _recipeCardAsBlock: Block = recipeCard
 
 // Optional imageUrl — must still satisfy the interface without it
 const recipeCardNoImage = {
@@ -85,9 +90,9 @@ const recipeCardNoImage = {
     servings: 2,
     difficulty: 'easy' as const,
   },
-} satisfies RecipeCardBlock;
+} satisfies RecipeCardBlock
 
-const _recipeCardNoImageAsBlock: Block = recipeCardNoImage;
+const _recipeCardNoImageAsBlock: Block = recipeCardNoImage
 
 // ---------------------------------------------------------------------------
 // IngredientsBlock
@@ -100,13 +105,18 @@ const ingredientsBlock = {
     servings: 6,
     ingredients: [
       { name: 'beef chuck', amount: '1', unit: 'kg' },
-      { name: 'red wine', amount: '750', unit: 'ml', note: 'Burgundy preferred' },
+      {
+        name: 'red wine',
+        amount: '750',
+        unit: 'ml',
+        note: 'Burgundy preferred',
+      },
       { name: 'carrots', amount: '2', unit: 'medium' },
     ],
   },
-} satisfies IngredientsBlock;
+} satisfies IngredientsBlock
 
-const _ingredientsAsBlock: Block = ingredientsBlock;
+const _ingredientsAsBlock: Block = ingredientsBlock
 
 // ---------------------------------------------------------------------------
 // CookStepsBlock
@@ -117,7 +127,10 @@ const cookStepsBlock = {
   data: {
     recipeTitle: 'Boeuf Bourguignon',
     steps: [
-      { stepNumber: 1, instruction: 'Pat the beef dry and season with salt and pepper.' },
+      {
+        stepNumber: 1,
+        instruction: 'Pat the beef dry and season with salt and pepper.',
+      },
       {
         stepNumber: 2,
         instruction: 'Sear the beef in batches over high heat until browned.',
@@ -131,9 +144,9 @@ const cookStepsBlock = {
       },
     ],
   },
-} satisfies CookStepsBlock;
+} satisfies CookStepsBlock
 
-const _cookStepsAsBlock: Block = cookStepsBlock;
+const _cookStepsAsBlock: Block = cookStepsBlock
 
 // ---------------------------------------------------------------------------
 // QuickRepliesBlock
@@ -142,11 +155,66 @@ const _cookStepsAsBlock: Block = cookStepsBlock;
 const quickRepliesBlock = {
   type: 'quick_replies' as const,
   data: {
-    replies: ["Let's start cooking", 'Adjust servings', 'Show me the ingredients'],
+    replies: [
+      "Let's start cooking",
+      'Adjust servings',
+      'Show me the ingredients',
+    ],
   },
-} satisfies QuickRepliesBlock;
+} satisfies QuickRepliesBlock
 
-const _quickRepliesAsBlock: Block = quickRepliesBlock;
+const _quickRepliesAsBlock: Block = quickRepliesBlock
+
+// ---------------------------------------------------------------------------
+// RecipeCarouselBlock
+// ---------------------------------------------------------------------------
+
+const recipeCarouselBlock = {
+  type: 'recipe_carousel' as const,
+  data: {
+    items: [
+      {
+        recipeId: 'hainanese-chicken-001',
+        title: 'Hainanese Chicken Rice',
+        cookTime: '1h 50min',
+        servings: 4,
+        difficulty: 'medium' as const,
+        cuisine: 'Chinese',
+      },
+      {
+        recipeId: 'lemon-herb-chicken-001',
+        title: 'Roasted Lemon Herb Chicken',
+        cookTime: '1h 15min',
+        servings: 4,
+        difficulty: 'easy' as const,
+        cuisine: 'Western',
+      },
+    ],
+  },
+} satisfies RecipeCarouselBlock
+
+const _recipeCarouselAsBlock: Block = recipeCarouselBlock
+
+// ---------------------------------------------------------------------------
+// RescueBlock
+// ---------------------------------------------------------------------------
+
+const rescueBlock = {
+  type: 'rescue' as const,
+  data: {
+    header: "Don't worry! Here's how to fix it.",
+    steps: [
+      { stepNumber: 1, instruction: 'Remove the pan from heat immediately.' },
+      {
+        stepNumber: 2,
+        instruction: 'Add a splash of cold water to cool the sauce.',
+      },
+    ],
+    tip: 'Prevention is better than cure — stir frequently on high heat.',
+  },
+} satisfies RescueBlock
+
+const _rescueAsBlock: Block = rescueBlock
 
 // ---------------------------------------------------------------------------
 // Block discriminated union narrowing
@@ -155,20 +223,24 @@ const _quickRepliesAsBlock: Block = quickRepliesBlock;
 function assertNarrows(block: Block): string {
   switch (block.type) {
     case 'text':
-      return block.data.content;
+      return block.data.content
     case 'recipe_card':
-      return block.data.title;
+      return block.data.title
     case 'ingredients':
-      return block.data.recipeTitle;
+      return block.data.recipeTitle
     case 'cook_steps':
-      return block.data.recipeTitle;
+      return block.data.recipeTitle
     case 'quick_replies':
-      return block.data.replies.join(', ');
+      return block.data.replies.join(', ')
+    case 'recipe_carousel':
+      return block.data.items.map((i) => i.title).join(', ')
+    case 'rescue':
+      return block.data.header
   }
 }
 
 // Verify the switch is exhaustive — TypeScript will error if a case is missing
-const _narrowResult: string = assertNarrows(textBlock);
+const _narrowResult: string = assertNarrows(textBlock)
 
 // ---------------------------------------------------------------------------
 // ChatMessage
@@ -179,20 +251,26 @@ const userMessage = {
   role: 'user' as const,
   content: 'I want to make Boeuf Bourguignon',
   timestamp: new Date(),
-} satisfies ChatMessage;
+} satisfies ChatMessage
 
 // Assistant message with blocks
 const assistantMessage = {
   id: 'msg-002',
   role: 'assistant' as const,
   content: 'What a wonderful choice!',
-  blocks: [textBlock, recipeCard, ingredientsBlock, cookStepsBlock, quickRepliesBlock],
+  blocks: [
+    textBlock,
+    recipeCard,
+    ingredientsBlock,
+    cookStepsBlock,
+    quickRepliesBlock,
+  ],
   timestamp: new Date(),
-} satisfies ChatMessage;
+} satisfies ChatMessage
 
 // ChatMessage without blocks (user messages won't have blocks)
-const _userMsgCheck: ChatMessage = userMessage;
-const _assistantMsgCheck: ChatMessage = assistantMessage;
+const _userMsgCheck: ChatMessage = userMessage
+const _assistantMsgCheck: ChatMessage = assistantMessage
 
 // ---------------------------------------------------------------------------
 // Recipe interface
@@ -213,13 +291,16 @@ const sampleRecipe = {
     { name: 'red wine', amount: '750', unit: 'ml', note: 'Burgundy preferred' },
   ],
   steps: [
-    { stepNumber: 1, instruction: 'Pat the beef dry and season with salt and pepper.' },
+    {
+      stepNumber: 1,
+      instruction: 'Pat the beef dry and season with salt and pepper.',
+    },
     { stepNumber: 2, instruction: 'Sear the beef in batches.', time: '10 min' },
   ],
   tags: ['beef', 'french', 'stew', 'weekend'],
-} satisfies Recipe;
+} satisfies Recipe
 
-const _recipeCheck: Recipe = sampleRecipe;
+const _recipeCheck: Recipe = sampleRecipe
 
 // Recipe without optional fields
 const minimalRecipe = {
@@ -230,11 +311,16 @@ const minimalRecipe = {
   servings: 2,
   difficulty: 'easy' as const,
   ingredients: [{ name: 'eggs', amount: '2', unit: 'large' }],
-  steps: [{ stepNumber: 1, instruction: 'Bring water to a boil, add eggs, cook 8–10 min.' }],
+  steps: [
+    {
+      stepNumber: 1,
+      instruction: 'Bring water to a boil, add eggs, cook 8–10 min.',
+    },
+  ],
   tags: ['eggs', 'quick', 'breakfast'],
-} satisfies Recipe;
+} satisfies Recipe
 
-const _minimalRecipeCheck: Recipe = minimalRecipe;
+const _minimalRecipeCheck: Recipe = minimalRecipe
 
 // Suppress "unused variable" warnings for assertion variables
 void [
@@ -244,10 +330,12 @@ void [
   _ingredientsAsBlock,
   _cookStepsAsBlock,
   _quickRepliesAsBlock,
+  _recipeCarouselAsBlock,
+  _rescueAsBlock,
   _narrowResult,
   _userMsgCheck,
   _assistantMsgCheck,
   _recipeCheck,
   _minimalRecipeCheck,
   _blockTypeCoverageCheck,
-];
+]

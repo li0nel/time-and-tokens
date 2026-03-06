@@ -5,6 +5,7 @@ import type {
   CookStepsBlock,
   IngredientsBlock,
   RecipeCardBlock,
+  RecipeCarouselBlock,
   TextBlock,
 } from '../../types/blocks'
 import WidgetRenderer from '../../components/widgets/WidgetRenderer'
@@ -57,6 +58,22 @@ const quickRepliesBlock: Block = {
   data: { replies: ['Yes', 'No'] },
 }
 
+const recipeCarouselBlock: RecipeCarouselBlock = {
+  type: 'recipe_carousel',
+  data: {
+    items: [
+      {
+        recipeId: 'pasta-001',
+        title: 'Spaghetti Carbonara',
+        cookTime: '20 min',
+        servings: 2,
+        difficulty: 'medium',
+        cuisine: 'Italian',
+      },
+    ],
+  },
+}
+
 const unknownBlock = { type: 'not_a_real_type', data: {} } as unknown as Block
 
 describe('WidgetRenderer', () => {
@@ -97,6 +114,13 @@ describe('WidgetRenderer', () => {
       <WidgetRenderer block={quickRepliesBlock} onAction={mockOnAction} />
     )
     expect(toJSON()).toBeNull()
+  })
+
+  it('renders RecipeCarousel for type "recipe_carousel"', () => {
+    const { getByTestId } = render(
+      <WidgetRenderer block={recipeCarouselBlock} onAction={mockOnAction} />
+    )
+    expect(getByTestId('recipe-carousel')).toBeTruthy()
   })
 
   it('returns null for an unknown block type', () => {

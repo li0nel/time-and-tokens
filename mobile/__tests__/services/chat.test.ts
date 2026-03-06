@@ -82,7 +82,7 @@ describe('createChatSession', () => {
     createChatSession()
     expect(mockGetGenerativeModel).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({ model: 'gemini-2.5-flash' }),
+      expect.objectContaining({ model: 'gemini-2.5-flash' })
     )
   })
 
@@ -177,6 +177,48 @@ describe('sendChatMessage', () => {
     }
   })
 
+  it('parses recipe_carousel block response', async () => {
+    const responseText = JSON.stringify({
+      blocks: [
+        {
+          type: 'recipe_carousel',
+          items: [
+            {
+              recipeId: 'hainanese-chicken-001',
+              title: 'Hainanese Chicken Rice',
+              cookTime: '1h 50min',
+              servings: 4,
+              difficulty: 'medium',
+              cuisine: 'Chinese',
+            },
+            {
+              recipeId: 'tikka-masala-001',
+              title: 'Chicken Tikka Masala',
+              cookTime: '1h',
+              servings: 6,
+              difficulty: 'hard',
+            },
+          ],
+        },
+      ],
+    })
+    mockSendMessage.mockResolvedValue(makeTextResponse(responseText))
+
+    const session = createChatSession()
+    const blocks = await sendChatMessage(session, 'Show me chicken recipes')
+
+    expect(blocks).toHaveLength(1)
+    const block = blocks[0]
+    expect(block?.type).toBe('recipe_carousel')
+    if (block?.type === 'recipe_carousel') {
+      expect(block.data.items).toHaveLength(2)
+      expect(block.data.items[0]?.title).toBe('Hainanese Chicken Rice')
+      expect(block.data.items[0]?.cuisine).toBe('Chinese')
+      expect(block.data.items[1]?.title).toBe('Chicken Tikka Masala')
+      expect(block.data.items[1]?.cuisine).toBeUndefined()
+    }
+  })
+
   it('returns a text block wrapping the raw content on invalid JSON', async () => {
     mockSendMessage.mockResolvedValue(makeTextResponse('not valid json {{'))
 
@@ -193,7 +235,7 @@ describe('sendChatMessage', () => {
 
   it('returns a fallback block when blocks array is missing', async () => {
     mockSendMessage.mockResolvedValue(
-      makeTextResponse(JSON.stringify({ other: 'data' })),
+      makeTextResponse(JSON.stringify({ other: 'data' }))
     )
 
     const session = createChatSession()
@@ -244,7 +286,10 @@ describe('sendChatMessage — tool call round-trip', () => {
     mockSendMessage.mockResolvedValue(makeTextResponse(responseAfterTool))
 
     const session = createChatSession()
-    const blocks = await sendChatMessage(session, 'Show me the lemon chicken recipe')
+    const blocks = await sendChatMessage(
+      session,
+      'Show me the lemon chicken recipe'
+    )
 
     const block = blocks[0]
     expect(block?.type).toBe('recipe_card')
@@ -263,7 +308,10 @@ describe('sendChatMessage — tool call round-trip', () => {
           content:
             "I'm sorry, I couldn't find that recipe. Here are some recipes I know about:",
         },
-        { type: 'quick_replies', replies: ['Show all recipes', 'Suggest dinner'] },
+        {
+          type: 'quick_replies',
+          replies: ['Show all recipes', 'Suggest dinner'],
+        },
       ],
     })
     mockSendMessage.mockResolvedValue(makeTextResponse(gracefulResponse))
@@ -345,7 +393,7 @@ describe('saveTodayHistory', () => {
     await saveTodayHistory(messages)
     expect(mockSet).toHaveBeenCalledWith(
       expect.stringMatching(/^mise_history_\d{4}-\d{2}-\d{2}$/),
-      expect.stringContaining('msg-1'),
+      expect.stringContaining('msg-1')
     )
   })
 
