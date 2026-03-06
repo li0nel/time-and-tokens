@@ -31,8 +31,7 @@ describe('useAuth', () => {
 
     mockOnAuthStateChanged.mockImplementation((_auth, next) => {
       if (typeof next === 'function') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        next(fakeUser as any)
+        next(fakeUser as Parameters<typeof next>[0])
       }
       return jest.fn() as unknown as ReturnType<typeof onAuthStateChanged>
     })
@@ -50,8 +49,7 @@ describe('useAuth', () => {
   it('sets user to null when auth state resolves without a user', async () => {
     mockOnAuthStateChanged.mockImplementation((_auth, next) => {
       if (typeof next === 'function') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        next(null as any)
+        next(null as Parameters<typeof next>[0])
       }
       return jest.fn() as unknown as ReturnType<typeof onAuthStateChanged>
     })
