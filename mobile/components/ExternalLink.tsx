@@ -10,6 +10,9 @@ export function ExternalLink(
     <Link
       target="_blank"
       {...props}
+      // ExternalLink intentionally accepts arbitrary URLs (http/https) that are
+      // not part of the typed expo-router route tree.
+      // @ts-expect-error expo-router href type doesn't include arbitrary external URLs
       href={props.href}
       onPress={(e) => {
         if (Platform.OS !== 'web') {

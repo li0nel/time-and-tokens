@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "e2e": "playwright test",
-    "check": "npm run lint && npm run typecheck && npm run test"
+    "check": "npm run lint && npm run typecheck && npm run test",
+    "check:all": "npm run lint && npm run typecheck && npm run test"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
@@ -60,7 +61,8 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "__tests__/types.test.ts"
+      "__tests__/types.test.ts",
+      "/e2e/"
     ],
     "passWithNoTests": true
   },

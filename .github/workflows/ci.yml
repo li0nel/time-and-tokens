@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main, with-agent-teams]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: mobile/package-lock.json
+
+      - name: Install dependencies
+        run: cd mobile && npm ci
+
+      - name: Lint
+        run: cd mobile && npm run lint
+
+      - name: Type check
+        run: cd mobile && npm run typecheck
+
+      - name: Unit tests
+        run: cd mobile && npm run test
+
+      # E2E tests require a running Expo web server and real Firebase credentials.
+      # They are excluded from CI by default. To enable, uncomment the block below,
+      # add TEST_EMAIL and TEST_PASSWORD as GitHub Actions secrets, and ensure the
+      # Firebase project is configured for CI.
+      #
+      # - name: Install Playwright browsers
+      #   run: cd mobile && npx playwright install --with-deps chromium
+      #
+      # - name: E2E tests
+      #   run: cd mobile && npm run e2e
+      #   env:
+      #     TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+      #     TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
