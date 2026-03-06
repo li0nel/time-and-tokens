@@ -68,9 +68,13 @@ jest.mock('react-native-reanimated', () => {
       inOut: ID,
     },
     // Animated component factory — wraps in React.forwardRef
-    createAnimatedComponent: (Component: React.ComponentType) => React.forwardRef((props: object, ref) =>
-      React.createElement(Component, { ...props, ref } as React.ComponentPropsWithRef<typeof Component>)
-    ),
+    createAnimatedComponent: (Component: React.ComponentType) => {
+      const AnimatedComponent = React.forwardRef((props: object, ref) =>
+        React.createElement(Component, { ...props, ref } as React.ComponentPropsWithRef<typeof Component>)
+      )
+      AnimatedComponent.displayName = `Animated(${Component.displayName ?? Component.name ?? 'Component'})`
+      return AnimatedComponent
+    },
     FadeIn: {},
     FadeOut: {},
     SlideInRight: {},
